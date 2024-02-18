@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-// import { Feed } from "./Feed";
-// import { Search } from "./Search";
 import styled from "styled-components";
 import Logo from "components/commons/Logo";
 import SearchPath from "assets/images/icons/Search.png";
@@ -15,12 +13,12 @@ interface Props {
 }
 
 const StyledTopNav = styled.nav`
-  height: 130px;
   width: 100%;
   margin-top: 3rem;
 
   ${({ theme }) => theme.media.mobile`
     margin-top: 1rem;
+    justify-content: center;
   `}
 
   .frame {
@@ -32,6 +30,7 @@ const StyledTopNav = styled.nav`
     gap: 2.75rem;
     ${({ theme }) => theme.media.mobile`
       gap: 1rem;
+      width: 100%;
     `}
   }
   .div {
@@ -129,18 +128,18 @@ const Menu = styled.div`
   }
 `;
 
-const StyledCnt = styled.div`
-  height: 16px;
-  width: 16px;
-  background: orange;
-  border-radius: 50%;
-  span {
-    font-size: 10px;
-    color: white;
-    text-align: center;
-    margin: auto;
-  }
-`;
+// const StyledCnt = styled.div`
+//   height: 16px;
+//   width: 16px;
+//   background: orange;
+//   border-radius: 50%;
+//   span {
+//     font-size: 10px;
+//     color: white;
+//     text-align: center;
+//     margin: auto;
+//   }
+// `;
 
 export const TopNav = ({ overlapGroupClassName, divClassName }: Props): JSX.Element => {
   return (

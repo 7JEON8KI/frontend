@@ -120,8 +120,8 @@ const PageMain: React.FC = () => {
       </div>
       <div className="m-auto w-[1200px] text-left font-['Inter'] text-[2.5rem] font-bold leading-[3rem] text-neutral-700">
         저녁엔 이거 어때요?
-      </div>
-      <Footer /> */}
+      </div>*/}
+      <Footer />
     </div>
   );
 };
