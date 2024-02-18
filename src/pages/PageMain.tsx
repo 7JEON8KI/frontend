@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Footer from "components/commons/Footer";
 import TopNav from "components/commons/TopNav";
 import React from "react";
@@ -68,20 +69,20 @@ const PageMain: React.FC = () => {
 
   return (
     <div className="size-full">
-      <TopNav />
-      <div className="m-auto w-[1200px] text-left font-['Inter'] text-[2.5rem] font-bold leading-[3rem] text-neutral-700">
+      <TopNav overlapGroupClassName="" divClassName="" />
+      {/* <div className="m-auto w-[1200px] text-left font-['Inter'] text-[2.5rem] font-bold leading-[3rem] text-neutral-700">
         Best Meal
       </div>
       <div className="m-auto grid size-fit grid-cols-3 items-center justify-center gap-[0.3125rem]">
         {products.map((product, index) => (
           <div key={index} className="inline-flex items-center justify-start gap-[0.5rem]">
             <div className="inline-flex h-[40.625rem] w-[25rem] flex-col items-start justify-center">
-              <img className="h-[25rem] w-[25rem]" src={product.imageUrl} />
-              <div className="inline-flex h-[15.625rem] w-[25rem] flex-col items-start justify-center gap-[0.15625rem] bg-white px-[0.25rem] py-[0.15625rem]">
-                <div className="h-[3.625rem] self-stretch font-['Inter'] text-[1.625rem] font-semibold leading-[1.875rem] text-black">
+              <img className="h-[25rem] w-[25rem]" src={product.imageUrl} alt="" />
+              <div className="inline-flex h-[15.625rem] w-[25rem] flex-col items-start justify-start gap-0.5 bg-white px-1 py-4">
+                <div className="h-[3.625rem] self-stretch truncate font-['Inter'] text-[1.625rem] font-semibold leading-[1.875rem] text-black">
                   {product.title}
                 </div>
-                <div className="h-[0.75rem] self-stretch font-['Inter'] text-base font-medium leading-normal text-black">
+                <div className="h-[0.75rem] self-stretch truncate font-['Inter'] text-base font-medium leading-normal text-black">
                   {product.description}
                 </div>
                 <div className="inline-flex items-center justify-center gap-[4.5rem]">
@@ -103,6 +104,7 @@ const PageMain: React.FC = () => {
                     <img
                       className="absolute left-0 top-0 h-[3.125rem] w-[3.125rem]"
                       src="https://via.placeholder.com/50x50"
+                      alt=""
                     />
                   </div>
                 </div>
@@ -119,7 +121,7 @@ const PageMain: React.FC = () => {
       <div className="m-auto w-[1200px] text-left font-['Inter'] text-[2.5rem] font-bold leading-[3rem] text-neutral-700">
         저녁엔 이거 어때요?
       </div>
-      <Footer />
+      <Footer /> */}
     </div>
   );
 };
