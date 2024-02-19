@@ -4,16 +4,23 @@ import styled from "styled-components";
 const StyledFooter = styled.div`
   display: flex;
   background-color: #f7f7f7;
-  gap: 3.75rem;
-  margin: 3rem auto 0;
-  width: 1200px;
-  justify-content: center;
-  ${({ theme }) => theme.media.mobile`
-    flex-direction: column;
-    width: 80%;
-    margin: none;
-    gap: 0;
-  `}
+  gap: 0 3.75rem;
+  margin: 0 auto;
+  max-width: 2000px;
+  min-width: 320px;
+  width: 80%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 0 10%;
+  &::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #d9d9d9;
+    margin-top: 5rem;
+  }
 `;
 
 const FooterItem = styled.div`
@@ -22,21 +29,24 @@ const FooterItem = styled.div`
   gap: 1rem;
   align-items: flex-start;
   padding: 2rem 0;
-  ${({ theme }) => theme.media.mobile`
-    padding: 1rem;
-  `}
+
   .title {
     font-size: 1.25rem;
     font-weight: bold;
-    ${({ theme }) => theme.media.mobile`
-      font-size: 1rem;
-  `}
   }
+
   p {
     font-size: 1rem;
-    ${({ theme }) => theme.media.mobile`
+  }
+
+  @media only screen and (min-width: 530x) {
+    padding: 1rem;
+    .title {
+      font-size: 1rem;
+    }
+    p {
       font-size: 0.8rem;
-  `}
+    }
   }
 `;
 

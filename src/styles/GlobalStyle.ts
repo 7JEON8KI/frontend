@@ -7,8 +7,12 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body{
-    background-color: #ffffff;
+    background-color: #f7f7f7;
     font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  #root {
+    max-width: 2100px;
+    margin: 0 auto;
   }
   a {
     color: inherit;

@@ -53,13 +53,10 @@ export const lightTheme = {
 //   // lg: "screen and (max-width: '1024px')", //데스크탑
 //   // xl: "screen and (max-width: '1280px')", //데스크탑
 //   // "2xl": "screen and (max-width: '1536px')", //데스크탑
-//   desktop: "screen and (min-width: 1024px)",
-//   tablet: "screen and (min-width: 640px)",
-//   mobile: "screen and (min-width: 400px)",
 // };
 
 const sizes: { [key: string]: number } = {
-  mobile: 450,
+  mobile: 425,
   tablet: 768,
   desktop: 1024,
 };
@@ -71,21 +68,6 @@ interface Media {
 }
 
 const media: Media = {
-  // desktop: (...args) => css`
-  //   @media only screen and (min-width: ${sizes.desktop}px) {
-  //     ${css(...args)}
-  //   }
-  // `,
-  // tablet: (...args) => css`
-  //   @media only screen and (max-width: ${sizes.desktop - 1}px) and (min-width: ${sizes.tablet}px) {
-  //     ${css(...args)}
-  //   }
-  // `,
-  // mobile: (...args) => css`
-  //   @media only screen and (max-width: ${sizes.tablet - 1}px) {
-  //     ${css(...args)}
-  //   }
-  // `,
   mobile: (...args) => css`
     @media only screen and (max-width: ${sizes.mobile}px) {
       ${args}

@@ -13,7 +13,6 @@ interface Props {
 }
 
 const StyledTopNav = styled.nav`
-  width: 100%;
   margin-top: 3rem;
 
   ${({ theme }) => theme.media.mobile`
@@ -23,29 +22,53 @@ const StyledTopNav = styled.nav`
 
   .frame {
     width: 90%;
-    display: inline-flex;
-    flex-direction: column;
+    margin: auto;
+    display: grid;
+    justify-items: center;
     align-items: center;
-    justify-content: center;
-    gap: 2.75rem;
-    ${({ theme }) => theme.media.mobile`
+    grid-template-columns: 2fr 8fr 2.25fr; /* 가로 비율 설정 */
+    grid-template-rows: auto auto; /* 세로 비율 설정, 각 행의 높이는 내용에 따라 자동으로 조정됨 */
+    gap: 2.5rem;
+    grid-template-areas:
+      "logo search icons"
+      ". menus .";
+
+    .logo {
+      grid-area: logo;
+      justify-self: start;
+    }
+
+    .search {
+      grid-area: search;
+    }
+
+    .icons {
+      grid-area: icons;
+      justify-self: end;
+    }
+
+    .menus {
+      grid-area: menus;
+    }
+
+    @media screen and (max-width: 1510px) {
       gap: 1rem;
-      width: 100%;
-    `}
-  }
-  .div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 14rem;
-    ${({ theme }) => theme.media.mobile`
-      gap: 0.5rem;
-    `}
-    flex-wrap: wrap;
+      grid-template-rows: repeat(4, auto); /* 세로 비율 설정, 각 행의 높이는 내용에 따라 자동으로 조정됨 */
+      grid-template-columns: 1fr; /* 가로 비율 설정 */
+      grid-template-areas:
+        "logo"
+        "icons"
+        "search"
+        "menus";
+      .logo,
+      .icons {
+        justify-self: center;
+      }
+    }
   }
 `;
 
-const StyledSearch = styled.div`
+const StyledSearch = styled.div.attrs({ className: "search" })`
   position: relative;
   display: inline-block;
   input#search {
@@ -62,7 +85,7 @@ const StyledSearch = styled.div`
         font-size: 0.8rem;
     `}
     ${({ theme }) => theme.media.mobile`
-        width: 300px;
+        width: 320px;
         font-size: 0.8rem;
     `}
   }
@@ -75,9 +98,9 @@ const StyledSearch = styled.div`
   }
 `;
 
-const StyledIconList = styled.div`
+const StyledIconList = styled.div.attrs({ className: "icons" })`
   display: inline-flex;
-  gap: 1rem;
+  gap: 2rem;
   align-items: center;
 `;
 
@@ -102,12 +125,19 @@ const StyledIcon = styled.div`
   align-items: center;
 `;
 
-const StyledMenus = styled.div`
+const StyledMenus = styled.div.attrs({ className: "menus" })`
   display: flex;
   gap: 2.5rem;
+  width: 706px;
+  justify-content: space-between;
+  ${({ theme }) => theme.media.tablet`
+        width: 500px;
+  `}
+
   ${({ theme }) => theme.media.mobile`
-      gap: 0.5rem;
-    `}
+    gap: 0.5rem;
+    width: 320px
+  `};
 `;
 
 const Menu = styled.div`
@@ -116,6 +146,10 @@ const Menu = styled.div`
   gap: 0.5rem; /* 아이콘과 텍스트 사이의 간격 설정 */
   font-size: 1.25rem;
   font-weight: 800;
+  ${({ theme }) => theme.media.tablet`
+        font-size: 0.8rem;
+  `}
+
   ${({ theme }) => theme.media.mobile`
     font-size: 0.8rem;
     gap: 0.25rem;
@@ -145,32 +179,32 @@ export const TopNav = ({ overlapGroupClassName, divClassName }: Props): JSX.Elem
   return (
     <StyledTopNav>
       <div className="frame">
-        <div className="div">
-          <Logo />
-          <StyledSearch>
-            <label htmlFor="search">
-              <img src={SearchPath} alt="검색 아이콘" />
-              <input id="search" type="text" placeholder="지금 먹고싶은 재료를 검색하세요!" />
-            </label>
-          </StyledSearch>
-          <StyledIconList>
-            <StyledIcon>
-              <img src={HeartPath} alt="찜 아이콘" />
-              <span>찜</span>
-            </StyledIcon>
-            <StyledIcon>
-              <img src={CartPath} alt="장바구니 아이콘" />
-              <span>장바구니</span>
-              {/* <StyledCnt>
+        {/* <div className="div"> */}
+        <Logo />
+        <StyledSearch>
+          <label htmlFor="search">
+            <img src={SearchPath} alt="검색 아이콘" />
+            <input id="search" type="text" placeholder="지금 먹고싶은 재료를 검색하세요!" />
+          </label>
+        </StyledSearch>
+        <StyledIconList>
+          <StyledIcon>
+            <img src={HeartPath} alt="찜 아이콘" />
+            <span>찜 목록</span>
+          </StyledIcon>
+          <StyledIcon>
+            <img src={CartPath} alt="장바구니 아이콘" />
+            <span>장바구니</span>
+            {/* <StyledCnt>
                 <span>20</span>
               </StyledCnt> */}
-            </StyledIcon>
-            <StyledIcon>
-              <img src={UserPath} alt="마이페이지 아이콘" />
-              <span>마이페이지</span>
-            </StyledIcon>
-          </StyledIconList>
-        </div>
+          </StyledIcon>
+          <StyledIcon>
+            <img src={UserPath} alt="마이페이지 아이콘" />
+            <span>마이페이지</span>
+          </StyledIcon>
+        </StyledIconList>
+        {/* </div> */}
         <StyledMenus>
           <Menu>
             <img src={MenuPath} alt="메뉴 아이콘" />
