@@ -11,7 +11,7 @@ import {
   StyledIconList,
   StyledIcon,
   StyledTopNav,
-  Menu,
+  NavMenu,
 } from "styles/components/commons/Header.style";
 
 export const Header = (): JSX.Element => {
@@ -43,15 +43,15 @@ export const Header = (): JSX.Element => {
           </StyledIcon>
         </StyledIconList>
         <StyledTopNav>
-          <Menu>
+          <NavMenu>
             <img src={MenuPath} alt="메뉴 아이콘" />
             전체상품
-          </Menu>
-          <Menu>밀킷 추천</Menu>
-          <Menu>오븐</Menu>
-          <Menu>이벤트</Menu>
-          <Menu>베스트</Menu>
-          <Menu>할인 중</Menu>
+          </NavMenu>
+          <NavMenu>밀킷 추천</NavMenu>
+          <NavMenu>오븐</NavMenu>
+          <NavMenu>이벤트</NavMenu>
+          <NavMenu>베스트</NavMenu>
+          <NavMenu>할인 중</NavMenu>
         </StyledTopNav>
       </div>
     </StyledHeader>

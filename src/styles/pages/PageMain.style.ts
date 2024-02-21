@@ -1,5 +1,3 @@
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 
 export const StyledMainDiv = styled.main`
@@ -12,13 +10,13 @@ interface StyledTitleProps {
 }
 
 export const StyledTitle = styled.div<StyledTitleProps>`
-  font-size: 2.5rem;
+  font-size: ${({ theme }) => theme.fontSize.tooBig};
   font-weight: bold;
   padding-left: ${({ $paddingLeft }) => $paddingLeft}px;
   margin-top: 1.8rem;
   margin-bottom: 0.9rem;
-  ${({ theme }) => theme.media.mobile`
-    font-size: 1.25rem;
+  ${({ theme }) => theme.media.sm`
+    font-size: ${theme.fontSize.xl};
   `}
 `;
 
@@ -28,24 +26,24 @@ export const StyledGridContainer = styled.div`
   justify-items: center;
   gap: 50px 0;
 
-  @media screen and (max-width: 1510px) {
+  ${({ theme }) => theme.media.xl`
     grid-template-columns: repeat(3, 1fr);
-  }
+  `}
 
-  @media screen and (max-width: 1200px) {
+  ${({ theme }) => theme.media.lg`
     grid-template-columns: repeat(2, 1fr);
-  }
+  `}
 
-  @media screen and (max-width: 770px) {
+  ${({ theme }) => theme.media.sm`
     grid-template-columns: repeat(1, 1fr);
-  }
+  `}
 `;
 
 export const StyledProduct = styled.div`
   width: 285px;
   height: 426px;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: ${({ theme }) => theme.shadows.default};
   img.food_img {
     width: 285px;
     height: 285px;
@@ -57,12 +55,12 @@ export const StyledProduct = styled.div`
   img.cart_btn {
     width: 35px;
     height: 35px;
-    border: 1px #d9d9d9 solid;
+    border: 1px solid ${({ theme }) => theme.colors.lightGrey};
     display: inline-block;
   }
 
   .content {
-    background: #ffffff;
+    background: ${({ theme }) => theme.colors.white};
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -79,10 +77,8 @@ interface StyledContentTextProps {
 }
 
 export const StyledContentText = styled.div<StyledContentTextProps>`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   width: 100%;
+  ${({ theme }) => theme.util.truncate};
   color: ${({ $description }) => ($description ? "#1C5641" : "black")};
   font-weight: ${({ $title }) => ($title ? "bold" : "normal")};
 `;
@@ -94,18 +90,30 @@ export const StyledContentPrice = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+
   div:nth-child(1) {
-    font-size: 1.5rem;
-    color: #fd6f21;
+    font-size: ${({ theme }) => theme.fontSize.xxl};
+    color: ${({ theme }) => theme.colors.mainColor};
   }
   div:nth-child(2) {
-    font-size: 1.5rem;
+    font-size: ${({ theme }) => theme.fontSize.xxl};
     font-weight: 600;
   }
   div:nth-child(3) {
-    font-size: 1.25rem;
-    color: #c4c4c4;
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    color: ${({ theme }) => theme.colors.mediumGrey};
     text-decoration: line-through;
     font-weight: 600;
+  }
+`;
+
+export const StyledTopSlider = styled.div`
+  width: 80%;
+  height: 30%;
+  margin: 50px auto;
+
+  .sliderItem {
+    img {
+      padding: 0 10px;
   }
 `;
