@@ -1,122 +1,28 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import Footer from "components/commons/Footer";
-import TopNav from "components/commons/TopNav";
 import React from "react";
-import styled from "styled-components";
+import Layout from "components/commons/Layout";
+import {
+  StyledContentPrice,
+  StyledContentText,
+  StyledGridContainer,
+  StyledProduct,
+  StyledTitle,
+  StyledMainDiv,
+  StyledTopSlider,
+} from "styles/pages/PageMain.style";
+import Slider from "react-slick";
 
-const StyledMainDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  & > .title {
-    font-size: 2.5rem;
-    font-family: "Inter";
-    font-weight: bold;
-  }
-`;
-
-interface StyledTitleProps {
-  $paddingLeft: number;
-}
-
-const StyledTitle = styled.div<StyledTitleProps>`
-  font-size: 2.5rem;
-  font-family: "Inter";
-  font-weight: bold;
-  padding-left: ${({ $paddingLeft }) => $paddingLeft}px;
-  margin-top: 1.8rem;
-  margin-bottom: 0.9rem;
-  ${({ theme }) => theme.media.mobile`
-    font-size: 1.25rem;
-  `}
-`;
-
-const StyledGridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
-  gap: 50px 0;
-
-  @media screen and (max-width: 1510px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (max-width: 1200px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (max-width: 770px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
-const StyledProduct = styled.div`
-  width: 285px;
-  height: 426px;
-  position: relative;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  img.food_img {
-    width: 285px;
-    height: 285px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  img.cart_btn {
-    width: 35px;
-    height: 35px;
-    border: 1px #d9d9d9 solid;
-    display: inline-block;
-  }
-
-  .content {
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: absolute;
-    width: 285px;
-    top: 285px;
-    left: 0;
-    padding: 10px 5px;
-  }
-`;
-interface StyledContentTextProps {
-  $title?: boolean;
-  $description?: boolean;
-}
-
-const StyledContentText = styled.div<StyledContentTextProps>`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-  color: ${({ $description }) => ($description ? "#1C5641" : "black")};
-  font-weight: ${({ $title }) => ($title ? "bold" : "normal")};
-`;
-
-const StyledContentPrice = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-  div:nth-child(1) {
-    font-size: 1.5rem;
-    color: #fd6f21;
-  }
-  div:nth-child(2) {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-  div:nth-child(3) {
-    font-size: 1.25rem;
-    color: #c4c4c4;
-    text-decoration: line-through;
-    font-weight: 600;
-  }
-`;
+const settings = {
+  dots: true,
+  arrows: true,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  pauseOnHover: true,
+  centerMode: true,
+  infinite: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  speed: 1500,
+};
 
 const PageMain: React.FC = () => {
   const gridRef = React.useRef<HTMLDivElement>(null);
@@ -126,9 +32,9 @@ const PageMain: React.FC = () => {
     .fill(0)
     .map((_, idx) => ({
       imageUrl: "https://via.placeholder.com/400x400",
-      title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 두줄까지 작성 가능합니다........`,
+      title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.`,
       description:
-        "내용입니다. 최대 두줄까지~~!! 두줄까지~~!! 두줄까지~~!! 두줄까지~~!! 두줄까지~~!! 두줄까지~~!! 까지 ...",
+        "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
       discount: "30%",
       price: "15,800원",
       originalPrice: "22,600원",
@@ -143,35 +49,108 @@ const PageMain: React.FC = () => {
     }
   }, [firstItemRef]);
 
-  return (
-    <StyledMainDiv>
-      <TopNav overlapGroupClassName="" divClassName="" />
-      <StyledTitle $paddingLeft={itemRect || 0}>Best Meal</StyledTitle>
-      <StyledGridContainer ref={gridRef}>
-        {products.map((product, index) => (
-          <StyledProduct key={index} ref={index == 0 ? firstItemRef : null}>
-            <img className="food_img" src={product.imageUrl} alt="" />
-            <div className="content">
-              <StyledContentText $title={true}>{product.title}</StyledContentText>
-              <StyledContentText $description={true}>{product.description}</StyledContentText>
-              <StyledContentPrice>
-                <div>{product.discount}</div>
-                <div>{product.price}</div>
-                <div>{product.originalPrice}</div>
-                <img className="cart_btn" src="https://via.placeholder.com/50x50" alt="" />
-              </StyledContentPrice>
-              {product.soldOut && <div>일시 품절</div>}
-            </div>
-          </StyledProduct>
-        ))}
-      </StyledGridContainer>
+  const sliderItem = Array(4)
+    .fill(0)
+    .map((_, idx) => ({
+      imageUrl: "https://via.placeholder.com/1200x400",
+      alt: `${idx}`,
+    }));
 
-      {/*
-      <div className="m-auto w-[1200px] text-left font-['Inter'] text-[2.5rem] font-bold leading-[3rem] text-neutral-700">
-        저녁엔 이거 어때요?
-      </div>*/}
-      <Footer />
-    </StyledMainDiv>
+  return (
+    <Layout>
+      <StyledMainDiv>
+        <StyledTopSlider id="here">
+          <Slider {...settings}>
+            {sliderItem.map((item, index) => (
+              <div key={index} className="sliderItem">
+                {/* <h3>{index + 1}</h3> */}
+                <img src={item.imageUrl} alt={item.alt} />
+              </div>
+            ))}
+          </Slider>
+        </StyledTopSlider>
+        <StyledTitle $paddingLeft={itemRect || 0}>Best Meal</StyledTitle>
+        <StyledGridContainer ref={gridRef}>
+          {products.map((product, index) => (
+            <StyledProduct key={index} ref={index == 0 ? firstItemRef : null}>
+              <img className="food_img" src={product.imageUrl} alt="" />
+              <div className="content">
+                <StyledContentText $title={true}>{product.title}</StyledContentText>
+                <StyledContentText $description={true}>{product.description}</StyledContentText>
+                <StyledContentPrice>
+                  <div>{product.discount}</div>
+                  <div>{product.price}</div>
+                  <div>{product.originalPrice}</div>
+                  <img className="cart_btn" src="https://via.placeholder.com/50x50" alt="" />
+                </StyledContentPrice>
+                {product.soldOut && <div>일시 품절</div>}
+              </div>
+            </StyledProduct>
+          ))}
+        </StyledGridContainer>
+        <button
+          type="button"
+          style={{
+            width: "245px",
+            height: "48px",
+            border: "solid 1px #FD6F21",
+            padding: "12px 50px",
+            margin: "34px auto",
+            display: "block",
+            color: "#FD6F21",
+            fontWeight: "bold",
+          }}
+        >
+          더 많은 상품 보러가기
+        </button>
+        <StyledTitle $paddingLeft={itemRect || 0}>저녁엔 이거 어때요?</StyledTitle>
+        <div style={{ width: "1600px", height: "500px", margin: "50px auto" }}>
+          <Slider dots={true} arrows={true} slidesToShow={3} slidesToScroll={3} speed={1500} infinite={true}>
+            {Array(6)
+              .fill(0)
+              .map((_, idx) => (
+                <div key={idx}>
+                  <img
+                    src="https://via.placeholder.com/390x250"
+                    alt=""
+                    style={{
+                      width: "390px",
+                      height: "250px",
+                      display: "block",
+                      margin: "15px auto 0",
+                      boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: "390px",
+                      height: "120px",
+                      margin: "0 auto 15px",
+                      boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "90%",
+                        height: "90%",
+                        margin: "auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <p style={{ fontWeight: "bold", width: "100%" }}>
+                        [프레시지] 한끼 고기 만두국 밀키트 450g x 3봉 (총 9인분)
+                      </p>
+                      <p style={{ color: "#898989", fontSize: "14px", width: "100%" }}>19,800원</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </Slider>
+        </div>
+      </StyledMainDiv>
+    </Layout>
   );
 };
 
