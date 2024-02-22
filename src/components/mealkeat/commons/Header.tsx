@@ -1,18 +1,11 @@
 import React from "react";
-import Logo from "components/commons/Logo";
+import { Logo } from "components/mealkeat";
 import SearchPath from "assets/images/icons/Search.png";
 import HeartPath from "assets/images/icons/Heart.png";
 import CartPath from "assets/images/icons/Cart.png";
 import UserPath from "assets/images/icons/User.png";
 import MenuPath from "assets/images/icons/Menu.png";
-import {
-  StyledHeader,
-  StyledSearch,
-  StyledIconList,
-  StyledIcon,
-  StyledTopNav,
-  NavMenu,
-} from "styles/components/commons/Header.style";
+import { StyledHeader, StyledSearch, StyledIconList, StyledIcon, StyledTopNav, NavMenu } from "./Header.style";
 
 export const Header = (): JSX.Element => {
   return (

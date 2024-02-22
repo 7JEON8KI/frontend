@@ -1,9 +1,13 @@
 import React from "react";
-import { StyledFooter, FooterItem } from "styles/components/commons/Footer.style";
+import { StyledFooter, FooterItem } from "./Footer.style";
+import { Logo } from "components/mealkeat";
 
 export const Footer = (): JSX.Element => {
   return (
     <StyledFooter>
+      <FooterItem>
+        <Logo />
+      </FooterItem>
       <FooterItem>
         <div className="title">Mealkeat</div>
         <p>밀키트를 더 간편하게 맛있게 즐겨보자!</p>
@@ -26,19 +30,6 @@ export const Footer = (): JSX.Element => {
         <p>나의 활동</p>
         <p>고객센터</p>
         <p>나의 활동</p>
-      </FooterItem>
-      <FooterItem>
-        <div className="title">Stay Connected</div>
-        <p>Instagram</p>
-        {/* <p >자주 묻는 질문</p>
-        <p >배송정보</p>
-        <p >교환 및 반품</p>
-        <p >고객센터</p>
-        <p >고객센터</p> */}
-      </FooterItem>
-      <FooterItem>
-        <div className="title">Stay Updated</div>
-        <div className="placeholder">Enter your email</div>
       </FooterItem>
     </StyledFooter>
   );

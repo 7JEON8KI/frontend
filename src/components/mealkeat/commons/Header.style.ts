@@ -97,7 +97,7 @@ export const StyledIcon = styled.div`
     height: 24px;
   }
   span {
-    font-size: 1rem;
+    margin-top: ${({ theme }) => theme.size.lg};
   }
   @media only screen and (max-width: 600px) {
     img {
