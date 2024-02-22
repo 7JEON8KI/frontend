@@ -1,4 +1,4 @@
-import { PageMain, PageLogin, PageFail, PageSignup, PageMypage, PageDetail, PageList } from "pages";
+import { PageMain, PageLogin, PageFail, PageSignup, PageMypage, PageDetail, PageList } from "pages/mealkeat";
 interface Route {
   path: string;
   component: React.FC;

@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "components/commons/Layout";
+import { Layout } from "components/mealkeat";
 import kakaoButton from "assets/images/kakao_login_large_wide.png";
 const PageLogin: React.FC = () => {
   const onClickLogin = (event: React.MouseEvent<HTMLButtonElement>) => {

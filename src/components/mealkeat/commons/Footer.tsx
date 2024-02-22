@@ -1,6 +1,6 @@
 import React from "react";
-import { StyledFooter, FooterItem } from "styles/components/commons/Footer.style";
-import Logo from "components/commons/Logo";
+import { StyledFooter, FooterItem } from "./Footer.style";
+import { Logo } from "components/mealkeat";
 
 export const Footer = (): JSX.Element => {
   return (

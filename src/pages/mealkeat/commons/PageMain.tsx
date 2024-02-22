@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "components/commons/Layout";
+import { Layout } from "components/mealkeat";
 import {
   StyledContentPrice,
   StyledContentText,
@@ -8,7 +8,7 @@ import {
   StyledTitle,
   StyledMainDiv,
   StyledTopSlider,
-} from "styles/pages/commons/PageMain.style";
+} from "./PageMain.style";
 import Slider from "react-slick";
 
 const settings = {

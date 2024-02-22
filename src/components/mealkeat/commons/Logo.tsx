@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "assets/images/logo.png";
-import { StyledLogo } from "styles/components/commons/Logo.style";
+import { StyledLogo } from "./Logo.style";
 
 const Logo = (): JSX.Element => {
   return (
