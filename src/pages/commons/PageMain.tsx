@@ -8,7 +8,7 @@ import {
   StyledTitle,
   StyledMainDiv,
   StyledTopSlider,
-} from "styles/pages/PageMain.style";
+} from "styles/pages/commons/PageMain.style";
 import Slider from "react-slick";
 
 const settings = {
