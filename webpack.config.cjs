@@ -15,8 +15,16 @@ module.exports = (env, argv) => {
       filename: "[name].js",
     },
     devServer: {
-      port: 3000,
+      historyApiFallback: true,
+      port: 8080,
       hot: true,
+      proxy: {
+        "": {
+          target: "http://localhost:8080/api/v1",
+          changeOrigin: true, // 호스트 헤더를 target URL로 변경
+          secure: false,
+        },
+      },
     },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],

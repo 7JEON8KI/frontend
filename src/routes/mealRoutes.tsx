@@ -1,4 +1,5 @@
 import { PageMain, PageLogin, PageFail, PageSignup, PageMypage, PageDetail, PageList } from "pages/mealkeat";
+import KakaoCallback from "pages/mealkeat/oauth/KakaoCallback";
 interface Route {
   path: string;
   component: React.FC;
@@ -13,6 +14,7 @@ const mealRoutes: Route[] = [
   { path: "/mypage", component: PageMypage },
   { path: "/detail", component: PageDetail },
   { path: "/list", component: PageList },
+  { path: "/login/kakaocallback", component: KakaoCallback },
 ];
 
 export default mealRoutes;
