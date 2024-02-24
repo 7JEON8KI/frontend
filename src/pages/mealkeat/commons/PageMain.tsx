@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "components/commons/Layout";
+import { Layout } from "components/mealkeat";
 import {
   StyledContentPrice,
   StyledContentText,
@@ -8,8 +8,9 @@ import {
   StyledTitle,
   StyledMainDiv,
   StyledTopSlider,
-} from "styles/pages/PageMain.style";
+} from "./PageMain.style";
 import Slider from "react-slick";
+import axios from "axios";
 
 const settings = {
   dots: true,
@@ -48,6 +49,20 @@ const PageMain: React.FC = () => {
       setItemRect(newItemRect);
     }
   }, [firstItemRef]);
+
+  React.useEffect(() => {
+    axios
+      .create({
+        baseURL: "http://localhost:8080",
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+      .get("/api/v1/test/all")
+      .then(res => {
+        console.log(res.data);
+      });
+  }, []);
 
   const sliderItem = Array(4)
     .fill(0)

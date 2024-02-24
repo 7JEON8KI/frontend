@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
@@ -21,5 +22,13 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"]
   },
-  "settings": { "react": { "version": "detect" } }
+  "settings": { "react": { "version": "detect" } },
+  "overrides": [
+    {
+      "files": ["webpack.config.cjs"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

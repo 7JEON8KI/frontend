@@ -37,7 +37,9 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
   }
-
+  p,span {
+    cursor: default;
+  }
   // slick 슬라이더 스타일
   button.slick-arrow {
     width: 30px;

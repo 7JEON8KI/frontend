@@ -1,7 +1,6 @@
 import React from "react";
-import { StyledLayout } from "styles/components/commons/Layout.style";
-import Header from "components/commons/Header";
-import Footer from "components/commons/Footer";
+import { StyledLayout } from "./Layout.style";
+import { Header, Footer } from "components/mealkeat";
 
 interface Props {
   children: React.ReactNode;
