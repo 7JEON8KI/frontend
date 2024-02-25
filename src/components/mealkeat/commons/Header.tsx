@@ -36,15 +36,15 @@ export const Header = (): JSX.Element => {
           </StyledIcon>
         </StyledIconList>
         <StyledTopNav>
-          <NavMenu>
+          <NavMenu title="클릭 시 전체상품 페이지로 이동">
             <img src={MenuPath} alt="메뉴 아이콘" />
             전체상품
           </NavMenu>
-          <NavMenu>밀킷 추천</NavMenu>
-          <NavMenu>오븐</NavMenu>
-          <NavMenu>이벤트</NavMenu>
-          <NavMenu>베스트</NavMenu>
-          <NavMenu>할인 중</NavMenu>
+          <NavMenu title="클릭 시 밀킷 추천 페이지로 이동">밀킷 추천</NavMenu>
+          <NavMenu title="클릭 시 오븐 페이지로 이동">오븐</NavMenu>
+          <NavMenu title="클릭 시 이벤트 페이지로 이동">이벤트</NavMenu>
+          <NavMenu title="클릭 시 베스트 페이지로 이동">베스트</NavMenu>
+          <NavMenu title="클릭 시 할인 중 페이지로 이동">할인 중</NavMenu>
         </StyledTopNav>
       </div>
     </StyledHeader>
