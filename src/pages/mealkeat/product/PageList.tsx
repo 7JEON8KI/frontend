@@ -2,6 +2,24 @@ import React from "react";
 import { Layout, Product } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
 import exceptClick from "assets/images/icons/except_click.png";
+import {
+  StyledListGrid,
+  StyledSidebarDiv,
+  StyledMain,
+  StyledSidebarAside,
+  StyledInfoDivFirst,
+  StyledInfoDiv,
+  StyledScrollToTop,
+  StyledMenuDiv,
+  StyledMenuTitle,
+  StyledMenuInfo,
+  StyledMenuButton,
+  StyledMenuImage,
+  StyledItemCount,
+  StyledProductGrid,
+  StyledProductInfoDivider,
+} from "./PageList.style";
+import scrollToTop from "utils/scrollToTop";
 
 const PageList: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
@@ -20,63 +38,46 @@ const PageList: React.FC = () => {
 
   return (
     <Layout>
-      <main style={{ width: "100%" }}>
-        <div style={{ width: "1290px", margin: "40px auto" }} className="topMenu">
-          <p style={{ margin: "auto", fontSize: "30px", textAlign: "center", marginBottom: "60px" }}>전체상품</p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: " 100%",
-              borderTop: "1px solid black",
-              borderBottom: "1px solid #dfdfdf",
-              margin: "auto",
-            }}
-          >
-            <span style={{ padding: "1.5rem", fontSize: "0.875rem", verticalAlign: "middle" }}>총 262건</span>
-            <div style={{ padding: "1rem 0" }}>
-              <div style={{ display: "inline-block" }} onClick={() => setClickExcept(prev => !prev)}>
-                <img
-                  src={clickExcept ? exceptClick : except}
-                  alt=""
-                  style={{
-                    width: "35px",
-                    height: "35px",
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                  }}
-                />
-                <span style={{ padding: "0 1rem", fontSize: "0.875rem", borderRight: "1px solid #dfdfdf" }}>
-                  품절 상품제외
-                </span>
-              </div>
-              <span style={{ padding: "0 1rem", fontSize: "0.875rem", borderRight: "1px solid #dfdfdf" }}>
-                최신상품
-              </span>
-              <span style={{ padding: "0 1rem", fontSize: "0.875rem", borderRight: "1px solid #dfdfdf" }}>
-                낮은가격
-              </span>
-              <span style={{ padding: "0 1rem", fontSize: "0.875rem", borderRight: "1px solid #dfdfdf" }}>
-                높은가격
-              </span>
-              <span style={{ padding: "0 1rem", fontSize: "0.875rem" }}>인기상품</span>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              justifyItems: "center",
-              gap: "50px 0",
-              marginTop: "60px",
-            }}
-          >
-            {products.map((product, index) => (
-              <Product key={index} product={product} />
-            ))}
-          </div>
-        </div>
-      </main>
+      <StyledListGrid>
+        <StyledSidebarDiv />
+        <StyledMain>
+          <StyledMenuDiv className="topMenu">
+            <StyledMenuTitle>전체상품</StyledMenuTitle>
+            <StyledMenuInfo>
+              <StyledItemCount>총 262건</StyledItemCount>
+              <StyledProductInfoDivider>
+                <StyledMenuButton onClick={() => setClickExcept(prev => !prev)}>
+                  <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
+                  <span>품절 상품제외</span>
+                </StyledMenuButton>
+                <StyledMenuButton>최신상품</StyledMenuButton>
+                <StyledMenuButton>낮은가격</StyledMenuButton>
+                <StyledMenuButton>높은가격</StyledMenuButton>
+                <StyledMenuButton style={{ borderRight: "none" }}>인기상품</StyledMenuButton>
+              </StyledProductInfoDivider>
+            </StyledMenuInfo>
+            <StyledProductGrid>
+              {products.map((product, index) => (
+                <Product key={index} product={product} />
+              ))}
+            </StyledProductGrid>
+          </StyledMenuDiv>
+        </StyledMain>
+        <StyledSidebarDiv>
+          <StyledSidebarAside>
+            <StyledInfoDivFirst>
+              <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}></div>
+              주문 시간 및<br /> 배송 안내
+            </StyledInfoDivFirst>
+            <StyledInfoDiv>최근 본 상품 &gt;</StyledInfoDiv>
+            <StyledInfoDiv>찜한 상품 &gt;</StyledInfoDiv>
+            <StyledInfoDiv>1800-0700</StyledInfoDiv>
+            <StyledScrollToTop title="클릭 시 상단으로 이동" onClick={scrollToTop}>
+              &uarr;
+            </StyledScrollToTop>
+          </StyledSidebarAside>
+        </StyledSidebarDiv>
+      </StyledListGrid>
     </Layout>
   );
 };
