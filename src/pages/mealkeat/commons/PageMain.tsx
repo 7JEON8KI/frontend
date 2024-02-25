@@ -1,14 +1,6 @@
 import React from "react";
-import { Layout } from "components/mealkeat";
-import {
-  StyledContentPrice,
-  StyledContentText,
-  StyledGridContainer,
-  StyledProduct,
-  StyledTitle,
-  StyledMainDiv,
-  StyledTopSlider,
-} from "./PageMain.style";
+import { Layout, Product } from "components/mealkeat";
+import { StyledGridContainer, StyledTitle, StyledMainDiv, StyledTopSlider } from "./PageMain.style";
 import Slider from "react-slick";
 import axios from "axios";
 
@@ -87,20 +79,7 @@ const PageMain: React.FC = () => {
         <StyledTitle $paddingLeft={itemRect || 0}>Best Meal</StyledTitle>
         <StyledGridContainer ref={gridRef}>
           {products.map((product, index) => (
-            <StyledProduct key={index} ref={index == 0 ? firstItemRef : null}>
-              <img className="food_img" src={product.imageUrl} alt="" />
-              <div className="content">
-                <StyledContentText $title={true}>{product.title}</StyledContentText>
-                <StyledContentText $description={true}>{product.description}</StyledContentText>
-                <StyledContentPrice>
-                  <div>{product.discount}</div>
-                  <div>{product.price}</div>
-                  <div>{product.originalPrice}</div>
-                  <img className="cart_btn" src="https://via.placeholder.com/50x50" alt="" />
-                </StyledContentPrice>
-                {product.soldOut && <div>일시 품절</div>}
-              </div>
-            </StyledProduct>
+            <Product key={index} product={product} />
           ))}
         </StyledGridContainer>
         <button
