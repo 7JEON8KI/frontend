@@ -14,6 +14,7 @@ import {
   PageLike,
   PagePayment,
   PagePaymentComplete,
+  PageRecommend,
 } from "pages/mealkeat";
 interface Route {
   path: string;
@@ -38,6 +39,7 @@ const mealRoutes: Route[] = [
   { path: "/like", component: PageLike },
   { path: "/payment", component: PagePayment },
   { path: "/payment/complete", component: PagePaymentComplete },
+  { path: "/recommend", component: PageRecommend },
 ];
 
 export default mealRoutes;

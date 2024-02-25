@@ -47,7 +47,7 @@ export const Header = (): JSX.Element => {
             <img src={MenuPath} alt="메뉴 아이콘" />
             전체상품
           </NavMenu>
-          <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommand")}>
+          <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommend")}>
             밀킷 추천
           </NavMenu>
           <NavMenu title="클릭 시 오븐 페이지로 이동" onClick={() => navigate("/oven")}>
