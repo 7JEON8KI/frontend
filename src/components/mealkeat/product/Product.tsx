@@ -1,5 +1,7 @@
 import React from "react";
 import { StyledContentPrice, StyledContentText, StyledProduct } from "./Product.style";
+import { useNavigate } from "react-router-dom";
+
 interface Product {
   imageUrl: string;
   title: string;
@@ -14,8 +16,9 @@ interface Props {
 }
 
 const Product = ({ product }: Props): JSX.Element => {
+  const navigate = useNavigate();
   return (
-    <StyledProduct>
+    <StyledProduct onClick={() => navigate("/detail")}>
       {/* ref={index == 0 ? firstItemRef : null} */}
       <img className="food_img" src={product.imageUrl} alt="" />
       <div className="content">
