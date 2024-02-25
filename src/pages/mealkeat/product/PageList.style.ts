@@ -69,7 +69,7 @@ export const StyledScrollToTop = styled.button.attrs({ type: "button" })`
   border-radius: 50%;
 `;
 
-export const StyledMenuDiv = styled.div`
+export const StyledMenuNav = styled.nav`
   width: 1290px;
   margin: 40px auto;
 `;

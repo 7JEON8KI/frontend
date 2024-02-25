@@ -1,4 +1,15 @@
-import { PageMain, PageLogin, PageFail, PageSignup, PageMypage, PageDetail, PageList } from "pages/mealkeat";
+import {
+  PageMain,
+  PageLogin,
+  PageFail,
+  PageSignup,
+  PageMypage,
+  PageDetail,
+  PageList,
+  PageTheme,
+  PageBest,
+  PageDiscount,
+} from "pages/mealkeat";
 interface Route {
   path: string;
   component: React.FC;
@@ -13,6 +24,9 @@ const mealRoutes: Route[] = [
   { path: "/mypage", component: PageMypage },
   { path: "/detail", component: PageDetail },
   { path: "/list", component: PageList },
+  { path: "/theme", component: PageTheme },
+  { path: "/best", component: PageBest },
+  { path: "/discount", component: PageDiscount },
 ];
 
 export default mealRoutes;
