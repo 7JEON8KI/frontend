@@ -86,7 +86,7 @@ export const StyledSearch = styled.div.attrs({ className: "search" })`
 
 export const StyledIconList = styled.div.attrs({ className: "icons" })`
   display: inline-flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
 `;
 

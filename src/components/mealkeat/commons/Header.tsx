@@ -4,6 +4,7 @@ import SearchPath from "assets/images/icons/Search.png";
 import HeartPath from "assets/images/icons/Heart.png";
 import CartPath from "assets/images/icons/Cart.png";
 import UserPath from "assets/images/icons/User.png";
+import MypagePath from "assets/images/icons/Mypage.png";
 import MenuPath from "assets/images/icons/Menu.png";
 import { StyledHeader, StyledSearch, StyledIconList, StyledIcon, StyledTopNav, NavMenu } from "./Header.style";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +33,12 @@ export const Header = (): JSX.Element => {
                 <span>20</span>
               </StyledCnt> */}
           </StyledIcon>
+          <StyledIcon onClick={() => navigate("/login")}>
+            <img src={UserPath} alt="로그인/로그아웃 아이콘" />
+            <span>로그인</span>
+          </StyledIcon>
           <StyledIcon onClick={() => navigate("/mypage")}>
-            <img src={UserPath} alt="마이페이지 아이콘" />
+            <img src={MypagePath} alt="마이페이지 아이콘" />
             <span>마이페이지</span>
           </StyledIcon>
         </StyledIconList>
