@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledHeader = styled.header`
   margin-top: 3rem;
-
+  margin-bottom: 1rem;
   @media screen and (max-width: 600px) {
     margin-top: 1rem;
     justify-content: center;
