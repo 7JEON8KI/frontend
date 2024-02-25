@@ -9,6 +9,11 @@ import {
   PageTheme,
   PageBest,
   PageDiscount,
+  PageEvent,
+  PageCart,
+  PageLike,
+  PagePayment,
+  PagePaymentComplete,
 } from "pages/mealkeat";
 interface Route {
   path: string;
@@ -23,10 +28,16 @@ const mealRoutes: Route[] = [
   { path: "/signup", component: PageSignup },
   { path: "/mypage", component: PageMypage },
   { path: "/detail", component: PageDetail },
+  // { path: "/detail/:id", component: PageDetail },
   { path: "/list", component: PageList },
   { path: "/theme", component: PageTheme },
   { path: "/best", component: PageBest },
   { path: "/discount", component: PageDiscount },
+  { path: "/event", component: PageEvent },
+  { path: "/cart", component: PageCart },
+  { path: "/like", component: PageLike },
+  { path: "/payment", component: PagePayment },
+  { path: "/payment/complete", component: PagePaymentComplete },
 ];
 
 export default mealRoutes;

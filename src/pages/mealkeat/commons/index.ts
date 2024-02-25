@@ -1,3 +1,4 @@
 import PageMain from "./PageMain";
+import PageEvent from "./PageEvent";
 
-export { PageMain };
+export { PageMain, PageEvent };
