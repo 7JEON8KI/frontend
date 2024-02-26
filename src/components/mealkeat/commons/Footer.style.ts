@@ -4,7 +4,7 @@ export const StyledFooter = styled.footer`
   display: flex;
   background-color: #f7f7f7;
   gap: 0 3.75rem;
-  margin: 0 auto;
+  margin: 0 auto 60px;
   max-width: 2000px;
   min-width: 320px;
   width: 80%;

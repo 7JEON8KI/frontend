@@ -5,19 +5,18 @@ export const StyledMainDiv = styled.main`
   height: 100%;
 `;
 
-interface StyledTitleProps {
-  $paddingLeft: number;
-}
-
-export const StyledTitle = styled.div<StyledTitleProps>`
+export const StyledTitle = styled.div`
   font-size: ${({ theme }) => theme.fontSize.tooBig};
   font-weight: bold;
-  padding-left: ${({ $paddingLeft }) => $paddingLeft}px;
+  padding: 3rem 1rem;
   margin-top: 1.8rem;
   margin-bottom: 0.9rem;
+  width: 90%;
+  max-width: 2000px;
+  margin: auto;
   ${({ theme }) => theme.media.sm`
     font-size: ${theme.fontSize.xl};
-  `}
+  `};
 `;
 
 export const StyledGridContainer = styled.div`
