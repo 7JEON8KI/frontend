@@ -60,12 +60,13 @@ export const StyledInfoDiv = styled.div`
 
 export const StyledScrollToTop = styled.button.attrs({ type: "button" })`
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   border: 1px solid black;
   background: white;
-  font-size: 2rem;
-  bottom: -200px;
+  font-size: 1.75rem;
+  font-weight: bold;
+  bottom: -100px;
   border-radius: 50%;
 `;
 

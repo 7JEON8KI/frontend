@@ -4,12 +4,12 @@ import { css } from "styled-components";
 const colors = {
   mainColor: "#fd6f21",
   bgColor: "#f7f7f7",
-  pointSubColor: "237c60",
-  pointSubColor2: "1c5641",
+  pointSubColor: "#237c60",
+  pointSubColor2: "#1c5641",
   black: "#282828",
   darkGrey: "#5f5f5f",
-  mediumGrey: "c3c6c9",
-  lightGrey: "d0d0d0",
+  mediumGrey: "#c3c6c9",
+  lightGrey: "#d0d0d0",
   white: "#f4f4f4",
 
   indigo600: "#4f46e5",

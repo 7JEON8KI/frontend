@@ -19,8 +19,6 @@ const settings = {
 
 const PageMain: React.FC = () => {
   const gridRef = React.useRef<HTMLDivElement>(null);
-  const firstItemRef = React.useRef<HTMLDivElement>(null);
-  const [itemRect, setItemRect] = React.useState<number | null>(null);
   const products = Array(12)
     .fill(0)
     .map((_, idx) => ({
@@ -33,14 +31,6 @@ const PageMain: React.FC = () => {
       originalPrice: "22,600원",
       soldOut: false, // 일시 품절 여부
     }));
-
-  React.useEffect(() => {
-    if (gridRef.current && firstItemRef.current) {
-      const newItemRect =
-        gridRef.current.getBoundingClientRect().width >= 2100 ? 116.25 : firstItemRef.current.getBoundingClientRect().x;
-      setItemRect(newItemRect);
-    }
-  }, [firstItemRef]);
 
   React.useEffect(() => {
     axios
@@ -76,7 +66,7 @@ const PageMain: React.FC = () => {
             ))}
           </Slider>
         </StyledTopSlider>
-        <StyledTitle $paddingLeft={itemRect || 0}>Best Meal</StyledTitle>
+        <StyledTitle>Best Meal</StyledTitle>
         <StyledGridContainer ref={gridRef}>
           {products.map((product, index) => (
             <Product key={index} product={product} />
@@ -97,8 +87,8 @@ const PageMain: React.FC = () => {
         >
           더 많은 상품 보러가기
         </button>
-        <StyledTitle $paddingLeft={itemRect || 0}>저녁엔 이거 어때요?</StyledTitle>
-        <div style={{ width: "1600px", height: "500px", margin: "50px auto" }}>
+        <StyledTitle>저녁엔 이거 어때요?</StyledTitle>
+        <div style={{ width: "1600px", height: "500px", margin: "0px auto" }}>
           <Slider dots={true} arrows={true} slidesToShow={3} slidesToScroll={3} speed={1500} infinite={true}>
             {Array(6)
               .fill(0)
