@@ -47,7 +47,7 @@ export const GlobalStyle = createGlobalStyle`
   
   /* 키보드 사용자를 위한 포커스 스타일 */
   .user-is-tabbing *:focus {
-    outline: ${theme.colors.pointSubColor2} solid 5px;
+    outline: ${theme.colors.pointSubColor} solid 5px;
   }
 
   // slick 슬라이더 스타일

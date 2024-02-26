@@ -5,6 +5,8 @@ import checkClickPath from "assets/images/icons/except_click.png";
 import formatCurrency from "utils/formatCurrency";
 import { MIN_PRODUCT_AMOUNT, MAX_PRODUCT_AMOUNT, DEFAULT_DELIVERY_FEE } from "constants/productConstants";
 import styled from "styled-components";
+import scrollToTop from "utils/scrollToTop";
+import { useNavigate } from "react-router-dom";
 
 const StyledAmountBtn = styled.button.attrs({ type: "button" })`
   padding: 1rem;
@@ -35,6 +37,7 @@ interface Product {
   selected: boolean;
 }
 const PageCart: React.FC = () => {
+  const navigate = useNavigate();
   const [selectAll, setSelectAll] = useState<boolean>(true);
   const [cartProduct, setCartProduct] = useState<Product[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -201,7 +204,7 @@ const PageCart: React.FC = () => {
                   </div>
                   <div
                     style={{
-                      width: "150px",
+                      width: "200px",
                       fontWeight: "bold",
                       fontSize: "2rem",
                       display: "flex",
@@ -217,7 +220,7 @@ const PageCart: React.FC = () => {
                     >
                       -
                     </StyledAmountBtn>
-                    <span>{product.quantity}</span>
+                    <span>{product.quantity} 개</span>
                     <StyledAmountBtn
                       onClick={() => handleAmountBtnClick(i, "plus")}
                       disabled={product.quantity >= MAX_PRODUCT_AMOUNT || !product.selected}
@@ -296,7 +299,15 @@ const PageCart: React.FC = () => {
               결제 및 계좌 안내 시 상호명은 <span style={{ color: "#fd6f21" }}>밀킷</span>으로 표기되니 참고
               부탁드립니다.
             </span>
-            <StyledPurchaseBtn disabled={countSelectedItems() === 0} aria-disabled={countSelectedItems() === 0}>
+            <StyledPurchaseBtn
+              disabled={countSelectedItems() === 0}
+              aria-disabled={countSelectedItems() === 0}
+              onClick={() => {
+                scrollToTop({});
+                navigate("/payment");
+              }}
+              title="선택상품 구매하기, 클릭 시 결제 페이지로 이동"
+            >
               선택상품 구매하기
             </StyledPurchaseBtn>
           </div>
