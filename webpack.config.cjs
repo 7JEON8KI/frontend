@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
       hot: true,
       proxy: {
         "": {
-          target: "http://localhost:8080/api/v1",
+          target: process.env.REACT_APP_BASE_URL,
           changeOrigin: true, // 호스트 헤더를 target URL로 변경
           secure: false,
         },
