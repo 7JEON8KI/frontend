@@ -16,6 +16,8 @@ import {
   PagePaymentComplete,
   PageRecommend,
 } from "pages/mealkeat";
+import KakaoCallback from "pages/mealkeat/oauth/KakaoCallback";
+
 interface Route {
   path: string;
   component: React.FC;
@@ -30,7 +32,7 @@ const mealRoutes: Route[] = [
   { path: "/mypage", component: PageMypage },
   { path: "/detail", component: PageDetail },
   // { path: "/detail/:id", component: PageDetail },
-  { path: "/list", component: PageList },
+  { path: "/list", component: PageList }
   { path: "/theme", component: PageTheme },
   { path: "/best", component: PageBest },
   { path: "/discount", component: PageDiscount },
@@ -40,6 +42,7 @@ const mealRoutes: Route[] = [
   { path: "/payment", component: PagePayment },
   { path: "/payment/complete", component: PagePaymentComplete },
   { path: "/recommend", component: PageRecommend },
+  { path: "/login/kakaocallback", component: KakaoCallback },
 ];
 
 export default mealRoutes;
