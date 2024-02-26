@@ -32,7 +32,7 @@ const mealRoutes: Route[] = [
   { path: "/mypage", component: PageMypage },
   { path: "/detail", component: PageDetail },
   // { path: "/detail/:id", component: PageDetail },
-  { path: "/list", component: PageList }
+  { path: "/list", component: PageList },
   { path: "/theme", component: PageTheme },
   { path: "/best", component: PageBest },
   { path: "/discount", component: PageDiscount },
