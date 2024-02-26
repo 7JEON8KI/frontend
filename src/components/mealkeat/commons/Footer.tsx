@@ -17,19 +17,39 @@ export const Footer = (): JSX.Element => {
       </FooterItem>
       <FooterItem>
         <div className="title">Menu</div>
-        <p>밀킷 추천</p>
-        <p>오븐</p>
-        <p>테마별</p>
-        <p>베스트</p>
-        <p>할인 중</p>
+        <button type="button" title="선택 시 밀킷 추천 페이지로 이동">
+          밀킷 추천
+        </button>
+        <button type="button" title="선택 시 오븐 페이지로 이동">
+          오븐
+        </button>
+        <button type="button" title="선택 시 테마별 페이지로 이동">
+          테마별
+        </button>
+        <button type="button" title="선택 시 베스트 페이지로 이동">
+          베스트
+        </button>
+        <button type="button" title="선택 시 할인 중 페이지로 이동">
+          할인 중
+        </button>
       </FooterItem>
       <FooterItem>
         <div className="title">Mypage</div>
-        <p>주문현황</p>
-        <p>쇼핑통장</p>
-        <p>나의 활동</p>
-        <p>고객센터</p>
-        <p>나의 활동</p>
+        <button type="button" title="선택 시 마이페이지 주문현황으로 이동">
+          주문현황
+        </button>
+        <button type="button" title="선택 시 마이페이지 쇼핑통장으로 이동">
+          쇼핑통장
+        </button>
+        <button type="button" title="선택 시 마이페이지 나의 활동으로 이동">
+          나의 활동
+        </button>
+        <button type="button" title="선택 시 마이페이지 고객센터로 이동">
+          고객센터
+        </button>
+        <button type="button" title="선택 시 마이페이지 회원정보로 이동">
+          회원정보
+        </button>
       </FooterItem>
     </StyledFooter>
   );

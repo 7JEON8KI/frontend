@@ -40,6 +40,16 @@ export const GlobalStyle = createGlobalStyle`
   p,span {
     cursor: default;
   }
+  /* 웹 접근성 - 포커스 링 설정 */
+  *:focus {
+    outline: none;
+  }
+  
+  /* 키보드 사용자를 위한 포커스 스타일 */
+  .user-is-tabbing *:focus {
+    outline: ${theme.colors.mainColor} solid 5px;
+  }
+
   // slick 슬라이더 스타일
   button.slick-arrow {
     width: 30px;

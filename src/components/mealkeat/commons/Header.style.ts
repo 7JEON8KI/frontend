@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledHeader = styled.header`
   margin-top: 3rem;
-
+  margin-bottom: 1rem;
   @media screen and (max-width: 600px) {
     margin-top: 1rem;
     justify-content: center;
@@ -86,11 +86,11 @@ export const StyledSearch = styled.div.attrs({ className: "search" })`
 
 export const StyledIconList = styled.div.attrs({ className: "icons" })`
   display: inline-flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
 `;
 
-export const StyledIcon = styled.div`
+export const StyledIcon = styled.button.attrs({ type: "button" })`
   positon: absolute;
   img {
     width: 24px;
@@ -128,7 +128,7 @@ export const StyledTopNav = styled.nav.attrs({ className: "menus" })`
   }
 `;
 
-export const NavMenu = styled.div`
+export const NavMenu = styled.button.attrs({ type: "button" })`
   display: flex; /* Flex 컨테이너 설정 */
   align-items: center; /* 세로 방향으로 중앙 정렬 */
   gap: 0.5rem; /* 아이콘과 텍스트 사이의 간격 설정 */

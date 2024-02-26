@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledLogo = styled.div.attrs({ className: "logo" })`
+export const StyledLogo = styled.button.attrs({ type: "button", className: "logo" })`
   display: inline-block;
   img {
     height: 3.625rem;
