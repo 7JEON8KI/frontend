@@ -11,10 +11,27 @@ import {
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
+import styled from "styled-components";
+const StyledAmountBtn = styled.button.attrs({ type: "button" })`
+  width: 40px;
+  height: 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #237c60;
+  color: white;
+  &:disabled {
+    background-color: #d0d0d0;
+    color: black;
+  }
+`;
 
 const PageDetail: React.FC = () => {
-  const [clickDetailView, setClickDetailView] = React.useState(false);
-
+  const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
+  const [productCnt, setProductCnt] = React.useState<number>(1);
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
     if (detailContainer) {
@@ -200,7 +217,7 @@ const PageDetail: React.FC = () => {
               <div style={{ width: "100%", padding: "1rem  0" }}>
                 <div
                   style={{
-                    border: "1px solid gray",
+                    border: "1px solid #c3c6c9",
                     borderRadius: "10px",
                     padding: "1rem",
                     display: "flex",
@@ -211,43 +228,33 @@ const PageDetail: React.FC = () => {
                   <div style={{ fontWeight: "bold" }}>단호박죽</div>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", justifyContent: "start", alignItems: "center", gap: "0.5rem" }}>
-                      <button
-                        style={{
-                          width: "45px",
-                          height: "35px",
-                          border: "2px solid  #237c60",
-                          fontSize: "1.5rem",
-                          fontWeight: "bold",
-                          borderRadius: "5px",
-                        }}
+                      <StyledAmountBtn
+                        disabled={productCnt <= 1}
+                        aria-disabled={productCnt <= 1}
+                        onClick={() => setProductCnt(prev => prev - 1)}
                       >
                         -
-                      </button>
+                      </StyledAmountBtn>
                       <input
                         style={{
                           width: "60px",
                           height: "35px",
                           padding: "1rem",
                           textAlign: "center",
-                          border: "1px solid #5f5f5f",
+                          border: "1px solid #c3c6c9",
                           fontWeight: "bold",
                           fontSize: "1.25rem",
                         }}
                         type="number"
-                        value="2"
+                        value={productCnt}
                       />
-                      <button
-                        style={{
-                          width: "45px",
-                          height: "35px",
-                          border: "2px solid  #237c60",
-                          fontSize: "1.5rem",
-                          fontWeight: "bold",
-                          borderRadius: "5px",
-                        }}
+                      <StyledAmountBtn
+                        disabled={productCnt >= 10}
+                        aria-disabled={productCnt >= 10}
+                        onClick={() => setProductCnt(prev => prev + 1)}
                       >
                         +
-                      </button>
+                      </StyledAmountBtn>
                     </div>
                     <div>5,700원</div>
                   </div>
