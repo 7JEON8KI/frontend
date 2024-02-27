@@ -3,14 +3,16 @@ import { css } from "styled-components";
 /** 자주 사용하는 색상들 */
 const colors = {
   mainColor: "#fd6f21",
-  bgColor: "#f7f7f7",
+  // bgColor: "#f7f7f7",
+  bgColor: "#ffffff",
   pointSubColor: "#237c60",
   pointSubColor2: "#1c5641",
   black: "#282828",
   darkGrey: "#5f5f5f",
   mediumGrey: "#c3c6c9",
   lightGrey: "#d0d0d0",
-  white: "#f4f4f4",
+  // white: "#f4f4f4",
+  white: "#ffffff",
 
   indigo600: "#4f46e5",
   indigo300: "#a5b4fc",
@@ -30,7 +32,7 @@ export const lightTheme = {
 };
 
 const shadows: { [key: string]: string } = {
-  default: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+  default: "rgba(0, 0, 0, 0.3) 0px 4px 12px",
 };
 /** 반응형 사이즈 */
 const sizes: { [key: string]: number } = {
