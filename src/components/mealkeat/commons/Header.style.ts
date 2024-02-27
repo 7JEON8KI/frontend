@@ -17,6 +17,8 @@ export const StyledHeader = styled.header`
     grid-template-columns: 2fr 8fr 2.25fr; /* 가로 비율 설정 */
     grid-template-rows: auto auto; /* 세로 비율 설정, 각 행의 높이는 내용에 따라 자동으로 조정됨 */
     gap: 2.5rem;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGrey};
+    padding-bottom: 30px;
     grid-template-areas:
       "logo search icons"
       ". menus .";

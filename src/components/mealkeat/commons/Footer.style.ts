@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledFooter = styled.footer`
   display: flex;
-  background-color: #f7f7f7;
+  background-color: ${({ theme }) => theme.colors.bgColor};
   gap: 0 3.75rem;
   margin: 0 auto 60px;
   max-width: 2000px;

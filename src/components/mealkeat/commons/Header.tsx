@@ -47,8 +47,8 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommend")}>
             밀킷 추천
           </NavMenu>
-          <NavMenu title="클릭 시 오븐 페이지로 이동" onClick={() => navigate("/oven")}>
-            오븐
+          <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
+            와인
           </NavMenu>
           <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
             이벤트
