@@ -23,7 +23,7 @@ function KakaoCallback() {
       })
       .then(response => response.data)
       .then(response => {
-        if (response?.isMember) {
+        if (response.data?.isMember) {
           //spring에서 발급된 jwt localStorage 저장
           localStorage.setItem("Authorization", "Bearer " + response.data.accessToken);
           //메인 페이지로 이동
