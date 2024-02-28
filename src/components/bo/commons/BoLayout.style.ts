@@ -9,7 +9,7 @@ export const StyledBoBody = styled.div`
   width: 100vw;
   height: 100vh;
   display: grid;
-  grid-template-columns: 10% 90%;
+  grid-template-columns: 8% 92%;
 `;
 
 export const StyledBoSidebar = styled.div`
@@ -20,5 +20,4 @@ export const StyledBoSidebar = styled.div`
 export const StyledBoContent = styled.div`
   height: 100%;
   background-color: #e6e6e6;
-  display: grid;
 `;
