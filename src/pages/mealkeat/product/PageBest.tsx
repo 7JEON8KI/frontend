@@ -1,7 +1,5 @@
 import React from "react";
 import { Layout, Product } from "components/mealkeat";
-import except from "assets/images/icons/except.png";
-import exceptClick from "assets/images/icons/except_click.png";
 import {
   StyledListGrid,
   StyledSidebarDiv,
@@ -13,16 +11,12 @@ import {
   StyledMenuNav,
   StyledMenuTitle,
   StyledMenuInfo,
-  StyledMenuButton,
-  StyledMenuImage,
   StyledItemCount,
   StyledProductGrid,
-  StyledProductInfoDivider,
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
 
-const PageList: React.FC = () => {
-  const [clickExcept, setClickExcept] = React.useState<boolean>(false);
+const PageBest: React.FC = () => {
   const products = Array(12)
     .fill(0)
     .map((_, idx) => ({
@@ -42,19 +36,9 @@ const PageList: React.FC = () => {
         <StyledSidebarDiv />
         <StyledMain>
           <StyledMenuNav>
-            <StyledMenuTitle>전체상품</StyledMenuTitle>
+            <StyledMenuTitle>베스트 상품</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>총 262건</StyledItemCount>
-              <StyledProductInfoDivider>
-                <StyledMenuButton onClick={() => setClickExcept(prev => !prev)}>
-                  <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
-                  <span>품절 상품제외</span>
-                </StyledMenuButton>
-                <StyledMenuButton>최신상품</StyledMenuButton>
-                <StyledMenuButton>낮은가격</StyledMenuButton>
-                <StyledMenuButton>높은가격</StyledMenuButton>
-                <StyledMenuButton style={{ borderRight: "none" }}>인기상품</StyledMenuButton>
-              </StyledProductInfoDivider>
+              <StyledItemCount>총 12건</StyledItemCount>
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
@@ -82,4 +66,4 @@ const PageList: React.FC = () => {
   );
 };
 
-export default PageList;
+export default PageBest;

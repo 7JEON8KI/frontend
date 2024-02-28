@@ -40,6 +40,34 @@ export const GlobalStyle = createGlobalStyle`
   p,span {
     cursor: default;
   }
+  /* 웹 접근성 - 포커스 링 설정 */
+  *:focus {
+    outline: none;
+  }
+  
+  /* 키보드 사용자를 위한 포커스 스타일 */
+  .user-is-tabbing *:focus {
+    // outline: ${theme.colors.pointSubColor} solid 5px;
+    outline: red solid 4px;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  p,
+  span,
+  img,
+  div {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+
   // slick 슬라이더 스타일
   button.slick-arrow {
     width: 30px;

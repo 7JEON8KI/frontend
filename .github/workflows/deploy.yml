@@ -2,9 +2,9 @@ name: React CI with Docker
 
 on:
   push:
-    branches: [ "dev" ] # 또는 원하는 브랜치
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "dev" ] # 또는 원하는 브랜치
+    branches: [ "dev" ]
 
 permissions:
   contents: read
@@ -29,3 +29,16 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+        ## (2) docker compose up
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST_ID }}
+          username: ec2-user
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            sudo docker rm -f $(sudo docker ps -qa) || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mealkeat:frontlatest
+            sudo docker-compose up -d
+            sudo docker image prune -f

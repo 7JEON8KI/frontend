@@ -21,7 +21,7 @@ import {
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
 
-const PageList: React.FC = () => {
+const PageDiscount: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
   const products = Array(12)
     .fill(0)
@@ -42,7 +42,7 @@ const PageList: React.FC = () => {
         <StyledSidebarDiv />
         <StyledMain>
           <StyledMenuNav>
-            <StyledMenuTitle>전체상품</StyledMenuTitle>
+            <StyledMenuTitle>할인 중</StyledMenuTitle>
             <StyledMenuInfo>
               <StyledItemCount>총 262건</StyledItemCount>
               <StyledProductInfoDivider>
@@ -82,4 +82,4 @@ const PageList: React.FC = () => {
   );
 };
 
-export default PageList;
+export default PageDiscount;
