@@ -2,7 +2,6 @@ import React from "react";
 import { Layout, Product } from "components/mealkeat";
 import { StyledGridContainer, StyledTitle, StyledMainDiv, StyledTopSlider } from "./PageMain.style";
 import Slider from "react-slick";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import scrollToTop from "utils/scrollToTop";
 
@@ -34,20 +33,6 @@ const PageMain: React.FC = () => {
       originalPrice: "22,600원",
       soldOut: false, // 일시 품절 여부
     }));
-
-  React.useEffect(() => {
-    axios
-      .create({
-        baseURL: "http://localhost:8080",
-        headers: {
-          "Content-type": "application/json",
-        },
-      })
-      .get("/api/v1/test/all")
-      .then(res => {
-        console.log(res.data);
-      });
-  }, []);
 
   const sliderItem = Array(4)
     .fill(0)
