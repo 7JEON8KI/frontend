@@ -26,12 +26,9 @@ export const Header = (): JSX.Element => {
             <img src={HeartPath} alt="찜 아이콘" />
             <span>찜 목록</span>
           </StyledIcon>
-          <StyledIcon onClick={() => navigate("/cart")}>
+          <StyledIcon onClick={() => navigate("/cart")} $amount={3}>
             <img src={CartPath} alt="장바구니 아이콘" />
             <span>장바구니</span>
-            {/* <StyledCnt>
-                <span>20</span>
-              </StyledCnt> */}
           </StyledIcon>
           <StyledIcon onClick={() => navigate("/login")}>
             <img src={UserPath} alt="로그인/로그아웃 아이콘" />
@@ -50,8 +47,8 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommend")}>
             밀킷 추천
           </NavMenu>
-          <NavMenu title="클릭 시 오븐 페이지로 이동" onClick={() => navigate("/oven")}>
-            오븐
+          <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
+            와인
           </NavMenu>
           <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
             이벤트

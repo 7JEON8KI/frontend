@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const StyledHeader = styled.header`
   margin-top: 3rem;
@@ -17,6 +17,8 @@ export const StyledHeader = styled.header`
     grid-template-columns: 2fr 8fr 2.25fr; /* 가로 비율 설정 */
     grid-template-rows: auto auto; /* 세로 비율 설정, 각 행의 높이는 내용에 따라 자동으로 조정됨 */
     gap: 2.5rem;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGrey};
+    padding-bottom: 30px;
     grid-template-areas:
       "logo search icons"
       ". menus .";
@@ -88,10 +90,14 @@ export const StyledIconList = styled.div.attrs({ className: "icons" })`
   display: inline-flex;
   gap: 1rem;
   align-items: center;
+  margin-top: 1rem;
 `;
+interface StyledIconProps {
+  $amount?: number;
+}
 
-export const StyledIcon = styled.button.attrs({ type: "button" })`
-  positon: absolute;
+export const StyledIcon = styled.button.attrs({ type: "button" })<StyledIconProps>`
+  positon: relative;
   img {
     width: 24px;
     height: 24px;
@@ -111,6 +117,26 @@ export const StyledIcon = styled.button.attrs({ type: "button" })`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${({ $amount }) =>
+    $amount &&
+    $amount > 0 &&
+    css`
+      position: relative;
+      &::after {
+        content: "${$amount}";
+        position: absolute;
+        width: 40px;
+        height: 20px;
+        border: 1px solid ${({ theme }) => theme.colors.mainColor};
+        background: ${({ theme }) => theme.colors.mainColor};
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: -25px;
+      }
+    `};
 `;
 
 export const StyledTopNav = styled.nav.attrs({ className: "menus" })`

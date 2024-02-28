@@ -3,6 +3,8 @@ import { Layout, Product } from "components/mealkeat";
 import { StyledGridContainer, StyledTitle, StyledMainDiv, StyledTopSlider } from "./PageMain.style";
 import Slider from "react-slick";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import scrollToTop from "utils/scrollToTop";
 
 const settings = {
   dots: true,
@@ -18,7 +20,8 @@ const settings = {
 };
 
 const PageMain: React.FC = () => {
-  const gridRef = React.useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
   const products = Array(12)
     .fill(0)
     .map((_, idx) => ({
@@ -66,8 +69,8 @@ const PageMain: React.FC = () => {
             ))}
           </Slider>
         </StyledTopSlider>
-        <StyledTitle>Best Meal</StyledTitle>
-        <StyledGridContainer ref={gridRef}>
+        <StyledTitle>밀킷 베스트 상품입니다</StyledTitle>
+        <StyledGridContainer>
           {products.map((product, index) => (
             <Product key={index} product={product} />
           ))}
@@ -83,6 +86,10 @@ const PageMain: React.FC = () => {
             display: "block",
             color: "#FD6F21",
             fontWeight: "bold",
+          }}
+          onClick={() => {
+            scrollToTop({});
+            navigate("/best");
           }}
         >
           더 많은 상품 보러가기
@@ -102,7 +109,7 @@ const PageMain: React.FC = () => {
                       height: "250px",
                       display: "block",
                       margin: "15px auto 0",
-                      boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                      boxShadow: "rgba(0, 0, 0, 0.15) -5px -2px 12px, rgba(0, 0, 0, 0.15) 5px -2px 12px",
                     }}
                   />
                   <div
@@ -110,7 +117,7 @@ const PageMain: React.FC = () => {
                       width: "390px",
                       height: "120px",
                       margin: "0 auto 15px",
-                      boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+                      boxShadow: "rgba(0, 0, 0, 0.3) 0px 4px 12px",
                     }}
                   >
                     <div
