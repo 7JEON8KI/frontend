@@ -1,5 +1,5 @@
-import { Layout, Product } from "components/mealkeat";
-import React from "react";
+import { Layout, Product, Image } from "components/mealkeat";
+import React, { useEffect } from "react";
 import {
   StyledListGrid,
   StyledSidebarDiv,
@@ -9,28 +9,45 @@ import {
   StyledInfoDiv,
   StyledScrollToTop,
 } from "./PageList.style";
+import {
+  ProductDetailContainer,
+  ProductImageContainer,
+  // ProductMiniImage,
+  ProductDescription,
+  DeliveryInfo,
+  ProductFlexCol,
+  StyledAmountBtn,
+  ProductInfoListContainer,
+  ProductAmountInput,
+} from "./PageDetail.style";
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
-import styled from "styled-components";
-const StyledAmountBtn = styled.button.attrs({ type: "button" })`
-  width: 40px;
-  height: 30px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #237c60;
-  color: white;
-  &:disabled {
-    background-color: #d0d0d0;
-    color: black;
-  }
-`;
+import productApi from "apis/productApi";
+import formatCurrency from "utils/formatCurrency";
+
+interface ProductDetail {
+  productId: number;
+  productName: string;
+  productSubName: string;
+  price: number;
+  productType: string;
+  stock: number;
+  discountRate: number;
+  productDetail: string;
+  amount: number;
+  calorie: number;
+  storage: string;
+  thumbnailImageUrl: string;
+  createdAt: number[];
+  modifiedAt: number[];
+  isLike: number;
+  rn: number;
+  themeName?: string;
+}
 
 const PageDetail: React.FC = () => {
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
+  const [productDetail, setProductDetail] = React.useState<ProductDetail | undefined>(undefined);
   const [productCnt, setProductCnt] = React.useState<number>(1);
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
@@ -39,6 +56,7 @@ const PageDetail: React.FC = () => {
     }
     setClickDetailView(true);
   };
+
   const products = Array(5)
     .fill(0)
     .map((_, idx) => ({
@@ -51,183 +69,122 @@ const PageDetail: React.FC = () => {
       originalPrice: "22,600원",
       soldOut: false, // 일시 품절 여부
     }));
+
+  const getProductDetail = async () => {
+    const detail = await productApi.getProductDetail({ productId: 5 });
+    setProductDetail(detail.data);
+  };
+
+  useEffect(() => {
+    getProductDetail();
+
+    console.log(productDetail);
+    return () => {};
+  }, []);
+
   return (
     <Layout>
       <StyledListGrid>
         <StyledSidebarDiv />
         <StyledMain>
-          <div
-            style={{
-              width: "1320px",
-              display: "flex",
-              margin: "60px auto",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                display: "inline-flex",
-                flexDirection: "column",
-                margin: "0.5rem",
-                justifyContent: "start",
-                alignItems: "center",
-                gap: "1.5rem",
-              }}
-            >
-              <img
-                src="https://via.placeholder.com/567x567"
+          <ProductDetailContainer>
+            <ProductImageContainer>
+              <Image
+                src={productDetail ? productDetail?.thumbnailImageUrl : "https://via.placeholder.com/567x567"}
                 alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                style={{ width: "567px", height: "567px" }}
+                width={567}
+                height={567}
               />
-              <div style={{ display: "flex", gap: "1rem" }}>
-                <img
+              {/* <ProductMiniImage>
+                <Image
                   src="https://via.placeholder.com/98x98"
                   alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  style={{ width: "98px", height: "98px" }}
+                  width={98}
+                  height={98}
                 />
-                <img
+                <Image
                   src="https://via.placeholder.com/98x98"
                   alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  style={{ width: "98px", height: "98px" }}
+                  width={98}
+                  height={98}
                 />
-                <img
+                <Image
                   src="https://via.placeholder.com/98x98"
                   alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  style={{ width: "98px", height: "98px" }}
+                  width={98}
+                  height={98}
                 />
-                <img
+                <Image
                   src="https://via.placeholder.com/98x98"
                   alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  style={{ width: "98px", height: "98px" }}
+                  width={98}
+                  height={98}
                 />
-              </div>
-            </div>
-            <div
-              style={{
-                width: "670px",
-                display: "inline-flex",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1.5rem",
-                  justifyContent: "space-around",
-                  padding: "0  0 2rem",
-                }}
-              >
-                <span style={{ fontSize: "1rem", color: "#5f5f5f" }}>부드러운 달콤함을 품은</span>
-                <span style={{ fontSize: "2rem", fontWeight: "bold" }}>단호박죽</span>
-                <div style={{ display: "flex", gap: "2rem", width: "50%", alignItems: "baseline" }}>
-                  <span style={{ fontSize: "2rem", color: "red" }}>5%</span>
-                  <span style={{ fontSize: "2rem", fontWeight: "bold" }}>5,700원</span>
-                  <span style={{ fontSize: "1rem", color: "#5f5f5f", textDecorationLine: "line-through" }}>
-                    6,000원
-                  </span>
+              </ProductMiniImage> */}
+            </ProductImageContainer>
+            <ProductDescription>
+              <ProductFlexCol $padding="0 0 2rem">
+                <span className="text-base text-darkGrey">{productDetail?.productSubName}</span>
+                <span className="text-[2rem] font-bold">{productDetail?.productName}</span>
+                <div className="flex w-1/2 items-baseline gap-[2rem]">
+                  {productDetail && productDetail?.discountRate > 0 ? (
+                    <>
+                      <span className="text-[2rem] text-red">{productDetail?.discountRate}%</span>
+                      <span className="text-[2rem] font-bold">5,700원</span>
+                      <span className="text-[1rem] text-darkGrey line-through">
+                        {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[2rem] font-bold">
+                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  // justifyContent: "end",
-                  flexDirection: "column",
-                  gap: "1rem",
-                  padding: "1rem 0",
-                  borderTop: "1px solid #c3c6c9",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div style={{ width: "80px" }}>배송정보</div>
-                  <div
-                    style={{
-                      width: "130px",
-                      height: "40px",
-                      border: "2px solid #237c60",
-                      color: "#237c60",
-                      fontWeight: "bold",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "50px",
-                    }}
-                  >
-                    새벽배송
-                  </div>
-                  <div style={{ width: "300px" }}>
-                    7pm 이전 결제시 <span style={{ color: "#237c60", fontWeight: "bold" }}>2월 8일(목) 도착 가능</span>
+              </ProductFlexCol>
+              <ProductFlexCol $gap="1rem" $padding="1rem 0" $borderTop="1px solid #c3c6c9">
+                <div className="flex items-center justify-between">
+                  <div className="w-[80px]">배송정보</div>
+                  <DeliveryInfo $color="#237c60">새벽배송</DeliveryInfo>
+                  <div className="w-[300px]">
+                    7pm 이전 결제시 <span className="font-bold text-pointSubColor">3월 16일(토) 도착 가능</span>
                   </div>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div style={{ width: "80px" }}></div>
-                  <div
-                    style={{
-                      width: "130px",
-                      height: "40px",
-                      border: "2px solid black",
-                      fontWeight: "bold",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "50px",
-                    }}
-                  >
-                    택배배송
-                  </div>
-                  <div style={{ width: "300px" }}>
-                    7pm 이전 결제시 <span style={{ fontWeight: "bold" }}>2월 13일(화) 도착 가능</span>
+                <div className="flex items-center justify-between">
+                  <div className="w-[80px]"></div>
+                  <DeliveryInfo>택배배송</DeliveryInfo>
+                  <div className="w-[300px]">
+                    7pm 이전 결제시 <span className="font-bold">3월 18일(월) 도착 가능</span>
                   </div>
                 </div>
-                {/* <div style={{ color: "#5f5f5f" }}>주문시간 및 배송안내 자세히보기 &gt;</div> */}
-              </div>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: "1rem 0",
-                  gap: "1rem",
-                  borderTop: "1px solid #c3c6c9",
-                }}
-              >
-                <div style={{ display: "grid", gap: "5rem", justifyContent: "start", gridTemplateColumns: "1fr 5fr" }}>
-                  <span style={{ fontWeight: "bold" }}>용량</span>
-                  <span>330g</span>
-                </div>
-                <div style={{ display: "grid", gap: "5rem", justifyContent: "start", gridTemplateColumns: "1fr 5fr" }}>
-                  <span style={{ fontWeight: "bold" }}>칼로리</span>
-                  <span>320kcal</span>
-                </div>
-                <div style={{ display: "grid", gap: "5rem", justifyContent: "start", gridTemplateColumns: "1fr 5fr" }}>
-                  <span style={{ fontWeight: "bold" }}>보관방법</span>
-                  <span>냉동</span>
-                </div>
-                <div style={{ display: "grid", gap: "5rem", justifyContent: "start", gridTemplateColumns: "1fr 5fr" }}>
-                  <span style={{ fontWeight: "bold" }}>배송비</span>
+              </ProductFlexCol>
+              <ProductFlexCol $borderTop="1px solid #c3c6c9" $padding="1rem 0" $gap="1rem">
+                <ProductInfoListContainer>
+                  <span>용량</span>
+                  <span>{productDetail?.amount}g</span>
+                </ProductInfoListContainer>
+                <ProductInfoListContainer>
+                  <span>칼로리</span>
+                  <span>{productDetail?.calorie}kcal</span>
+                </ProductInfoListContainer>
+                <ProductInfoListContainer>
+                  <span>보관방법</span>
+                  <span>{productDetail?.storage}</span>
+                </ProductInfoListContainer>
+                <ProductInfoListContainer>
+                  <span>배송비</span>
                   <span>3,000원 / 40,000원 이상 무료 배송</span>
-                </div>
-                <div style={{ display: "grid", gap: "5rem", justifyContent: "start", gridTemplateColumns: "1fr 5fr" }}>
-                  <span style={{ fontWeight: "bold" }}>판매자</span>
-                  <span>그리팅</span>
-                </div>
-              </div>
-              <div style={{ width: "100%", padding: "1rem  0" }}>
-                <div
-                  style={{
-                    border: "1px solid #c3c6c9",
-                    borderRadius: "10px",
-                    padding: "1rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "2rem",
-                  }}
-                >
-                  <div style={{ fontWeight: "bold" }}>단호박죽</div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex", justifyContent: "start", alignItems: "center", gap: "0.5rem" }}>
+                </ProductInfoListContainer>
+                <ProductInfoListContainer>
+                  <span>판매자</span>
+                  <span>밀킷</span>
+                </ProductInfoListContainer>
+              </ProductFlexCol>
+              <div className="w-full py-[1rem]">
+                <ProductFlexCol $gap="2rem" $padding="1rem" $border="1px solid #c3c6c9" $borderRadius="10px">
+                  <div className="font-bold">{productDetail?.productName}</div>
+                  <div className="flex justify-between">
+                    <div className="flex items-center justify-start gap-[0.5rem]">
                       <StyledAmountBtn
                         disabled={productCnt <= 1}
                         aria-disabled={productCnt <= 1}
@@ -235,19 +192,7 @@ const PageDetail: React.FC = () => {
                       >
                         -
                       </StyledAmountBtn>
-                      <input
-                        style={{
-                          width: "60px",
-                          height: "35px",
-                          padding: "1rem",
-                          textAlign: "center",
-                          border: "1px solid #c3c6c9",
-                          fontWeight: "bold",
-                          fontSize: "1.25rem",
-                        }}
-                        type="number"
-                        value={productCnt}
-                      />
+                      <ProductAmountInput value={productCnt} readOnly aria-readonly />
                       <StyledAmountBtn
                         disabled={productCnt >= 10}
                         aria-disabled={productCnt >= 10}
@@ -256,9 +201,12 @@ const PageDetail: React.FC = () => {
                         +
                       </StyledAmountBtn>
                     </div>
-                    <div>5,700원</div>
+                    <div>
+                      {productDetail && formatCurrency({ amount: productCnt * productDetail?.price, locale: "ko-KR" })}
+                      원
+                    </div>
                   </div>
-                </div>
+                </ProductFlexCol>
                 <div
                   style={{
                     fontWeight: "bold",
@@ -270,7 +218,9 @@ const PageDetail: React.FC = () => {
                   }}
                 >
                   합계
-                  <span style={{ color: "red", fontSize: "2rem", fontWeight: "bold" }}>5,700원</span>
+                  <span className="text-[2rem] font-bold text-red">
+                    {productDetail && formatCurrency({ amount: productCnt * productDetail?.price, locale: "ko-KR" })}원
+                  </span>
                 </div>
               </div>
               <div
@@ -297,7 +247,6 @@ const PageDetail: React.FC = () => {
                   <img src={HeartPath} style={{ width: "30px", height: "30px" }} alt="찜 아이콘" />
                   <span style={{ marginTop: "0.2rem", fontWeight: "bold" }}>찜</span>
                 </button>
-                {/* <button style={{ width: "270px", height: "70px" }}>입고예정</button> */}
                 <button
                   style={{
                     width: "270px",
@@ -323,8 +272,8 @@ const PageDetail: React.FC = () => {
                   구매하기
                 </button>
               </div>
-            </div>
-          </div>
+            </ProductDescription>
+          </ProductDetailContainer>
           <div style={{ width: "1320px", height: "250px", border: "1px solid black", margin: "40px auto" }}>리뷰</div>
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
