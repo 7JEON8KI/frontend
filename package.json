@@ -31,7 +31,6 @@
     "@nivo/pie": "^0.84.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
-    "@toast-ui/react-editor": "^3.2.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
     "@types/react": "^18.2.55",

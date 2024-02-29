@@ -6,7 +6,7 @@ import BoMemberTable from "components/bo/commons/BoMemberTable";
 const PageAdminMember: React.FC = () => {
   return (
     <BoLayout>
-      <Box height="95vh" width="100%" bgcolor="white" overflow={"auto"} sx={{}}>
+      <Box height="95vh" width="100%" bgcolor="white" p={2} overflow={"auto"}>
         <BoMemberTable />
       </Box>
     </BoLayout>

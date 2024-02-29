@@ -1,11 +1,11 @@
 import React from "react";
 import BoLayout from "components/bo/commons/BoLayout";
-import { Box } from "@mui/material";
+import BoModal from "components/bo/commons/BoModal";
 
 const PageAdminEvent: React.FC = () => {
   return (
     <BoLayout>
-      <Box height="100%" width="100%" bgcolor="white"></Box>
+      <BoModal />
     </BoLayout>
   );
 };

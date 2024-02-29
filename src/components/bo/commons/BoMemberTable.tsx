@@ -11,49 +11,21 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-
+import memberdata from "../sampledata/memberdata";
+import BoModal from "./BoModal";
 interface Data {
-  product_id: number;
-  price: number;
-  stock: number;
-  discount: number;
-  product_name: string;
-  store_name: string;
+  member_id: string;
+  name: string;
+  nickname: string;
+  email: string;
+  phone: string;
+  gender: string;
+  birth: string;
+  address: string;
+  zipcode: string;
 }
 
-function createData(
-  product_id: number,
-  product_name: string,
-  price: number,
-  stock: number,
-  discount: number,
-  store_name: string,
-): Data {
-  return {
-    product_id,
-    product_name,
-    price,
-    stock,
-    discount,
-    store_name,
-  };
-}
-
-const rows = [
-  createData(1, "Cupcake", 305, 3.7, 67, "압구정김밥"),
-  createData(2, "Donut", 452, 25.0, 51, "압구정김밥"),
-  createData(3, "Eclair", 262, 16.0, 24, "압구정김밥"),
-  createData(4, "Frozen yoghurt", 159, 6.0, 24, "압구정김밥"),
-  createData(5, "Gingerbread", 356, 16.0, 49, "압구정김밥"),
-  createData(6, "Honeycomb", 408, 3.2, 87, "압구정김밥"),
-  createData(7, "Ice cream sandwich", 237, 9.0, 37, "압구정김밥"),
-  createData(8, "Jelly Bean", 375, 0.0, 94, "압구정김밥"),
-  createData(9, "KitKat", 518, 26.0, 65, "압구정김밥"),
-  createData(10, "Lollipop", 392, 0.2, 98, "압구정김밥"),
-  createData(11, "Marshmallow", 318, 0, 81, "압구정김밥"),
-  createData(12, "Nougat", 360, 19.0, 9, "압구정김밥"),
-  createData(13, "Oreo", 437, 18.0, 63, "압구정김밥"),
-];
+const memberData = memberdata;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -101,34 +73,58 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "product_name",
+    id: "member_id",
     numeric: false,
     disablePadding: false,
-    label: "회원 이름",
+    label: "회원 아이디",
   },
   {
-    id: "store_name",
+    id: "name",
     numeric: false,
     disablePadding: false,
-    label: "회원 닉네임",
+    label: "이름",
   },
   {
-    id: "price",
-    numeric: true,
+    id: "nickname",
+    numeric: false,
+    disablePadding: false,
+    label: "닉네임",
+  },
+  {
+    id: "email",
+    numeric: false,
+    disablePadding: false,
+    label: "이메일",
+  },
+  {
+    id: "phone",
+    numeric: false,
     disablePadding: false,
     label: "전화번호",
   },
   {
-    id: "stock",
-    numeric: true,
+    id: "gender",
+    numeric: false,
     disablePadding: false,
     label: "성별",
   },
   {
-    id: "discount",
-    numeric: true,
+    id: "birth",
+    numeric: false,
     disablePadding: false,
     label: "생일",
+  },
+  {
+    id: "address",
+    numeric: false,
+    disablePadding: false,
+    label: "주소",
+  },
+  {
+    id: "zipcode",
+    numeric: false,
+    disablePadding: false,
+    label: "우편번호",
   },
 ];
 
@@ -141,6 +137,7 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
+
   const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -176,17 +173,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export default function BoMemberTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("price");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [modalOpen, setModalOpen] = React.useState(false);
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     // const selectedIndex = selected.indexOf(id);
+    setModalOpen(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -199,69 +198,85 @@ export default function BoMemberTable() {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberData.length) : 0;
 
   const visibleRows = React.useMemo(
-    () => stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    () =>
+      stableSort(memberData, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage],
   );
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"small"}>
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <TableContainer>
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"small"}>
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={memberData.length}
+              />
+              <TableBody>
+                {visibleRows.map((row, index) => {
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
+                  return (
+                    <TableRow
+                      hover
+                      onClick={event => handleClick(event, row.member_id)}
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.member_id}
+                      sx={{ cursor: "pointer", height: 33 }}
+                    >
+                      <TableCell component="th" align="center" id={labelId} scope="row" padding="none">
+                        {row.member_id}
+                      </TableCell>
+                      <TableCell align="center">{row.name}</TableCell>
+                      <TableCell align="center">{row.nickname}</TableCell>
+                      <TableCell align="center">{row.email}</TableCell>
+                      <TableCell align="center">{row.phone}</TableCell>
+                      <TableCell align="center">{row.gender}</TableCell>
+                      <TableCell align="center">{row.birth}</TableCell>
+                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="center">{row.zipcode}</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
                   <TableRow
-                    hover
-                    onClick={event => handleClick(event, row.product_id)}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.product_id}
-                    sx={{ cursor: "pointer", height: 33 }}
+                    style={{
+                      height: 33 * emptyRows,
+                    }}
                   >
-                    <TableCell component="th" align="center" id={labelId} scope="row" padding="none">
-                      {row.product_name}
-                    </TableCell>
-                    <TableCell align="center">{row.store_name}</TableCell>
-                    <TableCell align="center">{row.price}</TableCell>
-                    <TableCell align="center">{row.stock}</TableCell>
-                    <TableCell align="center">{row.discount}</TableCell>
+                    <TableCell colSpan={5} />
                   </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 33 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={5} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 15]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 15]}
+            component="div"
+            count={memberData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+      {modalOpen && (
+        <BoModal
+          open={modalOpen}
+          data={memberData[0]}
+          onClose={() => {
+            setModalOpen(false);
+          }}
         />
-      </Paper>
-    </Box>
+      )}
+    </>
   );
 }
