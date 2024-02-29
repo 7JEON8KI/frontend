@@ -11,9 +11,10 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-import memberdata from "../sampledata/memberdata";
 import BoModal from "./BoModal";
-interface Data {
+import boAdminApi from "apis/boAdminApi";
+import { useEffect } from "react";
+interface Member {
   member_id: string;
   name: string;
   nickname: string;
@@ -25,7 +26,29 @@ interface Data {
   zipcode: string;
 }
 
-const memberData = memberdata;
+function createMember(
+  member_id: string,
+  name: string,
+  nickname: string,
+  email: string,
+  phone: string,
+  gender: string,
+  birth: string,
+  address: string,
+  zipcode: string,
+): Member {
+  return {
+    member_id,
+    name,
+    nickname,
+    email,
+    phone,
+    gender,
+    birth,
+    address,
+    zipcode,
+  };
+}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -48,10 +71,6 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
@@ -66,7 +85,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof Member;
   label: string;
   numeric: boolean;
 }
@@ -129,7 +148,7 @@ const headCells: readonly HeadCell[] = [
 ];
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Member) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -138,7 +157,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: keyof Member) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -173,11 +192,40 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export default function BoMemberTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
+  const [orderBy, setOrderBy] = React.useState<keyof Member>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+
+  const [memberdata, setMemberdata] = React.useState<Member[]>([]);
+  const [memberId, setMemberId] = React.useState("");
+  const getMemberList = async () => {
+    const detail = await boAdminApi.getBoMemberList();
+    const memberList = await detail.data.map((member: any) => {
+      const gender = member.memberGender === 1 ? "남자" : "여자";
+      const birthDate = member.memberBirth.join("-");
+      return createMember(
+        member.memberId,
+        member.memberName,
+        member.memberNickname,
+        member.memberEmail,
+        member.memberPhone,
+        gender,
+        birthDate,
+        member.infoAddr,
+        member.infoZipcode,
+      );
+    });
+    setMemberdata(memberList);
+  };
+
+  useEffect(() => {
+    getMemberList();
+    console.log(memberdata);
+    return () => {};
+  }, []);
+
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Member) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -186,6 +234,7 @@ export default function BoMemberTable() {
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     // const selectedIndex = selected.indexOf(id);
     setModalOpen(true);
+    setMemberId(id);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -198,12 +247,12 @@ export default function BoMemberTable() {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberData.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberdata.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(memberData, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage],
+      stableSort(memberdata, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, memberdata],
   );
 
   return (
@@ -216,7 +265,7 @@ export default function BoMemberTable() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={memberData.length}
+                rowCount={memberdata.length}
               />
               <TableBody>
                 {visibleRows.map((row, index) => {
@@ -260,7 +309,7 @@ export default function BoMemberTable() {
           <TablePagination
             rowsPerPageOptions={[10, 15]}
             component="div"
-            count={memberData.length}
+            count={memberdata.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -271,7 +320,7 @@ export default function BoMemberTable() {
       {modalOpen && (
         <BoModal
           open={modalOpen}
-          data={memberData[0]}
+          data={memberdata.find(member => member.member_id === memberId) as Member}
           onClose={() => {
             setModalOpen(false);
           }}

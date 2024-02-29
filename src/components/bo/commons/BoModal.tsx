@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 import { grey } from "@mui/material/colors";
 import { styled } from "styled-components";
+import boAdminApi from "apis/boAdminApi";
 
 interface Data {
   member_id: string;
@@ -35,14 +36,32 @@ export const ModalBlackOut = styled.div`
 `;
 
 const BoModal = ({ open, data, onClose }: Props) => {
-  const [name, setName] = React.useState("은구");
-  const [nickname, setNickname] = React.useState("은구구");
-  const [email, setEmail] = React.useState("kegoo1997@naver.com");
-  const [phone, setPhone] = React.useState("010-8014-6368");
-  const [gender, setGender] = React.useState("남성");
-  const [birth, setBirth] = React.useState("1997-08-26");
-  const [address, setAddress] = React.useState("경기도 성남시 분당구");
-  const [zipcode, setZipcode] = React.useState("13511");
+  const [name, setName] = React.useState(data.name);
+  const [nickname, setNickname] = React.useState(data.nickname);
+  const [email, setEmail] = React.useState(data.email);
+  const [phone, setPhone] = React.useState(data.phone);
+  const [gender, setGender] = React.useState(data.gender);
+  const [birth, setBirth] = React.useState(data.birth);
+  const [address, setAddress] = React.useState(data.address);
+  const [zipcode, setZipcode] = React.useState(data.zipcode);
+  const [memberId, setMemberId] = React.useState(data.member_id);
+
+  const modifiyMember = () => {
+    boAdminApi.modifyMember({
+      memberId: memberId,
+      memberName: name,
+      memberNickname: nickname,
+      memberEmail: email,
+      memberPhone: phone,
+      infoAddr: address,
+      infoZipcode: zipcode,
+    });
+  };
+
+  const handleClick = () => {
+    modifiyMember();
+    onClose();
+  };
 
   return (
     open && (
@@ -165,7 +184,12 @@ const BoModal = ({ open, data, onClose }: Props) => {
               paddingBottom: 2,
             }}
           >
-            <Button variant="contained" sx={{ backgroundColor: grey[800], marginRight: 2 }} endIcon={<SendIcon />}>
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              sx={{ backgroundColor: grey[800], marginRight: 2 }}
+              endIcon={<SendIcon />}
+            >
               수정
             </Button>
             <Button variant="contained" onClick={onClose} sx={{ backgroundColor: grey[500] }} endIcon={<SendIcon />}>
