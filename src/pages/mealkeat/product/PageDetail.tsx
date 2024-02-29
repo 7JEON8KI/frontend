@@ -124,14 +124,14 @@ const PageDetail: React.FC = () => {
             </ProductImageContainer>
             <ProductDescription>
               <ProductFlexCol $padding="0 0 2rem">
-                <span className="text-darkGrey text-base">{productDetail?.productSubName}</span>
+                <span className="text-base text-darkGrey">{productDetail?.productSubName}</span>
                 <span className="text-[2rem] font-bold">{productDetail?.productName}</span>
                 <div className="flex w-1/2 items-baseline gap-[2rem]">
                   {productDetail && productDetail?.discountRate > 0 ? (
                     <>
-                      <span className="text-red text-[2rem]">{productDetail?.discountRate}%</span>
+                      <span className="text-[2rem] text-red">{productDetail?.discountRate}%</span>
                       <span className="text-[2rem] font-bold">5,700원</span>
-                      <span className="text-darkGrey text-[1rem] line-through">
+                      <span className="text-[1rem] text-darkGrey line-through">
                         {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
                       </span>
                     </>
@@ -147,7 +147,7 @@ const PageDetail: React.FC = () => {
                   <div className="w-[80px]">배송정보</div>
                   <DeliveryInfo $color="#237c60">새벽배송</DeliveryInfo>
                   <div className="w-[300px]">
-                    7pm 이전 결제시 <span className="text-pointSubColor font-bold">3월 16일(토) 도착 가능</span>
+                    7pm 이전 결제시 <span className="font-bold text-pointSubColor">3월 16일(토) 도착 가능</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -218,7 +218,7 @@ const PageDetail: React.FC = () => {
                   }}
                 >
                   합계
-                  <span className="text-red text-[2rem] font-bold">
+                  <span className="text-[2rem] font-bold text-red">
                     {productDetail && formatCurrency({ amount: productCnt * productDetail?.price, locale: "ko-KR" })}원
                   </span>
                 </div>
