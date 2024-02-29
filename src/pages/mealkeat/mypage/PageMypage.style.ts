@@ -12,4 +12,5 @@ export const ContentSection = styled.section`
   display: inline-block;
   background: lightgray;
   width: 1300px;
+  padding: 0 7%;
 `;
