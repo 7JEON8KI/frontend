@@ -25,6 +25,11 @@ api.interceptors.response.use(
 export const boAdminApi = {
   getBoMemberList: () => api.get("/admin/member"),
   modifyMember: ({ ...body }) => api.post("/admin/member/modify", body),
+  downloadMemberList: () => api.get("/admin/member/excelDown"),
+  deleteMember: ({ ...body }) => api.delete("/admin/member/delete", body),
+  commitAuth: ({ ...body }) => api.post("/admin/member/auth", body),
+  getBoManagerList: () => api.get("/admin/member/manager"),
+  modifyManager: ({ ...body }) => api.post("/admin/manager/modify", body),
 };
 
 export default boAdminApi;

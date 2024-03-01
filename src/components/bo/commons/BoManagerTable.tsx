@@ -12,42 +12,42 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-import BoModal from "./BoModal";
 import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
-interface Member {
-  member_id: string;
-  name: string;
-  nickname: string;
-  email: string;
-  phone: string;
-  gender: string;
-  birth: string;
+import BoManagerModal from "./BoManagerModal";
+interface Manager {
+  storeId: string;
+  storeName: string;
+  storeTel: string;
+  memberId: string;
+  memberEmail: string;
   address: string;
   zipcode: string;
+  createdAt: string;
+  approvedAt: string;
 }
 
-function createMember(
-  member_id: string,
-  name: string,
-  nickname: string,
-  email: string,
-  phone: string,
-  gender: string,
-  birth: string,
+function createManager(
+  storeId: string,
+  storeName: string,
+  storeTel: string,
+  memberId: string,
+  memberEmail: string,
   address: string,
   zipcode: string,
-): Member {
+  createdAt: string,
+  approvedAt: string,
+): Manager {
   return {
-    member_id,
-    name,
-    nickname,
-    email,
-    phone,
-    gender,
-    birth,
+    storeId,
+    storeName,
+    storeTel,
+    memberId,
+    memberEmail,
     address,
     zipcode,
+    createdAt,
+    approvedAt,
   };
 }
 
@@ -86,53 +86,35 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Member;
+  id: keyof Manager;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "member_id",
+    id: "storeId",
     numeric: false,
     disablePadding: false,
-    label: "회원 아이디",
+    label: "번호",
   },
   {
-    id: "name",
+    id: "storeName",
     numeric: false,
     disablePadding: false,
-    label: "이름",
+    label: "판매자명",
   },
   {
-    id: "nickname",
-    numeric: false,
-    disablePadding: false,
-    label: "닉네임",
-  },
-  {
-    id: "email",
-    numeric: false,
-    disablePadding: false,
-    label: "이메일",
-  },
-  {
-    id: "phone",
+    id: "storeTel",
     numeric: false,
     disablePadding: false,
     label: "전화번호",
   },
   {
-    id: "gender",
+    id: "memberEmail",
     numeric: false,
     disablePadding: false,
-    label: "성별",
-  },
-  {
-    id: "birth",
-    numeric: false,
-    disablePadding: false,
-    label: "생일",
+    label: "이메일",
   },
   {
     id: "address",
@@ -146,10 +128,22 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "우편번호",
   },
+  {
+    id: "createdAt",
+    numeric: false,
+    disablePadding: false,
+    label: "가입일",
+  },
+  {
+    id: "approvedAt",
+    numeric: false,
+    disablePadding: false,
+    label: "승인일",
+  },
 ];
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Member) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Manager) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -158,7 +152,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
-  const createSortHandler = (property: keyof Member) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: keyof Manager) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -191,41 +185,45 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function BoMemberTable() {
+export default function BoManagerTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Member>("name");
+  const [orderBy, setOrderBy] = React.useState<keyof Manager>("storeId");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [modalOpen, setModalOpen] = React.useState(false);
 
-  const [memberdata, setMemberdata] = React.useState<Member[]>([]);
-  const [memberId, setMemberId] = React.useState("");
-  const getMemberList = async () => {
-    const detail = await boAdminApi.getBoMemberList();
-    const memberList = await detail.data.map((member: any) => {
-      const gender = member.memberGender === 1 ? "남자" : "여자";
-      return createMember(
-        member.memberId,
-        member.memberName,
-        member.memberNickname,
-        member.memberEmail,
-        member.memberPhone,
-        gender,
-        member.memberBirth,
-        member.infoAddr,
-        member.infoZipcode,
+  const [managerData, setManagerdata] = React.useState<Manager[]>([]);
+  const [storeId, setStoreId] = React.useState("");
+
+  const getManagerList = async () => {
+    const detail = await boAdminApi.getBoManagerList();
+    const managerList = await detail.data.map((item: any) => {
+      const [m_year, m_month, m_day, m_hours, m_minutes, m_seconds] = item.memberCreatedDate;
+      const createdAt = `${m_year}-${m_month}-${m_day} ${m_hours}:${m_minutes}:${m_seconds}`;
+      const [a_year, a_month, a_day, a_hours, a_minutes, a_seconds] = item.storeApprovedDate;
+      const approvedAt = `${a_year}-${a_month}-${a_day} ${a_hours}:${a_minutes}:${a_seconds}`;
+      return createManager(
+        item.storeId,
+        item.storeName,
+        item.storeTel,
+        item.memberId,
+        item.memberEmail,
+        item.infoAddr,
+        item.infoZipcode,
+        createdAt,
+        approvedAt,
       );
     });
-    setMemberdata(memberList);
+    setManagerdata(managerList);
   };
 
   useEffect(() => {
-    getMemberList();
-    console.log(memberdata);
+    getManagerList();
+    console.log(managerData);
     return () => {};
   }, []);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Member) => {
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Manager) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -234,7 +232,7 @@ export default function BoMemberTable() {
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     // const selectedIndex = selected.indexOf(id);
     setModalOpen(true);
-    setMemberId(id);
+    setStoreId(id);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -247,12 +245,15 @@ export default function BoMemberTable() {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberdata.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - managerData.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(memberdata, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, memberdata],
+      stableSort(managerData, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      ),
+    [order, orderBy, page, rowsPerPage, managerData],
   );
 
   return (
@@ -265,7 +266,7 @@ export default function BoMemberTable() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={memberdata.length}
+                rowCount={managerData.length}
               />
               <TableBody>
                 {visibleRows.map((row, index) => {
@@ -274,23 +275,22 @@ export default function BoMemberTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.member_id)}
+                      onClick={event => handleClick(event, row.storeId)}
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.member_id}
+                      key={row.storeId}
                       sx={{ cursor: "pointer", height: 33 }}
                     >
                       <TableCell component="th" align="center" id={labelId} scope="row" padding="none">
-                        {row.member_id}
+                        {row.storeId}
                       </TableCell>
-                      <TableCell align="center">{row.name}</TableCell>
-                      <TableCell align="center">{row.nickname}</TableCell>
-                      <TableCell align="center">{row.email}</TableCell>
-                      <TableCell align="center">{row.phone}</TableCell>
-                      <TableCell align="center">{row.gender}</TableCell>
-                      <TableCell align="center">{row.birth}</TableCell>
+                      <TableCell align="center">{row.storeName}</TableCell>
+                      <TableCell align="center">{row.storeTel}</TableCell>
+                      <TableCell align="center">{row.memberEmail}</TableCell>
                       <TableCell align="center">{row.address}</TableCell>
                       <TableCell align="center">{row.zipcode}</TableCell>
+                      <TableCell align="center">{row.createdAt}</TableCell>
+                      <TableCell align="center">{row.approvedAt}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -309,7 +309,7 @@ export default function BoMemberTable() {
           <TablePagination
             rowsPerPageOptions={[10, 15]}
             component="div"
-            count={memberdata.length}
+            count={managerData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -318,9 +318,9 @@ export default function BoMemberTable() {
         </Paper>
       </Box>
       {modalOpen && (
-        <BoModal
+        <BoManagerModal
           open={modalOpen}
-          data={memberdata.find(member => member.member_id === memberId) as Member}
+          data={managerData.find(manager => manager.storeId === storeId) as Manager}
           onClose={() => {
             setModalOpen(false);
           }}
