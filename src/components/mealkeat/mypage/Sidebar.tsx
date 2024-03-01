@@ -8,7 +8,9 @@ const Sidebar: React.FC = () => {
       <Title>마이페이지</Title>
       <Section>
         <SectionTitle>주문현황</SectionTitle>
-        <SectionButton type="button">주문/배송현황</SectionButton>
+        <SectionButton type="button">
+          <Link to={"/mypage/order"}>주문/배송현황</Link>
+        </SectionButton>
       </Section>
       <Section>
         <SectionTitle>쇼핑통장</SectionTitle>
@@ -21,8 +23,12 @@ const Sidebar: React.FC = () => {
       </Section>
       <Section>
         <SectionTitle>나의 활동</SectionTitle>
-        <SectionButton type="button">찜</SectionButton>
-        <SectionButton type="button">리뷰</SectionButton>
+        <SectionButton type="button">
+          <Link to={"/mypage/like"}>찜</Link>
+        </SectionButton>
+        <SectionButton type="button">
+          <Link to={"/mypage/review"}>리뷰</Link>
+        </SectionButton>
       </Section>
       <Section>
         <SectionTitle>고객센터</SectionTitle>
