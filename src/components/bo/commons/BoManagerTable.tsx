@@ -319,7 +319,6 @@ export default function BoManagerTable() {
       </Box>
       {modalOpen && (
         <BoManagerModal
-          open={modalOpen}
           data={managerData.find(manager => manager.storeId === storeId) as Manager}
           onClose={() => {
             setModalOpen(false);

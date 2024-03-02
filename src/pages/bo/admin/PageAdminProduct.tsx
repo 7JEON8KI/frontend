@@ -1,11 +1,11 @@
 import React from "react";
 import BoLayout from "components/bo/commons/BoLayout";
-import BoProductTable from "components/bo/commons/BoProcutTable";
+import { Paper } from "@mui/material";
 
 const PageAdminProduct: React.FC = () => {
   return (
     <BoLayout>
-      <BoProductTable />
+      <Paper elevation={3} sx={{ width: "100%", height: "100%", bgcolor: "white" }}></Paper>
     </BoLayout>
   );
 };

@@ -7,7 +7,7 @@ const PageAdminMember: React.FC = () => {
   return (
     <BoLayout>
       <Box height="95vh" width="100%" bgcolor="white" p={2} overflow={"auto"}>
-        <Box sx={{ width: "100%", bgcolor: "background.paper", paddingTop: 2 }}>
+        <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
           <Tabs value={0} centered>
             <Tab label="회원 리스트" />
           </Tabs>

@@ -4,17 +4,18 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 import { grey } from "@mui/material/colors";
 import { styled } from "styled-components";
+import boAdminApi from "apis/boAdminApi";
 
 interface Data {
-  storeId: string;
-  storeName: string;
-  storeTel: string;
-  memberId: string;
-  memberEmail: string;
+  member_id: string;
+  name: string;
+  nickname: string;
+  email: string;
+  phone: string;
+  gender: string;
+  birth: string;
   address: string;
   zipcode: string;
-  createdAt: string;
-  approvedAt: string;
 }
 
 type Props = {
@@ -33,16 +34,30 @@ export const ModalBlackOut = styled.div`
   background-color: rgba(0, 0, 0, 0.65);
 `;
 
-const BoManagerModal = ({ data, onClose }: Props) => {
-  const [storeName, setStoreName] = React.useState(data.storeName);
-  const [storeTel, setStoreTel] = React.useState(data.storeTel);
-  const [memberEmail, setMemberEmail] = React.useState(data.memberEmail);
+const BoMemberModal = ({ data, onClose }: Props) => {
+  const [name, setName] = React.useState(data.name);
+  const [nickname, setNickname] = React.useState(data.nickname);
+  const [email, setEmail] = React.useState(data.email);
+  const [phone, setPhone] = React.useState(data.phone);
+  const [gender, setGender] = React.useState(data.gender);
+  const [birth, setBirth] = React.useState(data.birth);
   const [address, setAddress] = React.useState(data.address);
   const [zipcode, setZipcode] = React.useState(data.zipcode);
-  const [createdAt, setCreatedAt] = React.useState(data.createdAt);
-  const [approvedAt, setApprovedAt] = React.useState(data.approvedAt);
+
+  const modifiyMember = () => {
+    boAdminApi.modifyMember({
+      memberId: data.member_id,
+      memberName: name,
+      memberNickname: nickname,
+      memberEmail: email,
+      memberPhone: phone,
+      infoAddr: address,
+      infoZipcode: zipcode,
+    });
+  };
 
   const handleClick = () => {
+    modifiyMember();
     onClose();
   };
 
@@ -67,23 +82,23 @@ const BoManagerModal = ({ data, onClose }: Props) => {
         <Grid container>
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TextField
-              id="storeName"
-              label="판매자명"
-              value={storeName}
+              id="name"
+              label="이름"
+              value={name}
               sx={{ margin: 1 }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setStoreName(event.target.value);
+                setName(event.target.value);
               }}
             />
           </Grid>
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TextField
-              id="storeTel"
-              label="전화번호"
-              value={storeTel}
+              id="nickname"
+              label="닉네임"
+              value={nickname}
               sx={{ margin: 1 }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setStoreTel(event.target.value);
+                setNickname(event.target.value);
               }}
             />
           </Grid>
@@ -91,10 +106,44 @@ const BoManagerModal = ({ data, onClose }: Props) => {
             <TextField
               id="email"
               label="이메일"
-              value={memberEmail}
+              value={email}
               sx={{ margin: 1 }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMemberEmail(event.target.value);
+                setEmail(event.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField
+              id="phone"
+              label="전화번호"
+              value={phone}
+              sx={{ margin: 1 }}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setPhone(event.target.value);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField
+              id="gender"
+              label="성별"
+              value={gender}
+              sx={{ margin: 1 }}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setGender(event.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField
+              id="birth"
+              label="생일"
+              value={birth}
+              sx={{ margin: 1 }}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setBirth(event.target.value);
               }}
             />
           </Grid>
@@ -117,28 +166,6 @@ const BoManagerModal = ({ data, onClose }: Props) => {
               sx={{ margin: 1 }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setZipcode(event.target.value);
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <TextField
-              id="createdAt"
-              label="회원 생성일"
-              value={createdAt}
-              sx={{ margin: 1 }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setCreatedAt(event.target.value);
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <TextField
-              id="approvedAt"
-              label="판매 승인일"
-              value={approvedAt}
-              sx={{ margin: 1 }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setApprovedAt(event.target.value);
               }}
             />
           </Grid>
@@ -171,4 +198,4 @@ const BoManagerModal = ({ data, onClose }: Props) => {
   );
 };
 
-export default BoManagerModal;
+export default BoMemberModal;
