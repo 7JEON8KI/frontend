@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-
 const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   // timeout: 10000,
@@ -9,8 +8,6 @@ const api: AxiosInstance = axios.create({
     Authorization: localStorage.getItem("Authorization"),
   },
 });
-
-// 응답 전, 응답 에러 처리를 위한 인터셉트
 api.interceptors.response.use(
   function (response) {
     //debugging console.log
@@ -25,4 +22,14 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+export const boAdminApi = {
+  getBoMemberList: () => api.get("/admin/member"),
+  modifyMember: ({ ...body }) => api.post("/admin/member/modify", body),
+  downloadMemberList: () => api.get("/admin/member/excelDown"),
+  deleteMember: ({ ...body }) => api.delete("/admin/member/delete", body),
+  commitAuth: ({ ...body }) => api.post("/admin/member/auth", body),
+  getBoManagerList: () => api.get("/admin/member/manager"),
+  modifyManager: ({ ...body }) => api.post("/admin/manager/modify", body),
+};
+
+export default boAdminApi;
