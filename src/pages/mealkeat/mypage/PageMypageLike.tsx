@@ -4,6 +4,9 @@ import checktPath from "assets/images/icons/except.png";
 import checkClickPath from "assets/images/icons/except_click.png";
 import formatCurrency from "utils/formatCurrency";
 import likeApi from "apis/likeApi";
+import cartApi from "apis/cartApi";
+import { ModalContainer, CartModal } from "components/mealkeat";
+import { useNavigate } from "react-router-dom";
 
 interface LikeProduct {
   likeId: number;
@@ -18,8 +21,9 @@ interface LikeProduct {
 }
 
 const PageMypageLike: React.FC = () => {
-  const [selectAll, setSelectAll] = useState<boolean>(true);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const [likeProduct, setLikeProduct] = useState<LikeProduct[]>([]);
+  const [cartModal, setCartModal] = React.useState<boolean>(false);
   const handleSelectAllClick = () => {
     const prev = selectAll;
     setSelectAll(!prev);
@@ -41,6 +45,10 @@ const PageMypageLike: React.FC = () => {
   };
 
   const handleDeleteSelected = () => {
+    const selectedIds = likeProduct.filter(item => item.selected).map(item => item.productId);
+    for (const id of selectedIds) {
+      deleteLikes(id);
+    }
     const newLikeProduct = likeProduct.filter(item => !item.selected);
     setLikeProduct(newLikeProduct);
   };
@@ -53,6 +61,23 @@ const PageMypageLike: React.FC = () => {
   const getLikes = async () => {
     const likes = await likeApi.getLikes();
     setLikeProduct(likes.data);
+  };
+
+  const deleteLikes = async (productId: number) => {
+    await likeApi.deleteLikes(productId);
+  };
+
+  const saveCart = async (productId: number) => {
+    const data = {
+      cartProductCnt: 1,
+      productId: productId,
+    };
+    await cartApi.saveOrDeleteCart(data);
+  };
+
+  const navigate = useNavigate();
+  const goToCart = () => {
+    navigate("/cart");
   };
 
   useEffect(() => {
@@ -158,7 +183,10 @@ const PageMypageLike: React.FC = () => {
                     color: "#fd6f21",
                     fontWeight: "bold",
                   }}
-                  // onClick={handleDeleteSelected}
+                  onClick={() => {
+                    saveCart(product.productId);
+                    setCartModal(true);
+                  }}
                 >
                   장바구니 담기
                 </button>
@@ -172,7 +200,10 @@ const PageMypageLike: React.FC = () => {
                     color: "#fd6f21",
                     fontWeight: "bold",
                   }}
-                  onClick={() => handleDeleteProduct(product.likeId)}
+                  onClick={() => {
+                    deleteLikes(product.productId);
+                    handleDeleteProduct(product.likeId);
+                  }}
                 >
                   삭제
                 </button>
@@ -202,6 +233,20 @@ const PageMypageLike: React.FC = () => {
           </div>
         )}
       </section>
+      <ModalContainer
+        title="장바구니 담기"
+        isOpen={cartModal}
+        onClose={() => setCartModal(false)}
+        width="670px"
+        height="300px"
+      >
+        <CartModal
+          onClickBtn1={() => setCartModal(false)}
+          onClickBtn2={() => {
+            goToCart();
+          }}
+        />
+      </ModalContainer>
     </>
   );
 };
