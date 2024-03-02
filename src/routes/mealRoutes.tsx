@@ -15,6 +15,8 @@ import {
   PagePayment,
   PagePaymentComplete,
   PageRecommend,
+  PageWine,
+  PageSearchResult,
 } from "pages/mealkeat";
 import KakaoCallback from "pages/mealkeat/oauth/KakaoCallback";
 
@@ -43,6 +45,8 @@ const mealRoutes: Route[] = [
   { path: "/payment/complete", component: PagePaymentComplete },
   { path: "/recommend", component: PageRecommend },
   { path: "/login/kakaocallback", component: KakaoCallback },
+  { path: "/wine", component: PageWine },
+  { path: "/search", component: PageSearchResult },
 ];
 
 export default mealRoutes;
