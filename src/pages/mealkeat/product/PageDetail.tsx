@@ -1,4 +1,4 @@
-import { Layout, Product, Image } from "components/mealkeat";
+import { Layout, Product, Image, ModalContainer, CartModal } from "components/mealkeat";
 import React, { useEffect } from "react";
 import {
   StyledListGrid,
@@ -49,6 +49,7 @@ const PageDetail: React.FC = () => {
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
   const [productDetail, setProductDetail] = React.useState<ProductDetail | undefined>(undefined);
   const [productCnt, setProductCnt] = React.useState<number>(1);
+  const [cartModal, setCartModal] = React.useState<boolean>(false);
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
     if (detailContainer) {
@@ -256,6 +257,8 @@ const PageDetail: React.FC = () => {
                     fontSize: "1.25rem",
                     fontWeight: "bold",
                   }}
+                  onClick={() => setCartModal(true)}
+                  title="클릭 시 장바구니 모달이 열립니다"
                 >
                   장바구니
                 </button>
@@ -350,6 +353,15 @@ const PageDetail: React.FC = () => {
           </StyledSidebarAside>
         </StyledSidebarDiv>
       </StyledListGrid>
+      <ModalContainer
+        title="장바구니 담기"
+        isOpen={cartModal}
+        onClose={() => setCartModal(false)}
+        width="670px"
+        height="300px"
+      >
+        <CartModal onClickBtn1={() => setCartModal(false)} onClickBtn2={() => {}} />
+      </ModalContainer>
     </Layout>
   );
 };
