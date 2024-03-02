@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, Product } from "components/mealkeat";
 import { StyledGridContainer, StyledTitle, StyledMainDiv, StyledTopSlider } from "./PageMain.style";
 import Slider from "react-slick";
@@ -41,10 +41,12 @@ const PageMain: React.FC = () => {
       alt: `${idx}`,
     }));
 
+  useEffect(() => {}, []);
+
   return (
     <Layout>
       <StyledMainDiv>
-        <StyledTopSlider id="here">
+        <StyledTopSlider>
           <Slider {...settings}>
             {sliderItem.map((item, index) => (
               <div key={index} className="sliderItem">
