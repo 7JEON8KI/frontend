@@ -29,7 +29,7 @@ const mealRoutes: Route[] = [
   { path: "/login", component: PageLogin },
   { path: "/fail", component: PageFail },
   { path: "/signup", component: PageSignup },
-  { path: "/mypage", component: PageMypage },
+  { path: "/mypage/*", component: PageMypage },
   { path: "/detail", component: PageDetail },
   // { path: "/detail/:id", component: PageDetail },
   { path: "/list", component: PageList },
