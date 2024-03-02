@@ -22,7 +22,7 @@ export const Header = (): JSX.Element => {
           </label>
         </StyledSearch>
         <StyledIconList>
-          <StyledIcon onClick={() => navigate("/like")}>
+          <StyledIcon onClick={() => navigate("/mypage/like")}>
             <img src={HeartPath} alt="찜 아이콘" />
             <span>찜 목록</span>
           </StyledIcon>
@@ -34,7 +34,7 @@ export const Header = (): JSX.Element => {
             <img src={UserPath} alt="로그인/로그아웃 아이콘" />
             <span>로그인</span>
           </StyledIcon>
-          <StyledIcon onClick={() => navigate("/mypage")}>
+          <StyledIcon onClick={() => navigate("/mypage/order")}>
             <img src={MypagePath} alt="마이페이지 아이콘" />
             <span>마이페이지</span>
           </StyledIcon>
