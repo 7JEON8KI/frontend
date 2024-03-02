@@ -12,9 +12,9 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-import BoModal from "./BoModal";
 import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
+import BoMemberModal from "./BoMemberModal";
 interface Member {
   member_id: string;
   name: string;
@@ -318,7 +318,7 @@ export default function BoMemberTable() {
         </Paper>
       </Box>
       {modalOpen && (
-        <BoModal
+        <BoMemberModal
           open={modalOpen}
           data={memberdata.find(member => member.member_id === memberId) as Member}
           onClose={() => {

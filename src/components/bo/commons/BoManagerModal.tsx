@@ -4,7 +4,6 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 import { grey } from "@mui/material/colors";
 import { styled } from "styled-components";
-import boAdminApi from "apis/boAdminApi";
 
 interface Data {
   storeId: string;
@@ -36,10 +35,8 @@ export const ModalBlackOut = styled.div`
 `;
 
 const BoManagerModal = ({ open, data, onClose }: Props) => {
-  const [storeId, setStoreId] = React.useState(data.storeId);
   const [storeName, setStoreName] = React.useState(data.storeName);
   const [storeTel, setStoreTel] = React.useState(data.storeTel);
-  const [memberId, setMemberId] = React.useState(data.memberId);
   const [memberEmail, setMemberEmail] = React.useState(data.memberEmail);
   const [address, setAddress] = React.useState(data.address);
   const [zipcode, setZipcode] = React.useState(data.zipcode);

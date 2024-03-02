@@ -35,7 +35,7 @@ export const ModalBlackOut = styled.div`
   background-color: rgba(0, 0, 0, 0.65);
 `;
 
-const BoModal = ({ open, data, onClose }: Props) => {
+const BoMemberModal = ({ open, data, onClose }: Props) => {
   const [name, setName] = React.useState(data.name);
   const [nickname, setNickname] = React.useState(data.nickname);
   const [email, setEmail] = React.useState(data.email);
@@ -44,11 +44,10 @@ const BoModal = ({ open, data, onClose }: Props) => {
   const [birth, setBirth] = React.useState(data.birth);
   const [address, setAddress] = React.useState(data.address);
   const [zipcode, setZipcode] = React.useState(data.zipcode);
-  const [memberId, setMemberId] = React.useState(data.member_id);
 
   const modifiyMember = () => {
     boAdminApi.modifyMember({
-      memberId: memberId,
+      memberId: data.member_id,
       memberName: name,
       memberNickname: nickname,
       memberEmail: email,
@@ -202,4 +201,4 @@ const BoModal = ({ open, data, onClose }: Props) => {
   );
 };
 
-export default BoModal;
+export default BoMemberModal;
