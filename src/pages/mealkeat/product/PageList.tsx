@@ -45,9 +45,9 @@ const PageList: React.FC = () => {
     });
   };
 
-  const handleClickSort = (target: HTMLButtonElement) => {
+  const handleClickSort = (sortValue: Sort) => {
     setProductSort({
-      productCriteria: { ...productSort.productCriteria, sort: target.value },
+      productCriteria: { ...productSort.productCriteria, sort: sortValue },
     });
   };
 
@@ -76,37 +76,10 @@ const PageList: React.FC = () => {
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
                   <span>품절 상품제외</span>
                 </StyledMenuButton>
-                <StyledMenuButton
-                  value={Sort.NEW}
-                  onClick={e => {
-                    handleClickSort(e.target as HTMLButtonElement);
-                  }}
-                >
-                  최신상품
-                </StyledMenuButton>
-                <StyledMenuButton
-                  value={Sort.LOW_PRICE}
-                  onClick={e => {
-                    handleClickSort(e.target as HTMLButtonElement);
-                  }}
-                >
-                  낮은가격
-                </StyledMenuButton>
-                <StyledMenuButton
-                  value={Sort.HIGH_PRICE}
-                  onClick={e => {
-                    handleClickSort(e.target as HTMLButtonElement);
-                  }}
-                >
-                  높은가격
-                </StyledMenuButton>
-                <StyledMenuButton
-                  value={Sort.MOST_ORDER}
-                  onClick={e => {
-                    handleClickSort(e.target as HTMLButtonElement);
-                  }}
-                  style={{ borderRight: "none" }}
-                >
+                <StyledMenuButton onClick={() => handleClickSort(Sort.NEW)}>최신상품</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.LOW_PRICE)}>낮은가격</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.HIGH_PRICE)}>높은가격</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.MOST_ORDER)} style={{ borderRight: "none" }}>
                   인기상품
                 </StyledMenuButton>
               </StyledProductInfoDivider>
