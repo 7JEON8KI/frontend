@@ -41,23 +41,6 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
       <div className="content">
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
-            type="button"
-            title="찜하기 버튼"
-            style={{
-              cursor: "pointer",
-              color: "gray", // "#FD6F21"
-              fontSize: "20px",
-              padding: "0 0.1rem",
-              border: "1px solid lightgray",
-            }}
-            onClick={e => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            ♥
-          </button>
-          <button
             style={{ width: "25px", height: "25px", display: "flex", justifyContent: "center", alignItems: "center" }}
             onClick={e => {
               handleAddCart(e, product.productId);
