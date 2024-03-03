@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import mealRoutes from "./routes/mealRoutes";
 import boRoutes from "./routes/boRoutes";
-
 export default function App() {
   /* 웹 접근성 포커스링 처리 */
   document.addEventListener("keydown", function (e) {

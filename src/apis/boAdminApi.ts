@@ -30,6 +30,7 @@ export const boAdminApi = {
   commitAuth: ({ ...body }) => api.post("/admin/member/auth", body),
   getBoManagerList: () => api.get("/admin/member/manager"),
   modifyManager: ({ ...body }) => api.post("/admin/manager/modify", body),
+  uploadImage: ({ ...formData }) => api.post("/upload", formData),
 };
 
 export default boAdminApi;
