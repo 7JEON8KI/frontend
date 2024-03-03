@@ -27,35 +27,7 @@ const PageSearchResult: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
   const [productList, setProductList] = React.useState([]);
 
-  // const products = Array(12)
-  //   .fill(0)
-  //   .map((_, idx) => ({
-  //     imageUrl: "https://via.placeholder.com/400x400",
-  //     title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.`,
-  //     description:
-  //       "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
-  //     discount: "30%",
-  //     price: "15,800원",
-  //     originalPrice: "22,600원",
-  //     soldOut: false, // 일시 품절 여부
-  //   }));
-
-  const getProducts = async () => {
-    const axiosProduct = await productApi.getProducts({
-      productCriteria: {
-        pageNum: "1",
-        pageAmount: "12",
-        sort: "HIGH_PRICE",
-        includeSoldOut: 1,
-      },
-    });
-    console.log(axiosProduct);
-    // setProductList(axiosProduct);
-  };
-
   useEffect(() => {
-    getProducts();
-
     return () => {};
   }, []);
 
@@ -81,9 +53,9 @@ const PageSearchResult: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList.map((product, index) => (
+            {/* {productList.map((product, index) => (
               <Product key={index} product={product} />
-            ))}
+            ))} */}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>

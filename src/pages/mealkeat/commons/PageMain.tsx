@@ -4,6 +4,9 @@ import { StyledGridContainer, StyledTitle, StyledMainDiv, StyledTopSlider } from
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import scrollToTop from "utils/scrollToTop";
+import { Sort } from "constants/productConstants";
+import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductModels";
+import productApi from "apis/productApi";
 
 const settings = {
   dots: true,
@@ -20,19 +23,19 @@ const settings = {
 
 const PageMain: React.FC = () => {
   const navigate = useNavigate();
+  const [bestProduct, setBestProduct] = React.useState<ProductResponse[]>([]);
 
-  const products = Array(12)
-    .fill(0)
-    .map((_, idx) => ({
-      imageUrl: "https://via.placeholder.com/400x400",
-      title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.`,
-      description:
-        "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
-      discount: "30%",
-      price: "15,800원",
-      originalPrice: "22,600원",
-      soldOut: false, // 일시 품절 여부
-    }));
+  const getBestProducts = async () => {
+    const fetchProduct = await productApi.getProducts({
+      productCriteria: {
+        pageNum: 1,
+        pageAmount: 12,
+        sort: Sort.MOST_ORDER, // 많이 팔린 순
+        includeSoldOut: 1, // 품절 제외
+      },
+    } as ProductSortRequest);
+    setBestProduct(fetchProduct.data.slice(0, 4)); // 메인에 4개만 보여줌
+  };
 
   const sliderItem = Array(4)
     .fill(0)
@@ -41,7 +44,9 @@ const PageMain: React.FC = () => {
       alt: `${idx}`,
     }));
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getBestProducts();
+  }, []);
 
   return (
     <Layout>
@@ -50,7 +55,6 @@ const PageMain: React.FC = () => {
           <Slider {...settings}>
             {sliderItem.map((item, index) => (
               <div key={index} className="sliderItem">
-                {/* <h3>{index + 1}</h3> */}
                 <img src={item.imageUrl} alt={item.alt} />
               </div>
             ))}
@@ -58,7 +62,7 @@ const PageMain: React.FC = () => {
         </StyledTopSlider>
         <StyledTitle>밀킷 베스트 상품입니다</StyledTitle>
         <StyledGridContainer>
-          {products.map((product, index) => (
+          {bestProduct.map((product, index) => (
             <Product key={index} product={product} />
           ))}
         </StyledGridContainer>
