@@ -29,12 +29,12 @@ const PageMain: React.FC = () => {
     const fetchProduct = await productApi.getProducts({
       productCriteria: {
         pageNum: 1,
-        pageAmount: 4,
+        pageAmount: 12,
         sort: Sort.MOST_ORDER, // 많이 팔린 순
         includeSoldOut: 1, // 품절 제외
       },
     } as ProductSortRequest);
-    setBestProduct(fetchProduct.data);
+    setBestProduct(fetchProduct.data.slice(0, 4)); // 메인에 4개만 보여줌
   };
 
   const sliderItem = Array(4)
