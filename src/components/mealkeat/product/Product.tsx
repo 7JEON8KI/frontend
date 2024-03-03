@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyledContentPrice,
-  StyledContentText,
-  StyledProduct,
-  StyledMiniProduct,
-  StyledMiniContentText,
-  StyledMiniContentPrice,
-} from "./Product.style";
+import { ContentPrice, ContentText, ProductContainer } from "./Product.style";
 import { useNavigate } from "react-router-dom";
 import { ProductResponse } from "models/mealkeat/ProductModels";
 import formatCurrency from "utils/formatCurrency";
@@ -17,10 +10,9 @@ import cartApi from "apis/cartApi";
 
 interface Props {
   product: ProductResponse;
-  miniSize?: boolean;
 }
 
-const Product = ({ product, miniSize }: Props): JSX.Element => {
+const Product = ({ product }: Props): JSX.Element => {
   const navigate = useNavigate();
 
   const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
@@ -28,47 +20,8 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
     await cartApi.saveOrDeleteCart({ productId: productId, cartProductCnt: 1 });
   };
 
-  return miniSize ? (
-    <StyledMiniProduct
-      onClick={() => {
-        scrollToTop({});
-        navigate(`/detail/${product.productId}`);
-      }}
-      tabIndex={0}
-    >
-      {/* ref={index == 0 ? firstItemRef : null} */}
-      <img className="food_img" src={product.thumbnailImageUrl} alt="" />
-      <div className="content">
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <button
-            style={{ width: "25px", height: "25px", display: "flex", justifyContent: "center", alignItems: "center" }}
-            onClick={e => {
-              handleAddCart(e, product.productId);
-            }}
-          >
-            <img
-              className="cart_btn"
-              src={AddCart}
-              alt="장바구니 추가 아이콘"
-              style={{ width: "25px", height: "25px" }}
-            />
-          </button>
-        </div>
-        <StyledMiniContentText $title={true}>{product.productName}</StyledMiniContentText>
-        <StyledMiniContentPrice>
-          <div>{product?.discountRate > 0 && `${product.discountRate}%`}</div>
-          <div>
-            {formatCurrency({
-              amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
-              locale: "ko-KR",
-            })}
-          </div>
-        </StyledMiniContentPrice>
-        {product.stock === 0 && <div>일시 품절</div>}
-      </div>
-    </StyledMiniProduct>
-  ) : (
-    <StyledProduct
+  return (
+    <ProductContainer
       onClick={() => {
         scrollToTop({});
         navigate(`/detail/${product.productId}`);
@@ -109,8 +62,8 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
             />
           </button>
         </div>
-        <StyledContentText $title={true}>{product.productName}</StyledContentText>
-        <StyledContentPrice>
+        <ContentText $title={true}>{product.productName}</ContentText>
+        <ContentPrice>
           <div>{product?.discountRate > 0 && `${product.discountRate}%`}</div>
           <div>
             {formatCurrency({
@@ -119,10 +72,10 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
             })}
           </div>
           <div>{product?.discountRate > 0 && formatCurrency({ amount: product.price, locale: "ko-KR" })}</div>
-        </StyledContentPrice>
+        </ContentPrice>
         {product.stock === 0 && <div>일시 품절</div>}
       </div>
-    </StyledProduct>
+    </ProductContainer>
   );
 };
 

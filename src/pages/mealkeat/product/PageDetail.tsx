@@ -1,4 +1,4 @@
-import { Layout, Product, Image, ModalContainer, CartModal } from "components/mealkeat";
+import { Layout, Image, ModalContainer, CartModal, RecommandProduct } from "components/mealkeat";
 import React, { useEffect } from "react";
 import {
   StyledListGrid,
@@ -12,7 +12,6 @@ import {
 import {
   ProductDetailContainer,
   ProductImageContainer,
-  // ProductMiniImage,
   ProductDescription,
   DeliveryInfo,
   ProductFlexCol,
@@ -23,32 +22,20 @@ import {
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
 import productApi from "apis/productApi";
+import recommandApi from "apis/recommandApi";
 import formatCurrency from "utils/formatCurrency";
-
-interface ProductDetail {
-  productId: number;
-  productName: string;
-  productSubName: string;
-  price: number;
-  productType: string;
-  stock: number;
-  discountRate: number;
-  productDetail: string;
-  amount: number;
-  calorie: number;
-  storage: string;
-  thumbnailImageUrl: string;
-  createdAt: number[];
-  modifiedAt: number[];
-  isLike: number;
-  rn: number;
-  themeName?: string;
-}
+import { useParams } from "react-router-dom";
+import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
+import { ProductResponse } from "models/mealkeat/ProductModels";
 
 const PageDetail: React.FC = () => {
+  const { id } = useParams();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
-  const [productDetail, setProductDetail] = React.useState<ProductDetail | undefined>(undefined);
-  const [productCnt, setProductCnt] = React.useState<number>(1);
+  const [productDetail, setProductDetail] = React.useState<ProductResponse>({} as ProductResponse);
+  const [recommandProduct, setRecommandProduct] = React.useState<ProductRecommandResponse[]>([]);
+  const [recommandWine, setRecommandWine] = React.useState<ProductResponse[]>([]);
+
+  const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
@@ -58,30 +45,41 @@ const PageDetail: React.FC = () => {
     setClickDetailView(true);
   };
 
-  const products = Array(5)
-    .fill(0)
-    .map((_, idx) => ({
-      imageUrl: "https://via.placeholder.com/200x200",
-      title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.최대 한줄까지 작성 가능합니다.최대 한줄까지 작성 가능합니다.최대 한줄까지 작성 가능합니다.최대 한줄까지 작성 가능합니다.최대 한줄까지 작성 가능합니다.`,
-      description:
-        "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
-      discount: "30%",
-      price: "15,800원",
-      originalPrice: "22,600원",
-      soldOut: false, // 일시 품절 여부
-    }));
-
   const getProductDetail = async () => {
-    const detail = await productApi.getProductDetail({ productId: 5 });
+    const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
+  };
+
+  const getRecommandProduct = async () => {
+    const recommand = await recommandApi.getRecommendations({
+      productId: Number(id),
+      productMainImage: productDetail.thumbnailImageUrl,
+      productName: productDetail.productName,
+    });
+    setRecommandProduct(recommand.data);
+  };
+
+  const getRecommandWine = async () => {
+    const recommandWine = await recommandApi.getWineRecommendations({
+      productId: Number(id),
+      productMainImage: productDetail.thumbnailImageUrl,
+      productName: productDetail.productName,
+    });
+    setRecommandWine(recommandWine.data.slice(0, 5));
   };
 
   useEffect(() => {
     getProductDetail();
 
-    console.log(productDetail);
     return () => {};
   }, []);
+
+  useEffect(() => {
+    getRecommandProduct();
+    getRecommandWine();
+
+    return () => {};
+  }, [productDetail]);
 
   return (
     <Layout>
@@ -125,7 +123,7 @@ const PageDetail: React.FC = () => {
             </ProductImageContainer>
             <ProductDescription>
               <ProductFlexCol $padding="0 0 2rem">
-                <span className="text-base text-darkGrey">{productDetail?.productSubName}</span>
+                <span className="h-[0.5rem] w-[3rem]"></span>
                 <span className="text-[2rem] font-bold">{productDetail?.productName}</span>
                 <div className="flex w-1/2 items-baseline gap-[2rem]">
                   {productDetail && productDetail?.discountRate > 0 ? (
@@ -187,23 +185,23 @@ const PageDetail: React.FC = () => {
                   <div className="flex justify-between">
                     <div className="flex items-center justify-start gap-[0.5rem]">
                       <StyledAmountBtn
-                        disabled={productCnt <= 1}
-                        aria-disabled={productCnt <= 1}
-                        onClick={() => setProductCnt(prev => prev - 1)}
+                        disabled={purchaseCnt <= 1}
+                        aria-disabled={purchaseCnt <= 1}
+                        onClick={() => setPurchaseCnt(prev => prev - 1)}
                       >
                         -
                       </StyledAmountBtn>
-                      <ProductAmountInput value={productCnt} readOnly aria-readonly />
+                      <ProductAmountInput value={purchaseCnt} readOnly aria-readonly />
                       <StyledAmountBtn
-                        disabled={productCnt >= 10}
-                        aria-disabled={productCnt >= 10}
-                        onClick={() => setProductCnt(prev => prev + 1)}
+                        disabled={purchaseCnt >= 10}
+                        aria-disabled={purchaseCnt >= 10}
+                        onClick={() => setPurchaseCnt(prev => prev + 1)}
                       >
                         +
                       </StyledAmountBtn>
                     </div>
                     <div>
-                      {productDetail && formatCurrency({ amount: productCnt * productDetail?.price, locale: "ko-KR" })}
+                      {productDetail && formatCurrency({ amount: purchaseCnt * productDetail?.price, locale: "ko-KR" })}
                       원
                     </div>
                   </div>
@@ -220,7 +218,7 @@ const PageDetail: React.FC = () => {
                 >
                   합계
                   <span className="text-[2rem] font-bold text-red">
-                    {productDetail && formatCurrency({ amount: productCnt * productDetail?.price, locale: "ko-KR" })}원
+                    {productDetail && formatCurrency({ amount: purchaseCnt * productDetail?.price, locale: "ko-KR" })}원
                   </span>
                 </div>
               </div>
@@ -295,7 +293,7 @@ const PageDetail: React.FC = () => {
                   fontSize: "1.5rem",
                   fontWeight: "bold",
                   height: "50px",
-                  margin: "auto",
+                  margin: "0 auto 3rem",
                 }}
                 onClick={handleClickDetailViewBtn}
               >
@@ -303,40 +301,43 @@ const PageDetail: React.FC = () => {
               </button>
             )}
           </div>
-          <div
-            style={{
-              width: "1320px",
-              margin: "60px auto",
-              gap: "1rem",
-              display: "flex",
-              flexDirection: "column",
-              paddingBottom: "80px",
-              borderBottom: "1px solid lightgray",
-            }}
-          >
-            <span style={{ fontWeight: "bold", fontSize: "2rem" }}>다른 고객이 함께 본 상품입니다</span>
-            <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-              {products.map((product, index) => (
-                <Product key={index} product={product} miniSize={true} />
-              ))}
+          {recommandProduct.length > 0 && (
+            <div
+              style={{
+                width: "1320px",
+                margin: "60px auto",
+                gap: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                paddingBottom: "80px",
+                borderBottom: "1px solid lightgray",
+              }}
+            >
+              <span style={{ fontWeight: "bold", fontSize: "2rem" }}>다른 고객이 함께 본 상품입니다</span>
+              <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
+                {recommandProduct.length > 0 &&
+                  recommandProduct.map((product, index) => <RecommandProduct key={index} product={product} />)}
+              </div>
             </div>
-          </div>
-          <div
-            style={{
-              width: "1320px",
-              margin: "60px auto",
-              gap: "1rem",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <span style={{ fontWeight: "bold", fontSize: "2rem" }}>현재 상품과 어울리는 와인입니다</span>
-            <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-              {products.map((product, index) => (
-                <Product key={index} product={product} miniSize={true} />
-              ))}
+          )}
+          {recommandWine.length > 0 && (
+            <div
+              style={{
+                width: "1320px",
+                margin: "60px auto",
+                gap: "1rem",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <span style={{ fontWeight: "bold", fontSize: "2rem" }}>현재 상품과 어울리는 와인입니다</span>
+              <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
+                {recommandWine.map((product, index) => (
+                  <RecommandProduct key={index} product={product} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </StyledMain>
         <StyledSidebarDiv>
           <StyledSidebarAside>

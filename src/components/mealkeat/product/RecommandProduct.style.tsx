@@ -1,15 +1,17 @@
 import styled from "styled-components";
 
-export const ProductContainer = styled.div`
-  width: 285px;
-  height: 426px;
+export const MiniProduct = styled.div`
+  width: 200px;
+  height: 315px;
+  display: flex;
   position: relative;
+  flex-direction: column;
   box-shadow: ${({ theme }) => theme.shadows.default};
   cursor: pointer;
   overflow: hidden;
   img.food_img {
-    width: 285px;
-    height: 285px;
+    width: 200px;
+    height: 200px;
     position: absolute;
     top: 0;
     left: 0;
@@ -22,8 +24,8 @@ export const ProductContainer = styled.div`
   }
 
   img.cart_btn {
-    width: 35px;
-    height: 35px;
+    width: 25px;
+    height: 25px;
     border: 1px solid ${({ theme }) => theme.colors.lightGrey};
     display: inline-block;
   }
@@ -33,9 +35,10 @@ export const ProductContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 200px;
+    height: 115px;
     position: absolute;
-    width: 285px;
-    top: 285px;
+    top: 200px;
     left: 0;
     padding: 10px 5px;
   }
@@ -46,14 +49,16 @@ interface ContentTextProps {
   $description?: boolean;
 }
 
-export const ContentText = styled.div<ContentTextProps>`
+export const MiniContentText = styled.div<ContentTextProps>`
   width: 100%;
-  ${({ theme }) => theme.util.truncate};
+  height: 30px;
+  overflow: hidden;
+  white-space: wrap;
   color: ${({ $description }) => ($description ? "#1C5641" : "black")};
   font-weight: ${({ $title }) => ($title ? "bold" : "normal")};
 `;
 
-export const ContentPrice = styled.div`
+export const MiniContentPrice = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -62,15 +67,15 @@ export const ContentPrice = styled.div`
   gap: 10px;
 
   div:nth-child(1) {
-    font-size: ${({ theme }) => theme.fontSize.xxl};
+    font-size: ${({ theme }) => theme.fontSize.lg};
     color: ${({ theme }) => theme.colors.mainColor};
   }
   div:nth-child(2) {
-    font-size: ${({ theme }) => theme.fontSize.xxl};
+    font-size: ${({ theme }) => theme.fontSize.xl};
     font-weight: 600;
   }
   div:nth-child(3) {
-    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-size: ${({ theme }) => theme.fontSize.lg};
     color: ${({ theme }) => theme.colors.mediumGrey};
     text-decoration: line-through;
     font-weight: 600;
