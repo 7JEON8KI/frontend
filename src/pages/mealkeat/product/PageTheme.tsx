@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Layout, Product } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
@@ -58,9 +59,9 @@ const PageTheme: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {products.map((product, index) => (
+            {/* {products.map((product, index) => (
               <Product key={index} product={product} />
-            ))}
+            ))} */}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>
