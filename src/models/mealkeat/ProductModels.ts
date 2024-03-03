@@ -1,7 +1,8 @@
 import { Sort, ThemeName } from "constants/productConstants";
 
 // 상품
-export interface ProductResponse {
+
+export interface ProductResponseDTO {
   amount: number;
   calorie: number;
   createdAt: number[];
@@ -19,6 +20,10 @@ export interface ProductResponse {
   storage: string;
   themeName?: string;
   thumbnailImageUrl: string;
+}
+export interface ProductResponse {
+  total: number;
+  productResponseDTOList: ProductResponseDTO[];
 }
 
 export interface DefaultProductRequest {

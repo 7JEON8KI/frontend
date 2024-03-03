@@ -1,7 +1,7 @@
 import React from "react";
 import { ContentPrice, ContentText, ProductContainer } from "./Product.style";
 import { useNavigate } from "react-router-dom";
-import { ProductResponse } from "models/mealkeat/ProductModels";
+import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 import formatCurrency from "utils/formatCurrency";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import scrollToTop from "utils/scrollToTop";
@@ -9,7 +9,7 @@ import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 
 interface Props {
-  product: ProductResponse;
+  product: ProductResponseDTO;
 }
 
 const Product = ({ product }: Props): JSX.Element => {

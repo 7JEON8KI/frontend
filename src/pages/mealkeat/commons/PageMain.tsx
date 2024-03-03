@@ -80,7 +80,7 @@ const productSettings = {
 
 const PageMain: React.FC = () => {
   const navigate = useNavigate();
-  const [bestProduct, setBestProduct] = React.useState<ProductResponse[]>([]);
+  const [bestProduct, setBestProduct] = React.useState<ProductResponse>();
   const [banner, setBanner] = React.useState<Banner[]>([]);
 
   const getBestProducts = async () => {
@@ -92,7 +92,7 @@ const PageMain: React.FC = () => {
         includeSoldOut: 1, // 품절 제외
       },
     } as ProductSortRequest);
-    setBestProduct(fetchProduct.data.slice(0, 4)); // 메인에 4개만 보여줌
+    setBestProduct(fetchProduct.data);
   };
 
   const getBanners = async () => {
@@ -123,9 +123,9 @@ const PageMain: React.FC = () => {
         </TopSlider>
         <Title>밀킷 베스트 상품입니다</Title>
         <GridContainer>
-          {bestProduct.map((product, index) => (
-            <Product key={index} product={product} />
-          ))}
+          {bestProduct?.productResponseDTOList
+            .slice(0, 4) // 메인에 4개만 보여줌
+            .map((product, index) => <Product key={index} product={product} />)}
         </GridContainer>
         <MoreProductsButton
           onClick={() => {
