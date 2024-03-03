@@ -59,9 +59,6 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 베스트 페이지로 이동" onClick={() => navigate("/best")}>
             베스트
           </NavMenu>
-          <NavMenu title="클릭 시 할인 중 페이지로 이동" onClick={() => navigate("/discount")}>
-            할인 중
-          </NavMenu>
         </StyledTopNav>
       </div>
     </StyledHeader>
