@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
 import { Layout, Product } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
@@ -23,11 +22,11 @@ import {
 import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { Sort } from "constants/productConstants";
-import { ProductWineRequest } from "models/mealkeat/ProductModels";
+import { ProductResponse, ProductWineRequest } from "models/mealkeat/ProductModels";
 
 const PageWine: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
-  const [productList, setProductList] = React.useState([]);
+  const [productList, setProductList] = React.useState<ProductResponse>();
   const [productSort, setProductSort] = React.useState<ProductWineRequest>({
     pageNum: 1,
     pageAmount: 12,
@@ -70,7 +69,7 @@ const PageWine: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>와인</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>{`총 ${productList.length}건`}</StyledItemCount>
+              <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
               <StyledProductInfoDivider>
                 <StyledMenuButton onClick={handleClickExcept}>
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
@@ -86,9 +85,7 @@ const PageWine: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList.map((product, index) => (
-              <Product key={index} product={product} />
-            ))}
+            {productList?.productResponseDTOList?.map((product, index) => <Product key={index} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>
