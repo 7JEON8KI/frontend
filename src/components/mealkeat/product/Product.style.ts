@@ -5,12 +5,20 @@ export const StyledProduct = styled.div`
   height: 426px;
   position: relative;
   box-shadow: ${({ theme }) => theme.shadows.default};
+  cursor: pointer;
+  overflow: hidden;
   img.food_img {
     width: 285px;
     height: 285px;
     position: absolute;
     top: 0;
     left: 0;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  img.food_img:hover {
+    opacity: 0.8;
+    scale: 1.3;
   }
 
   img.cart_btn {
@@ -35,12 +43,25 @@ export const StyledProduct = styled.div`
 
 export const StyledMiniProduct = styled.div`
   width: 200px;
+  height: 315px;
   display: flex;
+  position: relative;
   flex-direction: column;
   box-shadow: ${({ theme }) => theme.shadows.default};
+  cursor: pointer;
+  overflow: hidden;
   img.food_img {
     width: 200px;
     height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+  img.food_img:hover {
+    opacity: 0.8;
+    scale: 1.3;
   }
 
   img.cart_btn {
@@ -56,6 +77,10 @@ export const StyledMiniProduct = styled.div`
     flex-direction: column;
     gap: 10px;
     width: 200px;
+    height: 115px;
+    position: absolute;
+    top: 200px;
+    left: 0;
     padding: 10px 5px;
   }
 `;

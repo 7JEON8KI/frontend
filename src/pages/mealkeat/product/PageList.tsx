@@ -24,19 +24,50 @@ import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { ProductResponse } from "models/mealkeat/ProductModels";
 
+interface ProductSortRequest {
+  productCriteria: {
+    pageNum: number;
+    pageAmount: number;
+    sort: string;
+    includeSoldOut: number;
+  };
+}
+
+enum Sort {
+  NEW = "NEW",
+  HIGH_PRICE = "HIGH_PRICE",
+  LOW_PRICE = "LOW_PRICE",
+  MOST_ORDER = "MOST_ORDER",
+}
+
 const PageList: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
   const [productList, setProductList] = React.useState<ProductResponse[]>([]);
+  const [productSort, setProductSort] = React.useState<ProductSortRequest>({
+    productCriteria: {
+      pageNum: 1,
+      pageAmount: 12,
+      sort: Sort.NEW,
+      includeSoldOut: 1,
+    },
+  });
+
+  const handleClickExcept = () => {
+    const prev = clickExcept;
+    setClickExcept(prev => !prev);
+    setProductSort({
+      productCriteria: { ...productSort.productCriteria, includeSoldOut: prev ? 1 : 0 },
+    });
+  };
+
+  const handleClickSort = (target: HTMLButtonElement) => {
+    setProductSort({
+      productCriteria: { ...productSort.productCriteria, sort: target.value },
+    });
+  };
 
   const getProducts = async () => {
-    const axiosProduct = await productApi.getProducts({
-      productCriteria: {
-        pageNum: "1",
-        pageAmount: "12",
-        sort: "NEW",
-        includeSoldOut: 1,
-      },
-    });
+    const axiosProduct = await productApi.getProducts({ ...productSort });
     setProductList(axiosProduct.data);
   };
 
@@ -44,7 +75,7 @@ const PageList: React.FC = () => {
     getProducts();
 
     return () => {};
-  }, []);
+  }, [productSort]);
 
   return (
     <Layout>
@@ -54,16 +85,45 @@ const PageList: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>전체상품</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>총 262건</StyledItemCount>
+              <StyledItemCount>{`총 ${productList.length}건`}</StyledItemCount>
               <StyledProductInfoDivider>
-                <StyledMenuButton onClick={() => setClickExcept(prev => !prev)}>
+                <StyledMenuButton onClick={handleClickExcept}>
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
                   <span>품절 상품제외</span>
                 </StyledMenuButton>
-                <StyledMenuButton>최신상품</StyledMenuButton>
-                <StyledMenuButton>낮은가격</StyledMenuButton>
-                <StyledMenuButton>높은가격</StyledMenuButton>
-                <StyledMenuButton style={{ borderRight: "none" }}>인기상품</StyledMenuButton>
+                <StyledMenuButton
+                  value={Sort.NEW}
+                  onClick={e => {
+                    handleClickSort(e.target as HTMLButtonElement);
+                  }}
+                >
+                  최신상품
+                </StyledMenuButton>
+                <StyledMenuButton
+                  value={Sort.LOW_PRICE}
+                  onClick={e => {
+                    handleClickSort(e.target as HTMLButtonElement);
+                  }}
+                >
+                  낮은가격
+                </StyledMenuButton>
+                <StyledMenuButton
+                  value={Sort.HIGH_PRICE}
+                  onClick={e => {
+                    handleClickSort(e.target as HTMLButtonElement);
+                  }}
+                >
+                  높은가격
+                </StyledMenuButton>
+                <StyledMenuButton
+                  value={Sort.MOST_ORDER}
+                  onClick={e => {
+                    handleClickSort(e.target as HTMLButtonElement);
+                  }}
+                  style={{ borderRight: "none" }}
+                >
+                  인기상품
+                </StyledMenuButton>
               </StyledProductInfoDivider>
             </StyledMenuInfo>
           </StyledMenuNav>
