@@ -10,7 +10,6 @@ export const MainContent = styled.main`
 export const ContentSection = styled.section`
   max-width: 1300px;
   display: inline-block;
-  background: lightgray;
   width: 1300px;
   padding: 0 7%;
 `;
