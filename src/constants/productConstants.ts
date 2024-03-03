@@ -8,3 +8,9 @@ export enum Sort {
   LOW_PRICE = "LOW_PRICE",
   MOST_ORDER = "MOST_ORDER",
 }
+
+export enum ThemeName {
+  HOME = "홈파티",
+  SOLO = "1인가구",
+  CAMPING = "캠핑",
+}

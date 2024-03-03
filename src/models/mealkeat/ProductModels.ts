@@ -1,3 +1,5 @@
+import { Sort, ThemeName } from "constants/productConstants";
+
 export interface ProductResponse {
   amount: number;
   calorie: number;
@@ -18,11 +20,27 @@ export interface ProductResponse {
   thumbnailImageUrl: string;
 }
 
+export interface ProductRecommandResponse {
+  productId: string | number;
+  productName: string;
+  price: string | number;
+  productType: string;
+  discountRate: number;
+  mainImgUrl: string;
+}
+
+export interface DefaultProductRequest {
+  pageNum: number;
+  pageAmount: number;
+  sort: Sort;
+  includeSoldOut: number;
+}
+
+export interface ProductWineRequest extends DefaultProductRequest {}
+
+export interface ProductThemeRequest extends DefaultProductRequest {
+  themeName: ThemeName;
+}
 export interface ProductSortRequest {
-  productCriteria: {
-    pageNum: number;
-    pageAmount: number;
-    sort: string;
-    includeSoldOut: number;
-  };
+  productCriteria: DefaultProductRequest;
 }
