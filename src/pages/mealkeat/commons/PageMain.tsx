@@ -19,7 +19,18 @@ import scrollToTop from "utils/scrollToTop";
 import { Sort } from "constants/productConstants";
 import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductModels";
 import productApi from "apis/productApi";
+import promotionApi from "apis/promotionApi";
 
+interface Banner {
+  bannerId: number;
+  bannerTitle: string;
+  bannerImageUrl: string;
+  bannerStartDay: number[];
+  bannerEndDay: number[];
+  createAt: number[];
+  modifiedAt: number[];
+  deletedAt: number[] | null;
+}
 const bannerSettings = {
   dots: true,
   arrows: true,
@@ -70,6 +81,7 @@ const productSettings = {
 const PageMain: React.FC = () => {
   const navigate = useNavigate();
   const [bestProduct, setBestProduct] = React.useState<ProductResponse[]>([]);
+  const [banner, setBanner] = React.useState<Banner[]>([]);
 
   const getBestProducts = async () => {
     const fetchProduct = await productApi.getProducts({
@@ -83,15 +95,14 @@ const PageMain: React.FC = () => {
     setBestProduct(fetchProduct.data.slice(0, 4)); // 메인에 4개만 보여줌
   };
 
-  const sliderItem = Array(4)
-    .fill(0)
-    .map((_, idx) => ({
-      imageUrl: "https://via.placeholder.com/1200x400",
-      alt: `${idx}`,
-    }));
+  const getBanners = async () => {
+    const fetchBanner = await promotionApi.getBanner();
+    setBanner(fetchBanner.data);
+  };
 
   useEffect(() => {
     getBestProducts();
+    getBanners();
   }, []);
 
   return (
@@ -99,9 +110,13 @@ const PageMain: React.FC = () => {
       <MainDiv>
         <TopSlider>
           <Slider {...bannerSettings}>
-            {sliderItem.map((item, index) => (
+            {banner.map((item, index) => (
               <div key={index} className="sliderItem">
-                <img src={item.imageUrl} alt={item.alt} />
+                <img
+                  src={item?.bannerImageUrl}
+                  alt="푹 쉬고 싶은 주말! 푹 끓여 먹는 국물요리 기획전 3.1 ~ 3.3"
+                  title={item?.bannerTitle}
+                />
               </div>
             ))}
           </Slider>
