@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, Product } from "components/mealkeat";
 import {
   StyledListGrid,
@@ -15,20 +15,30 @@ import {
   StyledProductGrid,
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
+import productApi from "apis/productApi";
+import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductModels";
+import { Sort } from "constants/productConstants";
 
 const PageBest: React.FC = () => {
-  const products = Array(12)
-    .fill(0)
-    .map((_, idx) => ({
-      imageUrl: "https://via.placeholder.com/400x400",
-      title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.`,
-      description:
-        "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
-      discount: "30%",
-      price: "15,800원",
-      originalPrice: "22,600원",
-      soldOut: false, // 일시 품절 여부
-    }));
+  const [productList, setProductList] = React.useState<ProductResponse[]>([]);
+
+  const getProducts = async () => {
+    const fetchProduct = await productApi.getProducts({
+      productCriteria: {
+        pageNum: 1,
+        pageAmount: 12,
+        sort: Sort.MOST_ORDER, // 많이 팔린 순
+        includeSoldOut: 1, // 품절 제외
+      },
+    } as ProductSortRequest);
+    setProductList(fetchProduct.data);
+  };
+
+  useEffect(() => {
+    getProducts();
+
+    return () => {};
+  }, []);
 
   return (
     <Layout>
@@ -38,11 +48,11 @@ const PageBest: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>베스트 상품</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>총 12건</StyledItemCount>
+              <StyledItemCount>{`총 ${productList.length}건`}</StyledItemCount>
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {products.map((product, index) => (
+            {productList.map((product, index) => (
               <Product key={index} product={product} />
             ))}
           </StyledProductGrid>

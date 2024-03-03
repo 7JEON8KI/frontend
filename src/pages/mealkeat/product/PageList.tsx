@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
 import { Layout, Product } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
@@ -23,22 +22,8 @@ import {
 import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { ProductResponse } from "models/mealkeat/ProductModels";
-
-interface ProductSortRequest {
-  productCriteria: {
-    pageNum: number;
-    pageAmount: number;
-    sort: string;
-    includeSoldOut: number;
-  };
-}
-
-enum Sort {
-  NEW = "NEW",
-  HIGH_PRICE = "HIGH_PRICE",
-  LOW_PRICE = "LOW_PRICE",
-  MOST_ORDER = "MOST_ORDER",
-}
+import { Sort } from "constants/productConstants";
+import { ProductSortRequest } from "models/mealkeat/ProductModels";
 
 const PageList: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
@@ -67,8 +52,8 @@ const PageList: React.FC = () => {
   };
 
   const getProducts = async () => {
-    const axiosProduct = await productApi.getProducts({ ...productSort });
-    setProductList(axiosProduct.data);
+    const fetchProduct = await productApi.getProducts({ ...productSort });
+    setProductList(fetchProduct.data);
   };
 
   useEffect(() => {

@@ -17,3 +17,12 @@ export interface ProductResponse {
   themeName?: string;
   thumbnailImageUrl: string;
 }
+
+export interface ProductSortRequest {
+  productCriteria: {
+    pageNum: number;
+    pageAmount: number;
+    sort: string;
+    includeSoldOut: number;
+  };
+}

@@ -92,7 +92,6 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
       }}
       tabIndex={0}
     >
-      {/* ref={index == 0 ? firstItemRef : null} */}
       <img className="food_img" src={product.thumbnailImageUrl} alt="" />
       <div className="content">
         <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -128,7 +127,6 @@ const Product = ({ product, miniSize }: Props): JSX.Element => {
           </button>
         </div>
         <StyledContentText $title={true}>{product.productName}</StyledContentText>
-        <StyledContentText $description={true}>{product.productDetail}</StyledContentText>
         <StyledContentPrice>
           <div>{product?.discountRate > 0 && `${product.discountRate}%`}</div>
           <div>
