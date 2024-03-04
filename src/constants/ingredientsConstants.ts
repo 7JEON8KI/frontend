@@ -1,4 +1,18 @@
 import Pork from "assets/images/ingredients/pork.png";
+import Meat from "assets/images/ingredients/meat.png";
+import Chicken from "assets/images/ingredients/chicken.png";
+import Fish from "assets/images/ingredients/fish.png";
+import MushRoom from "assets/images/ingredients/mushroom.png";
+import Lamb from "assets/images/ingredients/lamb.png";
+import Noodle from "assets/images/ingredients/noodle.png";
+import Cheese from "assets/images/ingredients/cheese.png";
+import Seashell from "assets/images/ingredients/seashell.png";
+import Shrimp from "assets/images/ingredients/shrimp.png";
+import Squid from "assets/images/ingredients/squid.png";
+import Peanut from "assets/images/ingredients/peanut.png";
+import Milk from "assets/images/ingredients/milk.png";
+import Peach from "assets/images/ingredients/peach.png";
+import Namul from "assets/images/ingredients/namul.png";
 
 export const wantIngredients = [
   {
@@ -7,42 +21,42 @@ export const wantIngredients = [
     value: "돼지고기",
   },
   {
-    src: Pork,
+    src: Meat,
     name: "소고기",
     value: "소고기",
   },
   {
-    src: Pork,
+    src: Chicken,
     name: "닭고기",
     value: "닭고기",
   },
   {
-    src: Pork,
+    src: Fish,
     name: "생선",
     value: "생선",
   },
   {
-    src: Pork,
+    src: MushRoom,
     name: "버섯",
     value: "버섯",
   },
   {
-    src: Pork,
+    src: Namul,
     name: "나물",
     value: "나물",
   },
   {
-    src: Pork,
+    src: Lamb,
     name: "양고기",
     value: "양고기",
   },
   {
-    src: Pork,
+    src: Noodle,
     name: "면",
     value: "면",
   },
   {
-    src: Pork,
+    src: Cheese,
     name: "치즈",
     value: "치즈",
   },
@@ -55,42 +69,42 @@ export const wontIngredients = [
     value: "돼지고기",
   },
   {
-    src: Pork,
+    src: Meat,
     name: "소고기",
     value: "소고기",
   },
   {
-    src: Pork,
+    src: Chicken,
     name: "닭고기",
     value: "닭고기",
   },
   {
-    src: Pork,
+    src: Seashell,
     name: "조개류",
     value: "조개",
   },
   {
-    src: Pork,
+    src: Shrimp,
     name: "새우",
     value: "새우",
   },
   {
-    src: Pork,
+    src: Squid,
     name: "오징어",
     value: "오징어",
   },
   {
-    src: Pork,
+    src: Peanut,
     name: "땅콩",
     value: "땅콩",
   },
   {
-    src: Pork,
+    src: Milk,
     name: "우유",
     value: "우유",
   },
   {
-    src: Pork,
+    src: Peach,
     name: "복숭아",
     value: "복숭아",
   },

@@ -47,6 +47,7 @@ export const IngredientsPanel = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #f4f4f4;
 `;
 
 export const PanelTitle = styled.p`
@@ -67,6 +68,7 @@ export const IngredientsGrid = styled.div`
 
 interface IngredientButtonProps {
   $selected: boolean;
+  $color: string;
 }
 export const IngredientButton = styled.button<IngredientButtonProps>`
   ${({ $selected }) =>
@@ -80,13 +82,31 @@ export const IngredientButton = styled.button<IngredientButtonProps>`
           & > img {
             filter: grayscale(1);
           }
-        `};
+        `}
+
+  overflow: hidden;
+  display: flex;
+  gap: 0.3rem;
+  flex-direction: column;
+  align-items: center;
+
+  & > span {
+    color: ${({ $selected, $color }) => ($selected ? $color : "black")};
+  }
 `;
 
 export const IngredientImage = styled.img`
   width: 170px;
   height: 100px;
   border-radius: 50px;
+
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+    scale: 0.9;
+  }
 `;
 
 export const IngredientName = styled.span`
@@ -122,6 +142,15 @@ export const TrayImage = styled.img<TrayProps>`
   display: ${({ $disable }) => ($disable ? "block" : "none")};
 `;
 
+export const TrayTitle = styled.p<TrayProps>`
+  font-size: 40px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.mainColor};
+  position: absolute;
+  top: ${({ $disable }) => ($disable ? "-100px" : "100px")};
+  left: 80px;
+`;
+
 const PageMealkeat: React.FC = () => {
   const navigate = useNavigate();
 
@@ -133,6 +162,35 @@ const PageMealkeat: React.FC = () => {
     const wantAny = !want.every(el => !el.selected);
     const wontAny = !wont.every(el => !el.selected);
     return wantAny || wontAny;
+  };
+
+  const handleClickWant = (index: number) => {
+    const newWant = [...want];
+    newWant[index].selected = !newWant[index].selected;
+    setWant(newWant);
+  };
+
+  // const checkSame = ():boolean => {
+  //   const check =
+  // };
+
+  const handleClickWont = (index: number) => {
+    const newWont = [...wont];
+    newWont[index].selected = !newWont[index].selected;
+    setWont(newWont);
+  };
+
+  const handleClickTray = () => {
+    if (checkSelectAny()) {
+      const searchRequest = {
+        preferredIngredients: want?.filter(el => el.selected)?.map(el => el.value),
+        unwantedIngredients: wont?.filter(el => el.selected)?.map(el => el.value),
+      };
+      scrollToTop({});
+      navigate("/recommend/result", { state: { searchRequestDTO: { ...searchRequest } } });
+    } else {
+      window.alert("재료를 하나 이상 선택해주세요.");
+    }
   };
 
   useEffect(() => {
@@ -161,11 +219,8 @@ const PageMealkeat: React.FC = () => {
               <IngredientButton
                 key={index}
                 $selected={el.selected}
-                onClick={() => {
-                  const newWant = [...want];
-                  newWant[index].selected = !newWant[index].selected;
-                  setWant(newWant);
-                }}
+                $color="#FD6F21"
+                onClick={() => handleClickWant(index)}
               >
                 <IngredientImage src={el.src} draggable={false} />
                 <IngredientName>{el.name}</IngredientName>
@@ -181,11 +236,8 @@ const PageMealkeat: React.FC = () => {
               <IngredientButton
                 key={index}
                 $selected={el.selected}
-                onClick={() => {
-                  const newWont = [...wont];
-                  newWont[index].selected = !newWont[index].selected;
-                  setWont(newWont);
-                }}
+                $color="#237C60"
+                onClick={() => handleClickWont(index)}
               >
                 <IngredientImage src={el.src} draggable={false} />
                 <IngredientName>{el.name}</IngredientName>
@@ -193,12 +245,10 @@ const PageMealkeat: React.FC = () => {
             ))}
           </IngredientsGrid>
         </IngredientsPanel>
-        <TrayContainer
-          onClick={() => {
-            scrollToTop({});
-            navigate("/recommend/result");
-          }}
-        >
+        <TrayContainer onClick={() => handleClickTray()}>
+          <TrayTitle $disable={selectAny}>
+            {selectAny ? "뚜껑을 열어 추천 확인해주세요!" : "원하는 재료를 넣고 클릭해주세요!"}
+          </TrayTitle>
           <EmptyTrayImage src={EmptyTray} />
           <TrayImage src={Tray} $disable={selectAny} />
         </TrayContainer>
