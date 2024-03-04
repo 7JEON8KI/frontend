@@ -9,5 +9,6 @@
   "javascript.format.enable": false,
   "eslint.alwaysShowStatus": true,
   "files.autoSave": "onFocusChange",
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "cSpell.words": ["adminmenu"]
 }

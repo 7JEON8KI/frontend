@@ -2,16 +2,16 @@ import React from "react";
 import { Grid } from "@mui/material";
 import { blueGrey, grey } from "@mui/material/colors";
 import { BoIcon } from "components/bo/global/BoIcon";
-import BoNav from "components/bo/commons/BoNav";
 // import BoTopbar from "components/bo/global/BoTopbar";
 import { StyledBoBody, StyledBoContent, StyledBoLayout, StyledBoSidebar } from "./BoLayout.style";
 import { Box } from "@mui/system";
+import { BoManagerNav } from "../global/BoManagerNav";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const BoLayout = ({ children }: Props): JSX.Element => {
+const BoManagerLayout = ({ children }: Props): JSX.Element => {
   return (
     <StyledBoLayout>
       <StyledBoBody>
@@ -29,7 +29,7 @@ const BoLayout = ({ children }: Props): JSX.Element => {
               <BoIcon />
             </Grid>
             <Grid item xs={10} width={"100%"} bgcolor={blueGrey[200]}>
-              <BoNav />
+              <BoManagerNav />
             </Grid>
           </Grid>
         </StyledBoSidebar>
@@ -41,4 +41,4 @@ const BoLayout = ({ children }: Props): JSX.Element => {
   );
 };
 
-export default BoLayout;
+export default BoManagerLayout;

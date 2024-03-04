@@ -1,32 +1,12 @@
 import React from "react";
 import BoLayout from "components/bo/commons/BoLayout";
-import { Box, Grid } from "@mui/material";
-import { green } from "@mui/material/colors";
+import { Box } from "@mui/material";
 
 const PageAdminMain: React.FC = () => {
   return (
     <BoLayout>
-      <Box height="100%" bgcolor="white">
-        <Grid container height={"100%"} spacing={2} p={3}>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box height={"100%"} bgcolor={green[100]} borderRadius={3}></Box>
-          </Grid>
-        </Grid>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Box component="main" sx={{ width: "100%", flexGrow: 1, p: { xs: 2, sm: 3 } }}></Box>
       </Box>
     </BoLayout>
   );
