@@ -18,7 +18,6 @@ import {
   StyledAmountBtn,
   ProductInfoListContainer,
   ProductAmountInput,
-  ProductMiniImage,
 } from "./PageDetail.style";
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
@@ -52,21 +51,25 @@ const PageDetail: React.FC = () => {
   };
 
   const getRecommendProduct = async () => {
-    const recommend = await recommendApi.getRecommendations({
-      productId: Number(id),
-      productMainImage: productDetail.thumbnailImageUrl,
-      productName: productDetail.productName,
-    });
-    setRecommendProduct(recommend.data);
+    if (productDetail?.thumbnailImageUrl) {
+      const recommend = await recommendApi.getRecommendations({
+        productId: Number(id),
+        productMainImage: productDetail.thumbnailImageUrl,
+        productName: productDetail.productName,
+      });
+      setRecommendProduct(recommend.data);
+    }
   };
 
   const getRecommendWine = async () => {
-    const recommendWine = await recommendApi.getWineRecommendations({
-      productId: Number(id),
-      productMainImage: productDetail.thumbnailImageUrl,
-      productName: productDetail.productName,
-    });
-    setRecommendWine(recommendWine.data.slice(0, 5));
+    if (productDetail?.thumbnailImageUrl) {
+      const recommendWine = await recommendApi.getWineRecommendations({
+        productId: Number(id),
+        productMainImage: productDetail.thumbnailImageUrl,
+        productName: productDetail.productName,
+      });
+      setRecommendWine(recommendWine.data.slice(0, 5));
+    }
   };
 
   useEffect(() => {
@@ -102,44 +105,6 @@ const PageDetail: React.FC = () => {
                 width={567}
                 height={567}
               />
-              <ProductMiniImage>
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-                <Image
-                  src="https://via.placeholder.com/98x98"
-                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
-                  width={98}
-                  height={98}
-                />
-              </ProductMiniImage>
             </ProductImageContainer>
             <ProductDescription>
               <ProductFlexCol $padding="0 0 2rem">
