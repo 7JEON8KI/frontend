@@ -1,13 +1,25 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import React from "react";
 import FileUploadService from "./FileUploadService";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "pages/bo/redux";
+import { changeBy } from "pages/bo/redux/changer";
+
 const SingleImageUpload: React.FC = () => {
   const [currentImage, setCurrentImage] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>("");
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
   const [imageInfos, setImageInfos] = useState<string>("");
+  const change = useSelector((state: RootState) => state.changer.url);
+  const dispatch = useDispatch();
+
+  const onChangeBy = (diff: string) => {
+    dispatch(changeBy(diff));
+  };
+
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files as FileList;
     setCurrentImage(selectedFiles?.[0]);
@@ -25,6 +37,7 @@ const SingleImageUpload: React.FC = () => {
       .then(response => {
         setMessage(response.data.message);
         setImageInfos(response.data.data);
+        onChangeBy(response.data.data);
         return response.data;
       })
       .catch(err => {
@@ -39,6 +52,9 @@ const SingleImageUpload: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    console.log("change : url:::", change);
+  }, [change]);
   return (
     <div>
       <div className="row">

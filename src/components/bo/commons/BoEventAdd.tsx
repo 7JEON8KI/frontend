@@ -1,16 +1,36 @@
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import React from "react";
 import Editor from "../global/Editor";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import ImageUpload from "./ImageUpload";
 import SingleImageUpload from "./SingleImageUpload";
-
+import SendIcon from "@mui/icons-material/Send";
+import boAdminApi from "apis/boAdminApi";
+import { useSelector } from "react-redux";
+import { RootState } from "pages/bo/redux";
+import { grey } from "@mui/material/colors";
 const BoEventAdd: React.FC = () => {
   const [title, setTitle] = React.useState("제목");
   const [startDate, setStartDate] = React.useState<Date | null>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const imageUrl = useSelector((state: RootState) => state.changer.url);
+  const content = useSelector((state: RootState) => state.content.content);
+  const insertEvnet = () => {
+    boAdminApi.insertEvent({
+      eventTitle: title,
+      eventDetail: content,
+      eventImageUrl: imageUrl,
+      eventStartDay: startDate,
+      eventEndDay: endDate,
+    });
+  };
 
+  const handleClick = () => {
+    console.log("startDay", startDate);
+    console.log("endDay", endDate);
+    insertEvnet();
+    alert("등록되었습니다.");
+  };
   return (
     <Grid container>
       <Grid item xs={6}>
@@ -61,6 +81,26 @@ const BoEventAdd: React.FC = () => {
       <Grid item xs={6}>
         <Box m={2}>
           <Editor />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            boxSizing: "border-box",
+            alignItems: "end",
+            justifyContent: "flex-end",
+            paddingTop: 2,
+            paddingRight: 2,
+            paddingBottom: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleClick}
+            sx={{ backgroundColor: grey[800], marginRight: 2 }}
+            endIcon={<SendIcon />}
+          >
+            등록
+          </Button>
         </Box>
       </Grid>
     </Grid>

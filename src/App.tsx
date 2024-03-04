@@ -2,6 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import mealRoutes from "./routes/mealRoutes";
 import boRoutes from "./routes/boRoutes";
+import { Provider } from "react-redux";
+import { legacy_createStore as createStore } from "redux";
+import rootReducer from "./pages/bo/redux";
+
+const store = createStore(rootReducer);
+
 export default function App() {
   /* 웹 접근성 포커스링 처리 */
   document.addEventListener("keydown", function (e) {
@@ -16,7 +22,6 @@ export default function App() {
     // 마우스 클릭 시 클래스 제거
     document.body.classList.remove("user-is-tabbing");
   });
-
   return (
     <Router>
       <Routes>
@@ -24,11 +29,13 @@ export default function App() {
           <Route key={index} path={route.path} element={<route.component />} />
         ))}
       </Routes>
-      <Routes>
-        {boRoutes.map((route, index) => (
-          <Route key={index} path={`/bo${route.path}`} element={<route.component />} />
-        ))}
-      </Routes>
+      <Provider store={store}>
+        <Routes>
+          {boRoutes.map((route, index) => (
+            <Route key={index} path={`/bo${route.path}`} element={<route.component />} />
+          ))}
+        </Routes>
+      </Provider>
     </Router>
   );
 }

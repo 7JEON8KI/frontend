@@ -12,8 +12,8 @@ const PageAdminBanner: React.FC = () => {
             <Tab label="배너 관리" />
             <Tab label="배너 등록" />
           </Tabs>
-          <BoBannerAdd />
         </Box>
+        <BoBannerAdd />
       </Paper>
     </BoLayout>
   );

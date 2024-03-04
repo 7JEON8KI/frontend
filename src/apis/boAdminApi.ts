@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+
 const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   // timeout: 10000,
@@ -31,6 +32,11 @@ export const boAdminApi = {
   getBoManagerList: () => api.get("/admin/member/manager"),
   modifyManager: ({ ...body }) => api.post("/admin/manager/modify", body),
   uploadImage: ({ ...formData }) => api.post("/upload", formData),
+  getBoProductList: () => api.get("/admin/product"),
+  insertEvent: ({ ...body }) => api.post("/admin/event", body),
+  getBannerList: () => api.get("/admin/banner"),
+  getEventList: () => api.get("/admin/event"),
+  insertBanner: ({ ...body }) => api.post("/admin/banner", body),
 };
 
 export default boAdminApi;
