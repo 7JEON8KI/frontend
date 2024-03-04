@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import { Layout, RecommandProduct } from "components/mealkeat";
-import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
-import recommandApi from "apis/recommandApi";
+import { Layout, RecommendProduct } from "components/mealkeat";
+import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
+import recommendApi from "apis/recommendApi";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 import { CenteredDiv, HighlightedText, MainText, VerticalCenterDiv } from "./PageMealkeat";
 import styled from "styled-components";
@@ -24,18 +24,18 @@ export const MoreProductsButton = styled.button.attrs({ type: "button" })`
 
 const PageMealkeatResult: React.FC = () => {
   const navigate = useNavigate();
-  // const [recommandProduct, setRecommandProduct] = React.useState<ProductRecommandResponse[]>([]);
+  // const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
 
-  // const getRecommandProduct = async () => {
-  //   const recommand = await recommandApi.getRecommendations({
+  // const getRecommendProduct = async () => {
+  //   const recommend = await recommendApi.getRecommendations({
   //     productId: 401,
   //     productMainImage:
   //       "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
   //     productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
   //   });
-  //   setRecommandProduct(recommand.data);
+  //   setRecommendProduct(recommend.data);
   // };
-  const recommandProduct: ProductResponseDTO[] = [
+  const recommendProduct: ProductResponseDTO[] = [
     {
       amount: 100,
       calorie: 500,
@@ -170,7 +170,7 @@ const PageMealkeatResult: React.FC = () => {
         }}
       >
         <div>
-          <img style={{ width: "620px", height: "620px" }} alt="" src={recommandProduct[0].thumbnailImageUrl} />
+          <img style={{ width: "620px", height: "620px" }} alt="" src={recommendProduct[0].thumbnailImageUrl} />
         </div>
         <div
           style={{
@@ -183,7 +183,7 @@ const PageMealkeatResult: React.FC = () => {
           }}
         >
           <p style={{ fontSize: "30px" }}>감초로 만든 육수!</p>
-          <p style={{ fontSize: "60px", fontWeight: "bold" }}>{recommandProduct[0].productName}</p>
+          <p style={{ fontSize: "60px", fontWeight: "bold" }}>{recommendProduct[0].productName}</p>
           <p style={{ fontSize: "24px" }}>
             {`40년간 3대째 이어져 내려오는 닭 요리 전문점으로 유명한 '장수닭한마리'의 닭개장을 소개해요. 엄나무, 황기 등의
             한약재를 넣어 푹 끓인 육수에 쫄깃한 국산 닭고기와 고사리를 푸짐하게 넣어 깊은 맛을 낸 닭개장을 집에서
@@ -191,7 +191,7 @@ const PageMealkeatResult: React.FC = () => {
           </p>
         </div>
       </div>
-      {recommandProduct.length > 0 && (
+      {recommendProduct.length > 0 && (
         <div
           style={{
             width: "1320px",
@@ -204,8 +204,8 @@ const PageMealkeatResult: React.FC = () => {
         >
           <span style={{ fontWeight: "bold", fontSize: "2rem" }}>관련 밀킷</span>
           <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-            {recommandProduct.length > 0 &&
-              recommandProduct.slice(1, 5).map((product, index) => <RecommandProduct key={index} product={product} />)}
+            {recommendProduct.length > 0 &&
+              recommendProduct.slice(1, 5).map((product, index) => <RecommendProduct key={index} product={product} />)}
           </div>
         </div>
       )}

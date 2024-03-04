@@ -45,7 +45,7 @@ export const TopSlider = styled.div`
   }
 `;
 
-export const UserRecommandSlider = styled.div`
+export const UserRecommendSlider = styled.div`
   width: 80%;
   max-width: 1600px;
   height: 500px;

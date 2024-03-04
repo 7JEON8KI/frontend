@@ -1,16 +1,16 @@
 import React from "react";
-import { MiniProduct, MiniContentText, MiniContentPrice } from "./RecommandProduct.style";
+import { MiniProduct, MiniContentText, MiniContentPrice } from "./RecommendProduct.style";
 import { useNavigate } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import scrollToTop from "utils/scrollToTop";
 import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
-import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
+import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 interface Props {
-  product: ProductResponseDTO | ProductRecommandResponse;
+  product: ProductResponseDTO | ProductRecommendResponse;
 }
 
 interface DisplayInfo {
@@ -22,7 +22,7 @@ interface DisplayInfo {
   productName: string;
 }
 
-const RecommandProduct = ({ product }: Props): JSX.Element => {
+const RecommendProduct = ({ product }: Props): JSX.Element => {
   const navigate = useNavigate();
 
   const displayInfo = (): DisplayInfo => {
@@ -95,4 +95,4 @@ const RecommandProduct = ({ product }: Props): JSX.Element => {
   );
 };
 
-export default RecommandProduct;
+export default RecommendProduct;
