@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import reviewApi from "apis/reviewApi";
 
 interface Product {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
+  productId: number;
+  productName: string;
+  thumbnailImageUrl: string;
   orderDate: string;
-  selected: boolean;
 }
 
 const Reviewable: React.FC = () => {
@@ -16,24 +14,33 @@ const Reviewable: React.FC = () => {
 
   const navigate = useNavigate();
   const goToReview = (productId: number) => {
-    navigate(`${productId}`);
+    navigate(`../review/${productId}`, { state: { productId: productId } });
+  };
+
+  const fetchReviewable = async () => {
+    const response = await reviewApi.getAbleReviewProduct();
+    setReviewProduct(response.data);
   };
 
   useEffect(() => {
-    const dummy = Array.from({ length: 3 }).map(
-      (_, i) =>
-        ({
-          id: i,
-          name: "[지투지샵] 마이무 무뼈닭발",
-          price: 1000,
-          quantity: 1,
-          imageUrl: "https://via.placeholder.com/150x150",
-          orderDate: "2024.03.15.",
-          selected: true,
-        }) as Product,
-    );
-    setReviewProduct(dummy);
+    fetchReviewable();
   }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+      .format(date)
+      .replace(/(\d{4})(\d{2})(\d{2})/, "$1.$2.$3")
+      .slice(0, -3);
+  };
 
   return (
     <div>
@@ -50,7 +57,7 @@ const Reviewable: React.FC = () => {
               justifyContent: "space-between",
             }}
           >
-            <img src={product.imageUrl} style={{ width: "150px", height: "150px" }} />
+            <img src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
             <div
               style={{
                 width: "550px",
@@ -61,8 +68,8 @@ const Reviewable: React.FC = () => {
                 justifyContent: "space-evenly",
               }}
             >
-              <span>{product.name}</span>
-              <span>{product.orderDate} 구매</span>
+              <span>{product.productName}</span>
+              <span>{formatDate(product.orderDate)} 구매</span>
             </div>
             <div
               style={{
@@ -85,7 +92,7 @@ const Reviewable: React.FC = () => {
                   fontWeight: "bold",
                   backgroundColor: "white",
                 }}
-                onClick={() => goToReview(product.id)}
+                onClick={() => goToReview(product.productId)}
               >
                 리뷰 작성하기
               </button>

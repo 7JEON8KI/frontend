@@ -21,6 +21,12 @@ api.interceptors.response.use(
   },
 
   function (error) {
+    //response.config.url 이 reviews로 시작하는 경우, 404 에러를 무시
+    if (error.response.status === 404) {
+      if (error.config.url.startsWith("/reviews/member/") && error.config.method === "get") {
+        return error.response.data;
+      }
+    }
     return Promise.reject(error);
   },
 );
