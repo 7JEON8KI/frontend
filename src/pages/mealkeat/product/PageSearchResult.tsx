@@ -21,7 +21,6 @@ import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 const PageSearchResult: React.FC = () => {
   const location = useLocation();
-
   const searchWord = location?.state?.searchWord || "";
   const [productList, setProductList] = React.useState<ProductResponseDTO[]>([]);
 
@@ -37,10 +36,9 @@ const PageSearchResult: React.FC = () => {
   };
 
   useEffect(() => {
-    return () => {
-      getSearchProduct();
-    };
-  }, []);
+    getSearchProduct();
+    return () => {};
+  }, [location?.key]);
 
   return (
     <Layout>
