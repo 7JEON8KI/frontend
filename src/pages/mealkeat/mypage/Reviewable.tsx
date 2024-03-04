@@ -14,7 +14,7 @@ const Reviewable: React.FC = () => {
 
   const navigate = useNavigate();
   const goToReview = (productId: number) => {
-    navigate(`../review/${productId}`, { state: { productId: productId } });
+    navigate(`/mypage/review/${productId}`, { state: { productId: productId } });
   };
 
   const fetchReviewable = async () => {
