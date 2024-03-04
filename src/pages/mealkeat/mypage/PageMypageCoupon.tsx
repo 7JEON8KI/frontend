@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Title,
   Container,
@@ -16,8 +16,64 @@ import {
 import { FaShoppingCart } from "react-icons/fa";
 import { PiPercentLight } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
+import mypageCouponApi from "apis/MypageCouponApi";
+
+interface Coupon {
+  couponId: number;
+  memberId: string;
+  couponName: string;
+  discountRate: number;
+  discountPrice: number;
+  createdAt: Date;
+  expiredAt: Date;
+}
+
+function createCoupon(
+  couponId: number,
+  memberId: string,
+  couponName: string,
+  discountRate: number,
+  discountPrice: number,
+  createdAt: Date,
+  expiredAt: Date,
+): Coupon {
+  return {
+    couponId,
+    memberId,
+    couponName,
+    discountRate,
+    discountPrice,
+    createdAt,
+    expiredAt,
+  };
+}
 
 const MyPageCoupon: React.FC = () => {
+  const [couponList, setCouponList] = React.useState<Coupon[]>([]);
+  const [couponCount, setCouponCount] = React.useState(0); // 쿠폰 수를 저장하는 상태를 추가
+  const getCoupons = async () => {
+    const detail = await mypageCouponApi.getCoupons();
+    const coupons = await detail.data.map((coupon: Coupon) => {
+      return createCoupon(
+        coupon.couponId,
+        coupon.memberId,
+        coupon.couponName,
+        coupon.discountRate,
+        coupon.discountPrice,
+        coupon.createdAt,
+        coupon.expiredAt,
+      );
+    });
+    setCouponList(coupons);
+    setCouponCount(coupons.length);
+  };
+
+  useEffect(() => {
+    getCoupons();
+    console.log(couponList);
+    return () => {};
+  }, []);
+
   return (
     <>
       <Title>쿠폰</Title>
@@ -33,9 +89,26 @@ const MyPageCoupon: React.FC = () => {
       <MainContainer>
         <SubTitle>보유 쿠폰</SubTitle>
         <CouponSection>
-          보유쿠폰 총 <span style={{ color: "orange" }}>1장</span>
+          보유쿠폰 총 <span style={{ color: "orange" }}>{couponCount}장</span> {/* 보유 쿠폰의 수를 표시 */}
         </CouponSection>
         <FlexContainer>
+          {couponList.map(coupon => (
+            <CouponItem key={coupon.couponId}>
+              <IconContainer>
+                {coupon.discountPrice > 0 ? <FaShoppingCart size={60} /> : <PiPercentLight size={60} />}
+              </IconContainer>
+              <CouponInfo>
+                <button>
+                  <IoTrashOutline size={25} />
+                </button>
+                <Title style={{ marginRight: "40px" }}>{coupon.couponName}</Title>
+                <div>{coupon.discountPrice > 0 ? `${coupon.discountPrice}원` : `최대 ${coupon.discountRate}%`}</div>
+              </CouponInfo>
+            </CouponItem>
+          ))}
+        </FlexContainer>
+
+        {/* <FlexContainer>
           <CouponItem>
             <IconContainer>
               <FaShoppingCart size={60} />
@@ -60,7 +133,7 @@ const MyPageCoupon: React.FC = () => {
               <div>최대 3,000원</div>
             </CouponInfo>
           </CouponItem>
-        </FlexContainer>
+        </FlexContainer> */}
       </MainContainer>
     </>
   );

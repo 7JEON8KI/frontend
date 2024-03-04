@@ -22,7 +22,7 @@ export const Header = (): JSX.Element => {
           </label>
         </StyledSearch>
         <StyledIconList>
-          <StyledIcon onClick={() => navigate("/like")}>
+          <StyledIcon onClick={() => navigate("/mypage/like")}>
             <img src={HeartPath} alt="찜 아이콘" />
             <span>찜 목록</span>
           </StyledIcon>
@@ -34,7 +34,7 @@ export const Header = (): JSX.Element => {
             <img src={UserPath} alt="로그인/로그아웃 아이콘" />
             <span>로그인</span>
           </StyledIcon>
-          <StyledIcon onClick={() => navigate("/mypage")}>
+          <StyledIcon onClick={() => navigate("/mypage/order")}>
             <img src={MypagePath} alt="마이페이지 아이콘" />
             <span>마이페이지</span>
           </StyledIcon>
@@ -50,17 +50,14 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
             와인
           </NavMenu>
-          <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
+          {/* <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
             이벤트
-          </NavMenu>
+          </NavMenu> */}
           <NavMenu title="클릭 시 테마별 페이지로 이동" onClick={() => navigate("/theme")}>
             테마별
           </NavMenu>
           <NavMenu title="클릭 시 베스트 페이지로 이동" onClick={() => navigate("/best")}>
             베스트
-          </NavMenu>
-          <NavMenu title="클릭 시 할인 중 페이지로 이동" onClick={() => navigate("/discount")}>
-            할인 중
           </NavMenu>
         </StyledTopNav>
       </div>

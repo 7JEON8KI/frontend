@@ -21,18 +21,17 @@ import {
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
-import { Sort, ThemeName } from "constants/productConstants";
-import { ProductResponse, ProductThemeRequest } from "models/mealkeat/ProductModels";
+import { Sort } from "constants/productConstants";
+import { ProductResponse, ProductWineRequest } from "models/mealkeat/ProductModels";
 
-const PageTheme: React.FC = () => {
+const PageWine: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
   const [productList, setProductList] = React.useState<ProductResponse>();
-  const [productSort, setProductSort] = React.useState<ProductThemeRequest>({
+  const [productSort, setProductSort] = React.useState<ProductWineRequest>({
     pageNum: 1,
     pageAmount: 12,
     sort: Sort.NEW,
     includeSoldOut: 1,
-    themeName: ThemeName.HOME,
   });
 
   const handleClickExcept = () => {
@@ -45,85 +44,30 @@ const PageTheme: React.FC = () => {
   };
 
   const handleClickSort = (sortValue: Sort) => {
-    setProductSort({
-      ...productSort,
-      sort: sortValue,
-    });
+    setProductSort({ ...productSort, sort: sortValue });
   };
 
-  const handleClickTheme = (themeName: ThemeName) => {
-    setProductSort({
+  const getProducts = async () => {
+    const fetchProduct = await productApi.getWineProducts({
       ...productSort,
-      themeName: themeName,
     });
-  };
 
-  const getThemeProducts = async () => {
-    const fetchProduct = await productApi.getThemeProducts({ ...productSort });
     setProductList(fetchProduct.data);
   };
 
   useEffect(() => {
-    getThemeProducts();
+    getProducts();
 
     return () => {};
   }, [productSort]);
+
   return (
     <Layout>
       <StyledListGrid>
         <StyledSidebarDiv />
         <StyledMain>
           <StyledMenuNav>
-            <StyledMenuTitle>테마별</StyledMenuTitle>
-            <div
-              style={{
-                display: "flex",
-                gap: "1rem",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "2rem",
-              }}
-            >
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
-                onClick={() => handleClickTheme(ThemeName.HOME)}
-              >
-                {ThemeName.HOME}
-              </button>
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
-                onClick={() => handleClickTheme(ThemeName.SOLO)}
-              >
-                {ThemeName.SOLO}
-              </button>
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
-                onClick={() => handleClickTheme(ThemeName.CAMPING)}
-              >
-                {ThemeName.CAMPING}
-              </button>
-            </div>
+            <StyledMenuTitle>와인</StyledMenuTitle>
             <StyledMenuInfo>
               <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
               <StyledProductInfoDivider>
@@ -163,4 +107,4 @@ const PageTheme: React.FC = () => {
   );
 };
 
-export default PageTheme;
+export default PageWine;

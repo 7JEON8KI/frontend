@@ -8,13 +8,14 @@ import {
   PageList,
   PageTheme,
   PageBest,
-  PageDiscount,
   PageEvent,
   PageCart,
   PageLike,
   PagePayment,
   PagePaymentComplete,
   PageRecommend,
+  PageWine,
+  PageSearchResult,
 } from "pages/mealkeat";
 import KakaoCallback from "pages/mealkeat/oauth/KakaoCallback";
 
@@ -30,12 +31,11 @@ const mealRoutes: Route[] = [
   { path: "/fail", component: PageFail },
   { path: "/signup", component: PageSignup },
   { path: "/mypage/*", component: PageMypage },
-  { path: "/detail", component: PageDetail },
-  // { path: "/detail/:id", component: PageDetail },
+  // { path: "/detail/*", component: PageDetail },
+  { path: "/detail/:id", component: PageDetail },
   { path: "/list", component: PageList },
   { path: "/theme", component: PageTheme },
   { path: "/best", component: PageBest },
-  { path: "/discount", component: PageDiscount },
   { path: "/event", component: PageEvent },
   { path: "/cart", component: PageCart },
   { path: "/like", component: PageLike },
@@ -43,6 +43,8 @@ const mealRoutes: Route[] = [
   { path: "/payment/complete", component: PagePaymentComplete },
   { path: "/recommend", component: PageRecommend },
   { path: "/login/kakaocallback", component: KakaoCallback },
+  { path: "/wine", component: PageWine },
+  { path: "/search", component: PageSearchResult },
 ];
 
 export default mealRoutes;
