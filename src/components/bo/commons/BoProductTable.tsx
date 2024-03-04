@@ -241,11 +241,11 @@ export default function BoProductTable() {
     setOrderBy(property);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    // const selectedIndex = selected.indexOf(id);
-    // setModalOpen(true);
-    // setProductId(id);
-  };
+  // const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+  //   // const selectedIndex = selected.indexOf(id);
+  //   // setModalOpen(true);
+  //   // setProductId(id);
+  // };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -287,7 +287,7 @@ export default function BoProductTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.productId)}
+                      // onClick={event => handleClick(event, row.productId)}
                       role="checkbox"
                       tabIndex={-1}
                       key={row.productId}
