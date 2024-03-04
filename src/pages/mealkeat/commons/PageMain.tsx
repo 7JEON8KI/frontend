@@ -5,7 +5,7 @@ import {
   Title,
   MainDiv,
   TopSlider,
-  UserRecommandSlider,
+  UserRecommendSlider,
   SlideImage,
   ProductName,
   ProductPrice,
@@ -20,6 +20,7 @@ import { Sort } from "constants/productConstants";
 import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductModels";
 import productApi from "apis/productApi";
 import promotionApi from "apis/promotionApi";
+import recommendApi from "apis/recommendApi";
 
 interface Banner {
   bannerId: number;
@@ -78,10 +79,24 @@ const productSettings = {
   ],
 };
 
+interface RecommendProduct {
+  productId: string;
+  productName: string;
+  price: string;
+  productType: string;
+  discountRate: number;
+  mainImgUrl: string;
+}
+interface UserRecommend {
+  ment: string;
+  products: RecommendProduct[];
+}
+
 const PageMain: React.FC = () => {
   const navigate = useNavigate();
   const [bestProduct, setBestProduct] = React.useState<ProductResponse>();
   const [banner, setBanner] = React.useState<Banner[]>([]);
+  const [userRecommend, setUserRecommend] = React.useState<UserRecommend[]>([]);
 
   const getBestProducts = async () => {
     const fetchProduct = await productApi.getProducts({
@@ -95,6 +110,11 @@ const PageMain: React.FC = () => {
     setBestProduct(fetchProduct.data);
   };
 
+  const getUserRecommend = async () => {
+    const fetchUserRecommend = await recommendApi.getMainRecommendations();
+    setUserRecommend(fetchUserRecommend.data);
+  };
+
   const getBanners = async () => {
     const fetchBanner = await promotionApi.getBanner();
     setBanner(fetchBanner.data);
@@ -103,6 +123,7 @@ const PageMain: React.FC = () => {
   useEffect(() => {
     getBestProducts();
     getBanners();
+    getUserRecommend();
   }, []);
 
   return (
@@ -135,24 +156,30 @@ const PageMain: React.FC = () => {
         >
           더 많은 상품 보러가기
         </MoreProductsButton>
-        <Title>저녁엔 이거 어때요?</Title>
-        <UserRecommandSlider>
+        <Title>{userRecommend.length > 0 && userRecommend[0]?.ment}</Title>
+        <UserRecommendSlider>
           <Slider {...productSettings}>
-            {Array(6)
-              .fill(0)
-              .map((_, idx) => (
-                <div key={idx}>
-                  <SlideImage src="https://via.placeholder.com/390x250" alt="" />
+            {userRecommend.length > 0 &&
+              userRecommend[0].products?.map((product, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    scrollToTop({});
+                    navigate(`/detail/${product.productId}`);
+                  }}
+                  title="클릭 시 해당 상품 페이지로 이동"
+                >
+                  <SlideImage src={product.mainImgUrl} alt={product.productName} />
                   <SlideInfoBox>
                     <SlideContent>
-                      <ProductName>[프레시지] 한끼 고기 만두국 밀키트 450g x 3봉 (총 9인분)</ProductName>
-                      <ProductPrice>19,800원</ProductPrice>
+                      <ProductName>{product.productName}</ProductName>
+                      <ProductPrice>{product.price}</ProductPrice>
                     </SlideContent>
                   </SlideInfoBox>
                 </div>
               ))}
           </Slider>
-        </UserRecommandSlider>
+        </UserRecommendSlider>
       </MainDiv>
     </Layout>
   );
