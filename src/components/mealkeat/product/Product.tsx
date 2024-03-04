@@ -62,7 +62,9 @@ const Product = ({ product }: Props): JSX.Element => {
             />
           </button>
         </div>
-        <ContentText $title={true}>{product.productName}</ContentText>
+        <ContentText $title={true} title={product.productName}>
+          {product.productName}
+        </ContentText>
         <ContentPrice>
           <div>{product?.discountRate > 0 && `${product.discountRate}%`}</div>
           <div>

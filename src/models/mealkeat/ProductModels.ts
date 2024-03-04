@@ -47,3 +47,10 @@ export interface ProductSearchRequest extends Partial<ProductSortRequest> {
     keyword: string;
   };
 }
+
+export interface ProductMealkeatRequest extends Partial<ProductSortRequest> {
+  searchRequestDTO: {
+    preferredIngredients: string[];
+    unwantedIngredients: string[];
+  };
+}

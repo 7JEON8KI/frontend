@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, RecommendProduct } from "components/mealkeat";
-import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
-import recommendApi from "apis/recommendApi";
-import { ProductResponseDTO } from "models/mealkeat/ProductModels";
+import { ProductMealkeatRequest, ProductResponseDTO } from "models/mealkeat/ProductModels";
+import productApi from "apis/productApi";
 import { CenteredDiv, HighlightedText, MainText, VerticalCenterDiv } from "./PageMealkeat";
 import styled from "styled-components";
 import scrollToTop from "utils/scrollToTop";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import formatCurrency from "utils/formatCurrency";
 
 export const MoreProductsButton = styled.button.attrs({ type: "button" })`
   width: 245px;
@@ -22,121 +22,30 @@ export const MoreProductsButton = styled.button.attrs({ type: "button" })`
   cursor: pointer; // 버튼에 마우스 오버 시 커서 변경 추가
 `;
 
-const PageMealkeatResult: React.FC = () => {
-  const navigate = useNavigate();
-  // const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
+export const GoProductButton = styled.button.attrs({ type: "button" })`
+  width: 245px;
+  height: 48px;
+  padding: 12px 50px;
+  display: block;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #fd6f21;
+`;
 
-  // const getRecommendProduct = async () => {
-  //   const recommend = await recommendApi.getRecommendations({
-  //     productId: 401,
-  //     productMainImage:
-  //       "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-  //     productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-  //   });
-  //   setRecommendProduct(recommend.data);
-  // };
-  const recommendProduct: ProductResponseDTO[] = [
-    {
-      amount: 100,
-      calorie: 500,
-      createdAt: [2024, 3, 3, 11, 45, 48],
-      discountRate: 0,
-      isLike: 0,
-      modifiedAt: [2024, 3, 3, 11, 45, 48],
-      price: 26000,
-      productDetail:
-        "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8fe6a029-d900-11ee-b8ac-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8ffa2cd9-d900-11ee-86bb-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90176a7d-d900-11ee-a1d9-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_902c583e-d900-11ee-92f6-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90fd1549-d900-11ee-9b6b-ac198ebc401d.jpg'",
-      productId: 401,
-      productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-      productSubName: "상품상세설명 참조",
-      productType: "밀키트",
-      rn: 0,
-      stock: 100,
-      storage: "냉장",
-      thumbnailImageUrl:
-        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-    },
-    {
-      amount: 100,
-      calorie: 500,
-      createdAt: [2024, 3, 3, 11, 45, 48],
-      discountRate: 0,
-      isLike: 0,
-      modifiedAt: [2024, 3, 3, 11, 45, 48],
-      price: 26000,
-      productDetail:
-        "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8fe6a029-d900-11ee-b8ac-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8ffa2cd9-d900-11ee-86bb-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90176a7d-d900-11ee-a1d9-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_902c583e-d900-11ee-92f6-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90fd1549-d900-11ee-9b6b-ac198ebc401d.jpg'",
-      productId: 401,
-      productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-      productSubName: "상품상세설명 참조",
-      productType: "밀키트",
-      rn: 0,
-      stock: 100,
-      storage: "냉장",
-      thumbnailImageUrl:
-        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-    },
-    {
-      amount: 100,
-      calorie: 500,
-      createdAt: [2024, 3, 3, 11, 45, 48],
-      discountRate: 0,
-      isLike: 0,
-      modifiedAt: [2024, 3, 3, 11, 45, 48],
-      price: 26000,
-      productDetail:
-        "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8fe6a029-d900-11ee-b8ac-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8ffa2cd9-d900-11ee-86bb-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90176a7d-d900-11ee-a1d9-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_902c583e-d900-11ee-92f6-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90fd1549-d900-11ee-9b6b-ac198ebc401d.jpg'",
-      productId: 401,
-      productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-      productSubName: "상품상세설명 참조",
-      productType: "밀키트",
-      rn: 0,
-      stock: 100,
-      storage: "냉장",
-      thumbnailImageUrl:
-        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-    },
-    {
-      amount: 100,
-      calorie: 500,
-      createdAt: [2024, 3, 3, 11, 45, 48],
-      discountRate: 0,
-      isLike: 0,
-      modifiedAt: [2024, 3, 3, 11, 45, 48],
-      price: 26000,
-      productDetail:
-        "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8fe6a029-d900-11ee-b8ac-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8ffa2cd9-d900-11ee-86bb-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90176a7d-d900-11ee-a1d9-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_902c583e-d900-11ee-92f6-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90fd1549-d900-11ee-9b6b-ac198ebc401d.jpg'",
-      productId: 401,
-      productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-      productSubName: "상품상세설명 참조",
-      productType: "밀키트",
-      rn: 0,
-      stock: 100,
-      storage: "냉장",
-      thumbnailImageUrl:
-        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-    },
-    {
-      amount: 100,
-      calorie: 500,
-      createdAt: [2024, 3, 3, 11, 45, 48],
-      discountRate: 0,
-      isLike: 0,
-      modifiedAt: [2024, 3, 3, 11, 45, 48],
-      price: 26000,
-      productDetail:
-        "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8fe6a029-d900-11ee-b8ac-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_8ffa2cd9-d900-11ee-86bb-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90176a7d-d900-11ee-a1d9-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_902c583e-d900-11ee-92f6-ac198ebc401d.jpg', 'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/101_90fd1549-d900-11ee-9b6b-ac198ebc401d.jpg'",
-      productId: 401,
-      productName: "[지투지샵] 마이무 무뼈닭발 500g 2팩",
-      productSubName: "상품상세설명 참조",
-      productType: "밀키트",
-      rn: 0,
-      stock: 100,
-      storage: "냉장",
-      thumbnailImageUrl:
-        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/101_8f6270bf-d900-11ee-ae88-ac198ebc401d.jpg",
-    },
-  ];
+const PageMealkeatResult: React.FC = () => {
+  const location = useLocation();
+  const searchRequest = location?.state;
+  const navigate = useNavigate();
+  const [recommendProduct, setRecommendProduct] = React.useState<ProductResponseDTO[]>([]);
+
+  const getRecommendProduct = async () => {
+    const fetchData = await productApi.getProductsMealkeatRecommend({ ...searchRequest } as ProductMealkeatRequest);
+    setRecommendProduct(fetchData.data);
+  };
+
+  useEffect(() => {
+    getRecommendProduct();
+  }, []);
 
   return (
     <Layout>
@@ -148,6 +57,7 @@ const PageMealkeatResult: React.FC = () => {
           </MainText>
         </VerticalCenterDiv>
       </CenteredDiv>
+
       <p
         style={{
           fontSize: "32px",
@@ -158,40 +68,62 @@ const PageMealkeatResult: React.FC = () => {
           alignItems: "center",
         }}
       >
-        추천 결과입니다!
+        {recommendProduct.length > 0 ? (
+          <>고객님의 입맛에 맞는 밀킷입니다</>
+        ) : (
+          <>
+            죄송합니다
+            <br />
+            고객님의 취향에 맞는 밀킷을 찾지 못했습니다
+          </>
+        )}
       </p>
-      <div
-        style={{
-          width: "1500px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "auto",
-        }}
-      >
-        <div>
-          <img style={{ width: "620px", height: "620px" }} alt="" src={recommendProduct[0].thumbnailImageUrl} />
-        </div>
-        <div
-          style={{
-            margin: "auto",
-            display: "flex",
-            flexDirection: "column",
-            width: "600px",
-            gap: "2rem",
-            alignItems: "start",
-          }}
-        >
-          <p style={{ fontSize: "30px" }}>감초로 만든 육수!</p>
-          <p style={{ fontSize: "60px", fontWeight: "bold" }}>{recommendProduct[0].productName}</p>
-          <p style={{ fontSize: "24px" }}>
-            {`40년간 3대째 이어져 내려오는 닭 요리 전문점으로 유명한 '장수닭한마리'의 닭개장을 소개해요. 엄나무, 황기 등의
-            한약재를 넣어 푹 끓인 육수에 쫄깃한 국산 닭고기와 고사리를 푸짐하게 넣어 깊은 맛을 낸 닭개장을 집에서
-            간편하게 즐겨보세요.`}
-          </p>
-        </div>
-      </div>
-      {recommendProduct.length > 0 && (
+
+      {recommendProduct.length > 0 &&
+        recommendProduct
+          .filter((_, idx) => idx === 0)
+          .map((product, index) => (
+            <div
+              key={product.productId}
+              style={{
+                width: "1500px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "auto",
+                boxShadow: "rgba(0, 0, 0, 0.3) 0px 4px 12px",
+              }}
+            >
+              <div>
+                <img style={{ width: "620px", height: "620px" }} alt="" src={product.thumbnailImageUrl} />
+              </div>
+              <div
+                style={{
+                  margin: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "600px",
+                  gap: "2rem",
+                  alignItems: "start",
+                }}
+              >
+                <p style={{ fontSize: "40px", fontWeight: "bold" }}>{product.productName}</p>
+                <p
+                  style={{ fontSize: "30px", fontWeight: "bold" }}
+                >{`${formatCurrency({ amount: product.price, locale: "ko-KR" })}원`}</p>
+                <GoProductButton
+                  onClick={() => {
+                    scrollToTop({});
+                    navigate(`/detail/${product.productId}`);
+                  }}
+                  title="클릭 시 해당 상품 페이지로 이동"
+                >
+                  해당 상품 보러가기
+                </GoProductButton>
+              </div>
+            </div>
+          ))}
+      {recommendProduct.length > 1 && (
         <div
           style={{
             width: "1320px",
@@ -204,20 +136,36 @@ const PageMealkeatResult: React.FC = () => {
         >
           <span style={{ fontWeight: "bold", fontSize: "2rem" }}>관련 밀킷</span>
           <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-            {recommendProduct.length > 0 &&
-              recommendProduct.slice(1, 5).map((product, index) => <RecommendProduct key={index} product={product} />)}
+            {recommendProduct
+              .filter((_, idx) => idx !== 0 && idx < 6)
+              .map((product, index) => (
+                <RecommendProduct key={product.productId} product={product} />
+              ))}
           </div>
         </div>
       )}
-      <MoreProductsButton
-        onClick={() => {
-          scrollToTop({});
-          navigate("/list");
-        }}
-        title="클릭 시 전체 상품 페이지로 이동"
-      >
-        더 많은 상품 보러가기
-      </MoreProductsButton>
+
+      {recommendProduct.length > 0 ? (
+        <MoreProductsButton
+          onClick={() => {
+            scrollToTop({});
+            navigate("/list");
+          }}
+          title="클릭 시 전체 상품 페이지로 이동"
+        >
+          더 많은 상품 보러가기
+        </MoreProductsButton>
+      ) : (
+        <MoreProductsButton
+          onClick={() => {
+            scrollToTop({});
+            navigate(-1);
+          }}
+          title="클릭 시 이전 밀킷 추천 페이지로 이동"
+        >
+          다시 추천 받기
+        </MoreProductsButton>
+      )}
     </Layout>
   );
 };
