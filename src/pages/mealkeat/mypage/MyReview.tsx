@@ -191,7 +191,6 @@ const MyReview: React.FC = () => {
               </div>
             </div>
           </>
-
         ))
       ) : (
         <div
