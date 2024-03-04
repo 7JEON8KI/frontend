@@ -29,7 +29,7 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
     if ("mainImgUrl" in product) {
       return {
         thumbnailImageUrl: product.mainImgUrl,
-        price: product?.price ? Number(product.price) : 0,
+        price: product?.price ? Number(product.price.replace("원", "").replace(",", "")) : 0,
         stock: 1,
         productId: product?.productId ? Number(product.productId) : 1,
         discountRate: product?.discountRate ? Number(product.discountRate) : 0,
@@ -79,14 +79,16 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
             />
           </button>
         </div>
-        <MiniContentText $title={true}>{productInfo.productName}</MiniContentText>
+        <MiniContentText $title={true} title={productInfo.productName}>
+          {productInfo.productName}
+        </MiniContentText>
         <MiniContentPrice>
           <div>{productInfo?.discountRate > 0 && `${productInfo.discountRate}%`}</div>
           <div>
-            {formatCurrency({
+            {`${formatCurrency({
               amount: calculateDiscountPrice({ price: productInfo.price, discountRate: productInfo.discountRate }),
               locale: "ko-KR",
-            })}
+            })}원`}
           </div>
         </MiniContentPrice>
         {productInfo.stock === 0 && <div>일시 품절</div>}
