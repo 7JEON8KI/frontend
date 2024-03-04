@@ -9,6 +9,14 @@ export const reviewApi = {
   getReviewsByMemberId: () => api.get("/reviews/member"),
   getProductReviewByMemberId: (productId: number) => api.get(`/reviews/member/${productId}`),
   getProductReviews: (productId: number) => api.get(`/reviews/product/${productId}/page/{pageNum}`),
+
+  uploadImage: (formData: FormData) => {
+    return api.post("/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // 필요한 경우 명시적으로 설정
+      },
+    });
+  },
 };
 
 export default reviewApi;

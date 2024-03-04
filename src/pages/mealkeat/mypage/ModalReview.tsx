@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Title } from "./PageMypageLike.style";
 import { LuImagePlus } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 import reviewApi from "apis/reviewApi";
 import productApi from "apis/productApi";
 import { AxiosResponse } from "axios";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 interface Product {
   productId: number;
@@ -37,6 +38,16 @@ const ModalReview: React.FC = () => {
   const [reviewScore, setReviewScore] = useState<number>(0);
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   const [reviewContent, setReviewContent] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append("multipartFile", file);
+      await reviewApi.uploadImage(formData).then(response => setImageUrl(response.data));
+    }
+  };
 
   const location = useLocation();
   const productId = location.state.productId;
@@ -57,6 +68,7 @@ const ModalReview: React.FC = () => {
       if (responseReview.data?.reviewStar) {
         setReviewScore(parseInt(responseReview.data.reviewStar));
         setReviewContent(responseReview.data.reviewContent);
+        setImageUrl(responseReview.data.reviewImageUrl);
       }
     } else if ((responseReview as CustomAxiosResponse).statusCode === 404) {
       setReviewExists(false);
@@ -107,6 +119,7 @@ const ModalReview: React.FC = () => {
       productId: product.productId,
       reviewContent: reviewContent,
       reviewStar: reviewScore.toString(),
+      reviewImageUrl: imageUrl,
       reviewTitle: product.productId + " 리뷰",
     };
 
@@ -181,18 +194,57 @@ const ModalReview: React.FC = () => {
               >
                 사진첨부
               </span>
-              <div>
-                <LuImagePlus
+              <input
+                ref={fileInputRef}
+                type="file"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div
                   style={{
-                    width: "100px",
-                    height: "100px",
                     margin: "10px",
                     border: "2px dashed #d0d0d0",
                     borderRadius: "10px",
                     cursor: "pointer",
+                    width: "100px",
+                    height: "100px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  onClick={() => {}}
-                />
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <LuImagePlus
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      margin: "10px",
+                    }}
+                  />
+                </div>
+                {imageUrl && (
+                  <div style={{ position: "relative", display: "inline-block" }}>
+                    <img src={imageUrl} alt="Preview" style={{ maxWidth: "150px" }} />
+                    <IoMdCloseCircleOutline
+                      style={{
+                        position: "absolute",
+                        top: "-1rem",
+                        right: "-1rem",
+                        cursor: "pointer",
+                        color: "#fd6f21",
+                        fontSize: "24px",
+                      }}
+                      onClick={() => setImageUrl(null)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div style={{ marginBottom: "10px", padding: "1rem" }}>
