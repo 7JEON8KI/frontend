@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "@mui/material";
 import { blueGrey, grey } from "@mui/material/colors";
 import { BoIcon } from "components/bo/global/BoIcon";
-import { BoNav } from "components/bo/global/BoNav";
+import BoNav from "components/bo/commons/BoNav";
 // import BoTopbar from "components/bo/global/BoTopbar";
 import { StyledBoBody, StyledBoContent, StyledBoLayout, StyledBoSidebar } from "./BoLayout.style";
 import { Box } from "@mui/system";

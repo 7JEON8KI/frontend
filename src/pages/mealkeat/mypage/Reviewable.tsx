@@ -41,7 +41,6 @@ const Reviewable: React.FC = () => {
       .replace(/(\d{4})(\d{2})(\d{2})/, "$1.$2.$3")
       .slice(0, -3);
   };
-
   return (
     <div>
       {reviewProduct.length > 0 ? (

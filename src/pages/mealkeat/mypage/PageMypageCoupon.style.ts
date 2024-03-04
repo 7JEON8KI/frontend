@@ -49,6 +49,7 @@ export const MainContainer = styled.div`
 
 export const FlexContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   height: 10vh;
 `;
@@ -64,12 +65,12 @@ export const CouponSection = styled.div`
 `;
 
 export const CouponItem = styled.div`
+  width: 48%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   border: 1px solid #e5e5e5;
   height: 20vh;
-  width: 100%;
   margin: 10px;
   border-radius: 10%;
 `;

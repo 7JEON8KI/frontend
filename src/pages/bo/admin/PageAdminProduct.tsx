@@ -1,11 +1,25 @@
 import React from "react";
 import BoLayout from "components/bo/commons/BoLayout";
-import { Paper } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
+import BoProductTable from "components/bo/commons/BoProductTable";
 
 const PageAdminProduct: React.FC = () => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
   return (
     <BoLayout>
-      <Paper elevation={3} sx={{ width: "100%", height: "100%", bgcolor: "white" }}></Paper>
+      <Box height="95vh" width="100%" bgcolor="white" p={2} overflow={"auto"}>
+        <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
+          <Tabs value={value} onChange={handleChange} centered>
+            <Tab label="판매자 리스트" />
+            <Tab label="판매자 신청 리스트" />
+          </Tabs>
+        </Box>
+        <BoProductTable />
+      </Box>
     </BoLayout>
   );
 };

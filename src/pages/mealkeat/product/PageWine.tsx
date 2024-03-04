@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
 import { Layout, Product } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
@@ -22,42 +21,45 @@ import {
 } from "./PageList.style";
 import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
+import { Sort } from "constants/productConstants";
+import { ProductResponse, ProductWineRequest } from "models/mealkeat/ProductModels";
 
 const PageWine: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
-  const [productList, setProductList] = React.useState([]);
+  const [productList, setProductList] = React.useState<ProductResponse>();
+  const [productSort, setProductSort] = React.useState<ProductWineRequest>({
+    pageNum: 1,
+    pageAmount: 12,
+    sort: Sort.NEW,
+    includeSoldOut: 1,
+  });
 
-  // const products = Array(12)
-  //   .fill(0)
-  //   .map((_, idx) => ({
-  //     imageUrl: "https://via.placeholder.com/400x400",
-  //     title: `${idx + 1}.[새벽시장] 맛있는 명인 손만두, 최대 한줄까지 작성 가능합니다.`,
-  //     description:
-  //       "내용입니다. 최대 한줄까지~~!! 한줄까지~~!! 한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!한줄까지~~!!",
-  //     discount: "30%",
-  //     price: "15,800원",
-  //     originalPrice: "22,600원",
-  //     soldOut: false, // 일시 품절 여부
-  //   }));
+  const handleClickExcept = () => {
+    const prev = clickExcept;
+    setClickExcept(prev => !prev);
+    setProductSort({
+      ...productSort,
+      includeSoldOut: prev ? 1 : 0,
+    });
+  };
+
+  const handleClickSort = (sortValue: Sort) => {
+    setProductSort({ ...productSort, sort: sortValue });
+  };
 
   const getProducts = async () => {
-    const axiosProduct = await productApi.getProducts({
-      productCriteria: {
-        pageNum: "1",
-        pageAmount: "12",
-        sort: "HIGH_PRICE",
-        includeSoldOut: 1,
-      },
+    const fetchProduct = await productApi.getWineProducts({
+      ...productSort,
     });
-    console.log(axiosProduct);
-    // setProductList(axiosProduct);
+
+    setProductList(fetchProduct.data);
   };
 
   useEffect(() => {
     getProducts();
 
     return () => {};
-  }, []);
+  }, [productSort]);
 
   return (
     <Layout>
@@ -67,23 +69,23 @@ const PageWine: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>와인</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>총 262건</StyledItemCount>
+              <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
               <StyledProductInfoDivider>
-                <StyledMenuButton onClick={() => setClickExcept(prev => !prev)}>
+                <StyledMenuButton onClick={handleClickExcept}>
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
                   <span>품절 상품제외</span>
                 </StyledMenuButton>
-                <StyledMenuButton>최신상품</StyledMenuButton>
-                <StyledMenuButton>낮은가격</StyledMenuButton>
-                <StyledMenuButton>높은가격</StyledMenuButton>
-                <StyledMenuButton style={{ borderRight: "none" }}>인기상품</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.NEW)}>최신상품</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.LOW_PRICE)}>낮은가격</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.HIGH_PRICE)}>높은가격</StyledMenuButton>
+                <StyledMenuButton onClick={() => handleClickSort(Sort.MOST_ORDER)} style={{ borderRight: "none" }}>
+                  인기상품
+                </StyledMenuButton>
               </StyledProductInfoDivider>
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList.map((product, index) => (
-              <Product key={index} product={product} />
-            ))}
+            {productList?.productResponseDTOList?.map((product, index) => <Product key={index} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>

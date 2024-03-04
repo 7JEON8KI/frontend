@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Box, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const BoNav = (): JSX.Element => {
+export const BoManagerNav = (): JSX.Element => {
   const [activeLink, setActiveLink] = useState<string>("");
 
   const handleLinkClick = (link: string) => {
@@ -30,11 +30,6 @@ export const BoNav = (): JSX.Element => {
       <Link to="/bo/admin/manager" onClick={() => handleLinkClick("/bo/admin/manager")}>
         <Box textAlign={"center"} fontSize={18} sx={{ color: "white", padding: 2, cursor: "pointer" }}>
           <Box>판매자 목록</Box>
-        </Box>
-      </Link>
-      <Link to="/bo/admin/manager/permit" onClick={() => handleLinkClick("/bo/admin/manager/permit")}>
-        <Box textAlign={"center"} fontSize={18} sx={{ color: "white", padding: 2, cursor: "pointer" }}>
-          <Box>판매자 등록</Box>
         </Box>
       </Link>
       <Divider sx={{ fontSize: "14px" }}>상품</Divider>
