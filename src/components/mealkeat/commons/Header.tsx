@@ -11,6 +11,19 @@ import { useNavigate } from "react-router-dom";
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate();
+  const [word, setWord] = React.useState<string>("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWord(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (word.trim()) navigate("/search", { state: { searchWord: word.trim() } });
+      else window.alert("검색어를 입력해주세요.");
+    }
+  };
+
   return (
     <StyledHeader>
       <div className="frame">
@@ -18,7 +31,14 @@ export const Header = (): JSX.Element => {
         <StyledSearch>
           <label htmlFor="search">
             <img src={SearchPath} alt="검색 아이콘" />
-            <input id="search" type="text" placeholder="지금 먹고싶은 재료를 검색하세요!" />
+            <input
+              id="search"
+              type="text"
+              placeholder="지금 먹고싶은 재료를 검색하세요!"
+              value={word}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
           </label>
         </StyledSearch>
         <StyledIconList>
