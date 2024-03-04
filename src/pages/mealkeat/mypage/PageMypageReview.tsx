@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { Title } from "./PageMypageLike.style";
 import Reviewable from "./Reviewable";
 import MyReview from "./MyReview";
+import { useLocation } from "react-router-dom";
 
 const PageMypageReview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"reviewable" | "myReview">("reviewable");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<"reviewable" | "myReview">(
+    location.state ? location.state.activeTab : "reviewable",
+  );
 
   // 리뷰 가능한 상품 탭을 활성화합니다.
   const showReviewable = () => {

@@ -1,97 +1,196 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import reviewApi from "apis/reviewApi";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-  orderDate: string;
-  selected: boolean;
+interface Review {
+  reviewId: number;
+  productId: number;
+  memberNickname: string;
+  reviewTitle: string;
+  reviewContent: string;
+  reviewImageUrl: string;
+  reviewStar: string;
+  modifiedAt: string;
+  thumbnailImageUrl: string;
+  productName: string;
 }
 
 const MyReview: React.FC = () => {
-  const [reviewProduct, setReviewProduct] = useState<Product[]>([]);
+  const [reviewProduct, setReviewProduct] = useState<Review[]>([]);
 
   const navigate = useNavigate();
   const goToReview = (productId: number) => {
-    navigate(`${productId}`);
+    navigate(`../review/${productId}`, { state: { productId: productId } });
+  };
+  const fetchReviewable = async () => {
+    const response = await reviewApi.getReviewsByMemberId();
+    setReviewProduct(response.data);
+  };
+
+  const deleteReview = async (review: Review) => {
+    const ReviewRequestDto = {
+      productId: review.productId,
+      reviewTitle: review.reviewTitle,
+      reviewContent: review.reviewContent,
+      reviewImageUrl: review.reviewImageUrl,
+      reviewStar: review.reviewStar,
+    };
+    await reviewApi.deleteReview(ReviewRequestDto).then(() => fetchReviewable());
   };
 
   useEffect(() => {
-    const dummy = Array.from({ length: 3 }).map(
-      (_, i) =>
-        ({
-          id: i,
-          name: "[지투지샵] 마이무 무뼈닭발",
-          price: 1000,
-          quantity: 1,
-          imageUrl: "https://via.placeholder.com/150x150",
-          orderDate: "2024.03.15.",
-          selected: true,
-        }) as Product,
-    );
-    setReviewProduct(dummy);
+    fetchReviewable();
   }, []);
 
   return (
-    <div>
-      작성한 리뷰들
+    <div
+      className="review-list"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+        padding: "1.5rem 1rem",
+        borderTop: "1px solid #d0d0d0",
+      }}
+    >
       {reviewProduct.length > 0 ? (
-        reviewProduct.map((product, i) => (
-          <div
-            key={i}
-            style={{
-              height: "210px",
-              display: "flex",
-              gap: "1rem",
-              padding: "1.5rem 1rem",
-              borderTop: "1px solid #d0d0d0",
-              justifyContent: "space-between",
-            }}
-          >
-            <img src={product.imageUrl} style={{ width: "150px", height: "150px" }} />
-            <div
-              style={{
-                width: "550px",
-                fontSize: "20px",
-                fontWeight: "bold",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <span>{product.name}</span>
-              <span>{product.orderDate} 구매</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "1rem",
-                gap: "1rem",
-              }}
-            >
-              <button
+        reviewProduct.map(review => (
+          <>
+            <div key={review.reviewId}>
+              <div
                 style={{
-                  width: "250px",
-                  height: "50px",
-                  padding: "0.5rem 1rem",
-                  fontSize: "1rem",
-                  border: "2px solid #fd6f21",
-                  color: "#fd6f21",
-                  fontWeight: "bold",
-                  backgroundColor: "white",
+                  height: "210px",
+                  display: "flex",
+                  gap: "1rem",
+                  padding: "1.5rem 1rem",
+                  borderTop: "1px solid #d0d0d0",
+                  justifyContent: "space-between",
                 }}
-                onClick={() => goToReview(product.id)}
               >
-                리뷰 작성하기
-              </button>
+                <img src={review.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
+                <div
+                  style={{
+                    width: "550px",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <span>{review.productName}</span>
+                  <span>{review.modifiedAt}</span>
+                  <span
+                    className="review-rating"
+                    style={{
+                      fontSize: "30px",
+                    }}
+                  >
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span
+                        key={index}
+                        style={{
+                          color: index < parseInt(review.reviewStar) ? "#FD6F21" : "grey",
+                        }}
+                      >
+                        ♥
+                      </span>
+                    ))}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1rem",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "1.3rem",
+                      fontWeight: "bold",
+                      color: "#fd6f21",
+                    }}
+                    onClick={() => goToReview(review.productId)}
+                  >
+                    수정
+                  </span>
+                  <span
+                    style={{
+                      color: "#d0d0d0",
+                    }}
+                  >
+                    |
+                  </span>
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "1.3rem",
+                      fontWeight: "bold",
+                      color: "#fd6f21",
+                    }}
+                    onClick={() => deleteReview(review)}
+                  >
+                    삭제
+                  </span>
+                </div>
+              </div>
+              <div
+                className="review-item"
+                style={{
+                  border: "1px solid #ccc",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "10px",
+                  marginBottom: "10px",
+                }}
+              >
+                <div
+                  className="review-image-container"
+                  style={{
+                    width: "500px",
+                    overflow: "hidden",
+                    margin: "2rem",
+                  }}
+                >
+                  <img
+                    src={review.reviewImageUrl}
+                    alt={review.reviewTitle}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    className="review-image"
+                  />
+                </div>
+                <div
+                  className="review-content"
+                  style={{
+                    width: "700px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <div
+                    className="review-text"
+                    style={{
+                      fontSize: "1.2rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    {review.reviewContent}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </>
         ))
       ) : (
         <div
