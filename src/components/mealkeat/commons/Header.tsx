@@ -89,20 +89,22 @@ export const Header = (): JSX.Element => {
             <span>장바구니</span>
           </StyledIcon>
           {isLoggedIn ? (
-            <StyledIcon onClick={handleLogout}>
-              <img src={UserPath} alt="로그아웃 아이콘" />
-              <span>로그아웃</span>
-            </StyledIcon>
+            <>
+              <StyledIcon onClick={handleLogout}>
+                <img src={UserPath} alt="로그아웃 아이콘" />
+                <span>로그아웃</span>
+              </StyledIcon>
+              <StyledIcon onClick={() => handleProtectedRoute("/mypage/order")}>
+                <img src={MypagePath} alt="마이페이지 아이콘" />
+                <span>마이페이지</span>
+              </StyledIcon>
+            </>
           ) : (
             <StyledIcon onClick={() => navigate("/login")}>
               <img src={UserPath} alt="로그인 아이콘" />
               <span>로그인</span>
             </StyledIcon>
           )}
-          <StyledIcon onClick={() => handleProtectedRoute("/mypage/order")}>
-            <img src={MypagePath} alt="마이페이지 아이콘" />
-            <span>마이페이지</span>
-          </StyledIcon>
         </StyledIconList>
         <StyledTopNav>
           <NavMenu title="클릭 시 전체상품 페이지로 이동" onClick={() => navigate("/list")}>
