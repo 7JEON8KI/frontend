@@ -20,7 +20,7 @@ import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductMode
 import { Sort } from "constants/productConstants";
 
 const PageBest: React.FC = () => {
-  const [productList, setProductList] = React.useState<ProductResponse[]>([]);
+  const [productList, setProductList] = React.useState<ProductResponse>();
 
   const getProducts = async () => {
     const fetchProduct = await productApi.getProducts({
@@ -48,13 +48,11 @@ const PageBest: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>베스트 상품</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>{`총 ${productList.length}건`}</StyledItemCount>
+              <StyledItemCount>{"총 12건"}</StyledItemCount>
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList.map((product, index) => (
-              <Product key={index} product={product} />
-            ))}
+            {productList?.productResponseDTOList.map((product, index) => <Product key={index} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>

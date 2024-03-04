@@ -7,10 +7,10 @@ import scrollToTop from "utils/scrollToTop";
 import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
-import { ProductResponse } from "models/mealkeat/ProductModels";
+import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 interface Props {
-  product: ProductResponse | ProductRecommandResponse;
+  product: ProductResponseDTO | ProductRecommandResponse;
 }
 
 interface DisplayInfo {

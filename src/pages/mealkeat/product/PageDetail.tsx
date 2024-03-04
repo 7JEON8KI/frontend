@@ -18,6 +18,7 @@ import {
   StyledAmountBtn,
   ProductInfoListContainer,
   ProductAmountInput,
+  ProductMiniImage,
 } from "./PageDetail.style";
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
@@ -26,14 +27,14 @@ import recommandApi from "apis/recommandApi";
 import formatCurrency from "utils/formatCurrency";
 import { useParams } from "react-router-dom";
 import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
-import { ProductResponse } from "models/mealkeat/ProductModels";
+import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 const PageDetail: React.FC = () => {
   const { id } = useParams();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
-  const [productDetail, setProductDetail] = React.useState<ProductResponse>({} as ProductResponse);
+  const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
   const [recommandProduct, setRecommandProduct] = React.useState<ProductRecommandResponse[]>([]);
-  const [recommandWine, setRecommandWine] = React.useState<ProductResponse[]>([]);
+  const [recommandWine, setRecommandWine] = React.useState<ProductResponseDTO[]>([]);
 
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
@@ -75,11 +76,18 @@ const PageDetail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    getRecommandProduct();
-    getRecommandWine();
-
-    return () => {};
+    if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
+      getRecommandProduct();
+      getRecommandWine();
+    }
   }, [productDetail]);
+  // "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b0ea42d5-d8ff-11ee-8ed0-ac198ebc401d.jpg',
+  //  'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b12e5516-d8ff-11ee-97a6-ac198ebc401d.jpg',
+  //   'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b158048e-d8ff-11ee-aea2-ac198ebc401d.jpg',
+  //    'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b1e6e08a-d8ff-11ee-bf35-ac198ebc401d.jpg',
+  //     'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b235ee19-d8ff-11ee-9774-ac198ebc401d.jpg',
+  //      'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2808466-d8ff-11ee-be8d-ac198ebc401d.jpg',
+  //       'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2cec175-d8ff-11ee-b38e-ac198ebc401d.jpg'"
 
   return (
     <Layout>
@@ -94,7 +102,7 @@ const PageDetail: React.FC = () => {
                 width={567}
                 height={567}
               />
-              {/* <ProductMiniImage>
+              <ProductMiniImage>
                 <Image
                   src="https://via.placeholder.com/98x98"
                   alt="이미지 대체 텍스트가 들어가야 합니다~!"
@@ -119,7 +127,19 @@ const PageDetail: React.FC = () => {
                   width={98}
                   height={98}
                 />
-              </ProductMiniImage> */}
+                <Image
+                  src="https://via.placeholder.com/98x98"
+                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
+                  width={98}
+                  height={98}
+                />
+                <Image
+                  src="https://via.placeholder.com/98x98"
+                  alt="이미지 대체 텍스트가 들어가야 합니다~!"
+                  width={98}
+                  height={98}
+                />
+              </ProductMiniImage>
             </ProductImageContainer>
             <ProductDescription>
               <ProductFlexCol $padding="0 0 2rem">

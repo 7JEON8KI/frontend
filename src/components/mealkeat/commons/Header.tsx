@@ -50,9 +50,9 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
             와인
           </NavMenu>
-          <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
+          {/* <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
             이벤트
-          </NavMenu>
+          </NavMenu> */}
           <NavMenu title="클릭 시 테마별 페이지로 이동" onClick={() => navigate("/theme")}>
             테마별
           </NavMenu>

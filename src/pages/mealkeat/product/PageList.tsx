@@ -27,7 +27,7 @@ import { ProductSortRequest } from "models/mealkeat/ProductModels";
 
 const PageList: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
-  const [productList, setProductList] = React.useState<ProductResponse[]>([]);
+  const [productList, setProductList] = React.useState<ProductResponse>();
   const [productSort, setProductSort] = React.useState<ProductSortRequest>({
     productCriteria: {
       pageNum: 1,
@@ -70,7 +70,7 @@ const PageList: React.FC = () => {
           <StyledMenuNav>
             <StyledMenuTitle>전체상품</StyledMenuTitle>
             <StyledMenuInfo>
-              <StyledItemCount>{`총 ${productList.length}건`}</StyledItemCount>
+              <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
               <StyledProductInfoDivider>
                 <StyledMenuButton onClick={handleClickExcept}>
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
@@ -86,9 +86,7 @@ const PageList: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList.map((product, index) => (
-              <Product key={index} product={product} />
-            ))}
+            {productList?.productResponseDTOList?.map((product, index) => <Product key={index} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>

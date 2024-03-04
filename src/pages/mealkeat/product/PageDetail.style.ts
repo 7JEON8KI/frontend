@@ -36,6 +36,8 @@ export const ProductImageContainer = styled.div`
 export const ProductMiniImage = styled.div`
   display: flex;
   gap: 1rem;
+  width: 560px;
+  flex-wrap: wrap;
 `;
 
 export const ProductDescription = styled.div`
