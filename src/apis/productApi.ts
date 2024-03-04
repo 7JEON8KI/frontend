@@ -1,5 +1,10 @@
 import api from "./api";
-import { ProductSortRequest, ProductWineRequest, ProductThemeRequest } from "models/mealkeat/ProductModels";
+import {
+  ProductSortRequest,
+  ProductWineRequest,
+  ProductThemeRequest,
+  ProductSearchRequest,
+} from "models/mealkeat/ProductModels";
 interface ProductDetailParams {
   productId: number;
 }
@@ -9,6 +14,7 @@ export const productApi = {
   getProductDetail: ({ productId }: ProductDetailParams) => api.get(`/products/${productId}`),
   getThemeProducts: ({ ...body }: ProductThemeRequest) => api.post("/products/theme", body),
   getWineProducts: ({ ...body }: ProductWineRequest) => api.post("/products/wine", body),
+  getProductsWithSearch: ({ ...body }: ProductSearchRequest) => api.post("/products", body),
 };
 
 export default productApi;

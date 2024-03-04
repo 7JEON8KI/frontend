@@ -1,4 +1,4 @@
-import { Layout, Image, ModalContainer, CartModal, RecommandProduct } from "components/mealkeat";
+import { Layout, Image, ModalContainer, CartModal, RecommendProduct } from "components/mealkeat";
 import React, { useEffect } from "react";
 import {
   StyledListGrid,
@@ -23,18 +23,18 @@ import {
 import scrollToTop from "utils/scrollToTop";
 import HeartPath from "assets/images/icons/Heart.png";
 import productApi from "apis/productApi";
-import recommandApi from "apis/recommandApi";
+import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
 import { useParams } from "react-router-dom";
-import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
+import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 const PageDetail: React.FC = () => {
   const { id } = useParams();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
   const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
-  const [recommandProduct, setRecommandProduct] = React.useState<ProductRecommandResponse[]>([]);
-  const [recommandWine, setRecommandWine] = React.useState<ProductResponseDTO[]>([]);
+  const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
+  const [recommendWine, setRecommendWine] = React.useState<ProductResponseDTO[]>([]);
 
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
@@ -51,22 +51,22 @@ const PageDetail: React.FC = () => {
     setProductDetail(detail.data);
   };
 
-  const getRecommandProduct = async () => {
-    const recommand = await recommandApi.getRecommendations({
+  const getRecommendProduct = async () => {
+    const recommend = await recommendApi.getRecommendations({
       productId: Number(id),
       productMainImage: productDetail.thumbnailImageUrl,
       productName: productDetail.productName,
     });
-    setRecommandProduct(recommand.data);
+    setRecommendProduct(recommend.data);
   };
 
-  const getRecommandWine = async () => {
-    const recommandWine = await recommandApi.getWineRecommendations({
+  const getRecommendWine = async () => {
+    const recommendWine = await recommendApi.getWineRecommendations({
       productId: Number(id),
       productMainImage: productDetail.thumbnailImageUrl,
       productName: productDetail.productName,
     });
-    setRecommandWine(recommandWine.data.slice(0, 5));
+    setRecommendWine(recommendWine.data.slice(0, 5));
   };
 
   useEffect(() => {
@@ -77,8 +77,8 @@ const PageDetail: React.FC = () => {
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
-      getRecommandProduct();
-      getRecommandWine();
+      getRecommendProduct();
+      getRecommendWine();
     }
   }, [productDetail]);
   // "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b0ea42d5-d8ff-11ee-8ed0-ac198ebc401d.jpg',
@@ -321,7 +321,7 @@ const PageDetail: React.FC = () => {
               </button>
             )}
           </div>
-          {recommandProduct.length > 0 && (
+          {recommendProduct.length > 0 && (
             <div
               style={{
                 width: "1320px",
@@ -335,12 +335,12 @@ const PageDetail: React.FC = () => {
             >
               <span style={{ fontWeight: "bold", fontSize: "2rem" }}>다른 고객이 함께 본 상품입니다</span>
               <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-                {recommandProduct.length > 0 &&
-                  recommandProduct.map((product, index) => <RecommandProduct key={index} product={product} />)}
+                {recommendProduct.length > 0 &&
+                  recommendProduct.map((product, index) => <RecommendProduct key={index} product={product} />)}
               </div>
             </div>
           )}
-          {recommandWine.length > 0 && (
+          {recommendWine.length > 0 && (
             <div
               style={{
                 width: "1320px",
@@ -352,8 +352,8 @@ const PageDetail: React.FC = () => {
             >
               <span style={{ fontWeight: "bold", fontSize: "2rem" }}>현재 상품과 어울리는 와인입니다</span>
               <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
-                {recommandWine.map((product, index) => (
-                  <RecommandProduct key={index} product={product} />
+                {recommendWine.map((product, index) => (
+                  <RecommendProduct key={index} product={product} />
                 ))}
               </div>
             </div>
