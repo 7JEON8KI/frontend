@@ -27,7 +27,7 @@ function KakaoCallback() {
           //spring에서 발급된 jwt localStorage 저장
           localStorage.setItem("Authorization", "Bearer " + response.data.accessToken);
           //메인 페이지로 이동
-          navigate("/", { replace: true });
+          window.location.href = "/";
         } else {
           //회원가입 페이지로 이동
           navigate("/signup", { replace: true });

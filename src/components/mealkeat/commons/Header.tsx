@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Logo } from "components/mealkeat";
 import SearchPath from "assets/images/icons/Search.png";
 import HeartPath from "assets/images/icons/Heart.png";
@@ -8,10 +8,13 @@ import MypagePath from "assets/images/icons/Mypage.png";
 import MenuPath from "assets/images/icons/Menu.png";
 import { StyledHeader, StyledSearch, StyledIconList, StyledIcon, StyledTopNav, NavMenu } from "./Header.style";
 import { useNavigate } from "react-router-dom";
+import cartApi from "apis/cartApi";
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate();
   const [word, setWord] = React.useState<string>("");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [cartsCount, setCartsCount] = useState<number>(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWord(e.target.value);
@@ -22,6 +25,41 @@ export const Header = (): JSX.Element => {
       if (word.trim()) navigate("/search", { state: { searchWord: word.trim() } });
       else window.alert("검색어를 입력해주세요.");
     }
+  };
+
+  const handleProtectedRoute = (path: string) => {
+    if (isLoggedIn) {
+      navigate(path);
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const fetchCartsCount = async () => {
+    const result = await cartApi.getCartsCount();
+    setCartsCount(result.data);
+  };
+
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem("Authorization");
+      setIsLoggedIn(!!token);
+      if (token) fetchCartsCount();
+    };
+    checkAuthStatus();
+    // 페이지가 포커스를 받을 때마다 로그인 상태를 체크
+    window.addEventListener("focus", checkAuthStatus);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => window.removeEventListener("focus", checkAuthStatus);
+  }, []);
+
+  const handleLogout = () => {
+    // 로그아웃 시 localStorage에서 Authorization 토큰 제거
+    localStorage.removeItem("Authorization");
+    setIsLoggedIn(false); // 로그인 상태 업데이트
+    setCartsCount(0); // 장바구니 수량 초기화
+    navigate("/"); // 홈으로 리디렉션 또는 원하는 경로로 변경
   };
 
   return (
@@ -42,19 +80,26 @@ export const Header = (): JSX.Element => {
           </label>
         </StyledSearch>
         <StyledIconList>
-          <StyledIcon onClick={() => navigate("/mypage/like")}>
+          <StyledIcon onClick={() => handleProtectedRoute("/mypage/like")}>
             <img src={HeartPath} alt="찜 아이콘" />
             <span>찜 목록</span>
           </StyledIcon>
-          <StyledIcon onClick={() => navigate("/cart")} $amount={3}>
+          <StyledIcon onClick={() => handleProtectedRoute("/cart")} $amount={cartsCount}>
             <img src={CartPath} alt="장바구니 아이콘" />
             <span>장바구니</span>
           </StyledIcon>
-          <StyledIcon onClick={() => navigate("/login")}>
-            <img src={UserPath} alt="로그인/로그아웃 아이콘" />
-            <span>로그인</span>
-          </StyledIcon>
-          <StyledIcon onClick={() => navigate("/mypage/order")}>
+          {isLoggedIn ? (
+            <StyledIcon onClick={handleLogout}>
+              <img src={UserPath} alt="로그아웃 아이콘" />
+              <span>로그아웃</span>
+            </StyledIcon>
+          ) : (
+            <StyledIcon onClick={() => navigate("/login")}>
+              <img src={UserPath} alt="로그인 아이콘" />
+              <span>로그인</span>
+            </StyledIcon>
+          )}
+          <StyledIcon onClick={() => handleProtectedRoute("/mypage/order")}>
             <img src={MypagePath} alt="마이페이지 아이콘" />
             <span>마이페이지</span>
           </StyledIcon>
