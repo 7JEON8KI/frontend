@@ -8,7 +8,7 @@ export const reviewApi = {
   getAbleReviewProduct: () => api.get("/reviews/able"),
   getReviewsByMemberId: () => api.get("/reviews/member"),
   getProductReviewByMemberId: (productId: number) => api.get(`/reviews/member/${productId}`),
-  getProductReviews: (productId: number) => api.get(`/reviews/product/${productId}/page/{pageNum}`),
+  getProductReviews: (productId: number, pageNum: number) => api.get(`/reviews/product/${productId}/page/${pageNum}`),
 
   uploadImage: (formData: FormData) => {
     return api.post("/upload", formData, {
