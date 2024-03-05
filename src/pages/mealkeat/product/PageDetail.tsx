@@ -20,8 +20,9 @@ import {
   ProductAmountInput,
 } from "./PageDetail.style";
 import scrollToTop from "utils/scrollToTop";
-import HeartPath from "assets/images/icons/Heart.png";
+// import HeartPath from "assets/images/icons/Heart.png";
 import productApi from "apis/productApi";
+import likeApi from "apis/likeApi";
 import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
 import { useParams } from "react-router-dom";
@@ -34,7 +35,7 @@ const PageDetail: React.FC = () => {
   const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
   const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
   const [recommendWine, setRecommendWine] = React.useState<ProductResponseDTO[]>([]);
-
+  const [likeProduct, setLikeProduct] = React.useState<number>(productDetail.isLike);
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
   const handleClickDetailViewBtn = () => {
@@ -48,6 +49,7 @@ const PageDetail: React.FC = () => {
   const getProductDetail = async () => {
     const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
+    setLikeProduct(detail.data.isLike);
   };
 
   const getRecommendProduct = async () => {
@@ -69,6 +71,18 @@ const PageDetail: React.FC = () => {
         productName: productDetail.productName,
       });
       setRecommendWine(recommendWine.data.slice(0, 5));
+    }
+  };
+
+  const toggleLike = async () => {
+    if (likeProduct === 1) {
+      // 현재 찜한 상태이면 찜 해제 API 호출
+      await likeApi.deleteLikes(productDetail.productId);
+      setLikeProduct(0);
+    } else {
+      // 현재 찜하지 않은 상태이면 찜하기 API 호출
+      await likeApi.saveLikes(productDetail.productId);
+      setLikeProduct(1);
     }
   };
 
@@ -227,8 +241,24 @@ const PageDetail: React.FC = () => {
                     alignItems: "center",
                     justifyContent: "center",
                   }}
+                  onClick={toggleLike}
                 >
-                  <img src={HeartPath} style={{ width: "30px", height: "30px" }} alt="찜 아이콘" />
+                  <button
+                    type="button"
+                    title="찜하기 버튼"
+                    style={{
+                      cursor: "pointer",
+                      color: likeProduct === 1 ? "#FD6F21" : "gray",
+                      fontSize: "32px",
+                      padding: "0 0.25rem",
+                    }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      toggleLike();
+                    }}
+                  >
+                    ♥
+                  </button>
                   <span style={{ marginTop: "0.2rem", fontWeight: "bold" }}>찜</span>
                 </button>
                 <button
