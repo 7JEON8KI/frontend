@@ -141,7 +141,7 @@ const PageTheme: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList?.productResponseDTOList?.map((product, index) => <Product key={index} product={product} />)}
+            {productList?.productResponseDTOList?.map(product => <Product key={product.productId} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>
