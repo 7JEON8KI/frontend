@@ -52,7 +52,7 @@ const PageSearchResult: React.FC = () => {
             </StyledMenuInfo>
           </StyledMenuNav>
           <StyledProductGrid>
-            {productList?.map((product, index) => <Product key={index} product={product} />)}
+            {productList?.map(product => <Product key={product.productId} product={product} />)}
           </StyledProductGrid>
         </StyledMain>
         <StyledSidebarDiv>
