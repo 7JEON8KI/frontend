@@ -43,6 +43,17 @@ interface Review {
   modifiedAt: number;
 }
 
+interface Review {
+  reviewId: number;
+  productId: number;
+  memberNickname: number;
+  reviewTitle: string;
+  reviewContent: string;
+  reviewImageUrl: string;
+  reviewStar: string;
+  modifiedAt: number;
+}
+
 const PageDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,6 +80,14 @@ const PageDetail: React.FC = () => {
     setLikeProduct(detail.data.isLike);
     const urlList: string[] = detail.data?.productDetail?.split(",");
     setDetailImageList(urlList.map(url => url.replace(/'/g, "").trim()));
+  };
+
+  const getReviewList = async () => {
+    const review = await reviewApi.getProductReviews(id ? Number(id) : 1, 1);
+    if (review?.data) {
+      console.log(review.data);
+      setReviewList(review?.data);
+    }
   };
 
   const getReviewList = async () => {
