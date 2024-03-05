@@ -45,6 +45,7 @@ const PageDetail: React.FC = () => {
   const navigate = useNavigate();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
   const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
+  const [detailImageList, setDetailImageList] = React.useState<string[]>([]);
   const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
   const [recommendWine, setRecommendWine] = React.useState<ProductResponseDTO[]>([]);
   const [likeProduct, setLikeProduct] = React.useState<number>(productDetail.isLike);
@@ -63,6 +64,8 @@ const PageDetail: React.FC = () => {
     const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
     setLikeProduct(detail.data.isLike);
+    const urlList: string[] = detail.data?.productDetail?.split(",");
+    setDetailImageList(urlList.map(url => url.replace(/'/g, "").trim()));
   };
 
   const getReviewList = async () => {
@@ -119,13 +122,6 @@ const PageDetail: React.FC = () => {
       getRecommendWine();
     }
   }, [productDetail]);
-  // "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b0ea42d5-d8ff-11ee-8ed0-ac198ebc401d.jpg',
-  //  'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b12e5516-d8ff-11ee-97a6-ac198ebc401d.jpg',
-  //   'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b158048e-d8ff-11ee-aea2-ac198ebc401d.jpg',
-  //    'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b1e6e08a-d8ff-11ee-bf35-ac198ebc401d.jpg',
-  //     'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b235ee19-d8ff-11ee-9774-ac198ebc401d.jpg',
-  //      'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2808466-d8ff-11ee-be8d-ac198ebc401d.jpg',
-  //       'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2cec175-d8ff-11ee-b38e-ac198ebc401d.jpg'"
 
   return (
     <Layout>
@@ -393,12 +389,15 @@ const PageDetail: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
-              <img
-                src="https://via.placeholder.com/640x2770"
-                alt="대체 텍스트가 들어가야합니다~~~!!"
-                style={{ width: "640px", height: "2770px", margin: "auto" }}
-                draggable={false}
-              />
+              {detailImageList?.map(url => (
+                <img
+                  key={url}
+                  src={url}
+                  alt="대체 텍스트가 들어가야합니다~~~!!"
+                  style={{ width: "640px", margin: "auto", objectFit: "contain" }}
+                  draggable={false}
+                />
+              ))}
             </div>
             {!clickDetailView && (
               <button
