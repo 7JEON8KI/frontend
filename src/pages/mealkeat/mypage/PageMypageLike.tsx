@@ -72,7 +72,7 @@ const PageMypageLike: React.FC = () => {
       cartProductCnt: 1,
       productId: productId,
     };
-    await cartApi.saveOrDeleteCart(data);
+    await cartApi.saveCart(data);
   };
 
   const navigate = useNavigate();

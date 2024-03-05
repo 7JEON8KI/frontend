@@ -17,7 +17,7 @@ const Product = ({ product }: Props): JSX.Element => {
 
   const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
     e.stopPropagation();
-    await cartApi.saveOrDeleteCart({ productId: productId, cartProductCnt: 1 });
+    await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
   };
 
   return (
