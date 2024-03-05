@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Product } from "components/mealkeat";
+import { Layout, Product, Pagination } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
 import exceptClick from "assets/images/icons/except_click.png";
 import {
@@ -24,7 +24,6 @@ import productApi from "apis/productApi";
 import { ProductResponse } from "models/mealkeat/ProductModels";
 import { Sort } from "constants/productConstants";
 import { ProductSortRequest } from "models/mealkeat/ProductModels";
-import Pageination from "components/mealkeat/commons/Pageination";
 
 const PageList: React.FC = () => {
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
@@ -111,7 +110,7 @@ const PageList: React.FC = () => {
           </StyledSidebarAside>
         </StyledSidebarDiv>
       </StyledListGrid>
-      <Pageination total={productList?.total || 0} pageAmount={12} onClickPage={handleClickPageButton} />
+      <Pagination total={productList?.total || 0} pageAmount={12} onClickPage={handleClickPageButton} />
     </Layout>
   );
 };
