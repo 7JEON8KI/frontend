@@ -25,10 +25,13 @@ const StyledPagination = styled(MuiPagination)({
 });
 
 interface PaginationProps {
-  count: number;
+  total: number;
   onClickPage: (page: number) => void;
+  pageAmount?: number;
 }
-const Pageination = ({ count, onClickPage }: PaginationProps): JSX.Element => {
+const Pageination = ({ total, pageAmount = 12, onClickPage }: PaginationProps): JSX.Element => {
+  const count = Math.round(total / pageAmount) + 1;
+
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     console.log(`현재 페이지: ${page}`);
     onClickPage(page);
