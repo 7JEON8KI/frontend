@@ -29,8 +29,8 @@ interface PaginationProps {
   onClickPage: (page: number) => void;
   pageAmount?: number;
 }
-const Pageination = ({ total, pageAmount = 12, onClickPage }: PaginationProps): JSX.Element => {
-  const count = Math.round(total / pageAmount) + 1;
+const Pagination = ({ total, pageAmount = 12, onClickPage }: PaginationProps): JSX.Element => {
+  const count = Math.ceil(total / pageAmount);
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     console.log(`현재 페이지: ${page}`);
@@ -40,4 +40,4 @@ const Pageination = ({ total, pageAmount = 12, onClickPage }: PaginationProps): 
   return <StyledPagination count={count} shape="rounded" size="large" onChange={handleChange} />;
 };
 
-export default Pageination;
+export default Pagination;
