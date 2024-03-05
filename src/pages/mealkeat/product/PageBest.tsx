@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Product } from "components/mealkeat";
+import { Layout, Pagination, Product } from "components/mealkeat";
 import {
   StyledListGrid,
   StyledSidebarDiv,
@@ -70,6 +70,7 @@ const PageBest: React.FC = () => {
           </StyledSidebarAside>
         </StyledSidebarDiv>
       </StyledListGrid>
+      <Pagination total={12} pageAmount={12} onClickPage={() => {}} />
     </Layout>
   );
 };
