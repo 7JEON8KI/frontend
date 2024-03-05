@@ -114,7 +114,7 @@ const PageDetail: React.FC = () => {
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
-      getRecommendProduct();
+      if (productDetail.productType !== "wine") getRecommendProduct();
       getRecommendWine();
     }
   }, [productDetail]);
@@ -396,6 +396,7 @@ const PageDetail: React.FC = () => {
                 src="https://via.placeholder.com/640x2770"
                 alt="대체 텍스트가 들어가야합니다~~~!!"
                 style={{ width: "640px", height: "2770px", margin: "auto" }}
+                draggable={false}
               />
             </div>
             {!clickDetailView && (
