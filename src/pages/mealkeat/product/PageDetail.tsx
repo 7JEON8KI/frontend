@@ -30,6 +30,7 @@ import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
 import cartApi from "apis/cartApi";
+import { CartProduct } from "models/mealkeat/CartModels";
 
 interface Review {
   reviewId: number;
@@ -121,6 +122,16 @@ const PageDetail: React.FC = () => {
       console.log("장바구니 실패...!!!");
       window.alert(res.data.message);
     }
+  };
+
+  const handleClickPurchase = () => {
+    const currentProduct: CartProduct = {
+      ...productDetail,
+      cartProductId: new Date().getTime(),
+      cartProductCnt: purchaseCnt,
+      selected: true,
+    };
+    navigate("/payment", { state: { cartList: [{ ...currentProduct }] } });
   };
 
   useEffect(() => {
@@ -310,6 +321,8 @@ const PageDetail: React.FC = () => {
                     fontSize: "1.25rem",
                     fontWeight: "bold",
                   }}
+                  title="클릭 시 현재 상품을 구매할 수 있는 구매 페이지로 이동"
+                  onClick={handleClickPurchase}
                 >
                   구매하기
                 </button>
