@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Layout, Product } from "components/mealkeat";
+import { Layout, Product, Pagination } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
 import exceptClick from "assets/images/icons/except_click.png";
 import {
@@ -55,6 +55,10 @@ const PageWine: React.FC = () => {
     setProductList(fetchProduct.data);
   };
 
+  const handleClickPageButton = (currPage: number) => {
+    setProductSort({ ...productSort, pageNum: currPage });
+  };
+
   useEffect(() => {
     getProducts();
 
@@ -103,6 +107,7 @@ const PageWine: React.FC = () => {
           </StyledSidebarAside>
         </StyledSidebarDiv>
       </StyledListGrid>
+      <Pagination total={productList?.total || 0} pageAmount={12} onClickPage={handleClickPageButton} />
     </Layout>
   );
 };
