@@ -2,7 +2,8 @@ import api from "./api";
 
 export const cartApi = {
   getCarts: () => api.get("/carts"),
-  saveOrDeleteCart: ({ ...body }) => api.post("/carts/", body),
+  saveCart: ({ ...body }) => api.post("/carts/", body),
+  deleteCart: ({ ...body }) => api.post("/carts/", body),
   getCartsCount: () => api.get("/carts/count"),
 };
 
