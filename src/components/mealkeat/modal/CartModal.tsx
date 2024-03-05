@@ -15,11 +15,14 @@ const CartModal = ({ onClickBtn1, onClickBtn2 }: CartModalProps) => {
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: "50px" }}>
         <button
           onClick={onClickBtn1}
-          style={{ width: "200px", height: "40px", border: "1px solid orange", color: "orange" }}
+          style={{ width: "200px", height: "50px", border: "1px solid #fd6f21", color: "#fd6f21", fontWeight: "bold" }}
         >
           계속 쇼핑하기
         </button>
-        <button onClick={onClickBtn2} style={{ width: "200px", height: "40px", background: "orange", color: "white" }}>
+        <button
+          onClick={onClickBtn2}
+          style={{ width: "200px", height: "50px", background: "#fd6f21", color: "white", fontWeight: "bold" }}
+        >
           장바구니 가기
         </button>
       </div>
