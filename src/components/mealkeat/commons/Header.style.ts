@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const StyledHeader = styled.header`
+export const Header = styled.header`
   margin-top: 3rem;
   margin-bottom: 1rem;
   @media screen and (max-width: 600px) {
@@ -58,10 +58,14 @@ export const StyledHeader = styled.header`
     }`}
 `;
 
-export const StyledSearch = styled.div.attrs({ className: "search" })`
-  position: relative;
+export const Search = styled.div.attrs({ className: "search" })`
   display: inline-block;
-  input#search {
+  & label {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  & input#search {
     height: 55px;
     border: 1px solid;
     border-radius: 10px;
@@ -77,7 +81,7 @@ export const StyledSearch = styled.div.attrs({ className: "search" })`
       font-size: 0.8rem;
     }
   }
-  img {
+  & img {
     width: 2.5rem;
     height: 2.5rem;
     position: absolute;
@@ -86,17 +90,17 @@ export const StyledSearch = styled.div.attrs({ className: "search" })`
   }
 `;
 
-export const StyledIconList = styled.div.attrs({ className: "icons" })`
+export const IconList = styled.div.attrs({ className: "icons" })`
   display: inline-flex;
   gap: 1rem;
   align-items: center;
   margin-top: 1rem;
 `;
-interface StyledIconProps {
+interface IconProps {
   $amount?: number;
 }
 
-export const StyledIcon = styled.button.attrs({ type: "button" })<StyledIconProps>`
+export const Icon = styled.button.attrs({ type: "button" })<IconProps>`
   positon: relative;
   img {
     width: 24px;
@@ -139,7 +143,7 @@ export const StyledIcon = styled.button.attrs({ type: "button" })<StyledIconProp
     `};
 `;
 
-export const StyledTopNav = styled.nav.attrs({ className: "menus" })`
+export const TopNav = styled.nav.attrs({ className: "menus" })`
   display: flex;
   gap: 2.5rem;
   width: 706px;
@@ -173,5 +177,29 @@ export const NavMenu = styled.button.attrs({ type: "button" })`
     display: inline;
     width: 18px;
     height: 18px;
+  }
+`;
+
+export const ImageSearchBtn = styled.button.attrs({ type: "button" })`
+  position: absolute;
+  right: 30px;
+  background-color: ${({ theme }) => theme.colors.pointSubColor2}; /* 버튼 배경 색 */
+  border: none; /* 테두리 없음 */
+  color: white; /* 텍스트 색 */
+  padding: 0.3rem 0.9rem; /* 내부 여백 */
+  text-decoration: none; /* 텍스트 밑줄 없음 */
+  display: inline-flex; /* 인라인 블록 요소로 표시 */
+  font-size: 1rem; /* 폰트 크기 */
+  margin: 4px 2px; /* 마진 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  align-items: center;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.pointSubColor}; /* 호버 상태 배경 색 */
+    font-weight: bold;
+  }
+
+  & > img {
+    position: static;
   }
 `;
