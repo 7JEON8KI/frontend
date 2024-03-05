@@ -57,7 +57,7 @@ export const StyledProductInfo = styled.div`
   justifycontent: "space-evenly";
 `;
 
-export const StyledImage = styled.img`
+export const StyledImage = styled.img.attrs({ draggable: false })`
   width: "150px";
   height: "150px";
 `;

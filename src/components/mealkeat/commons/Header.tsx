@@ -68,7 +68,7 @@ export const Header = (): JSX.Element => {
         <Logo />
         <StyledSearch>
           <label htmlFor="search">
-            <img src={SearchPath} alt="검색 아이콘" />
+            <img src={SearchPath} alt="검색 아이콘" draggable={false} />
             <input
               id="search"
               type="text"
@@ -81,34 +81,34 @@ export const Header = (): JSX.Element => {
         </StyledSearch>
         <StyledIconList>
           <StyledIcon onClick={() => handleProtectedRoute("/mypage/like")}>
-            <img src={HeartPath} alt="찜 아이콘" />
+            <img src={HeartPath} alt="찜 아이콘" draggable={false} />
             <span>찜 목록</span>
           </StyledIcon>
           <StyledIcon onClick={() => handleProtectedRoute("/cart")} $amount={cartsCount}>
-            <img src={CartPath} alt="장바구니 아이콘" />
+            <img src={CartPath} alt="장바구니 아이콘" draggable={false} />
             <span>장바구니</span>
           </StyledIcon>
           {isLoggedIn ? (
             <>
               <StyledIcon onClick={handleLogout}>
-                <img src={UserPath} alt="로그아웃 아이콘" />
+                <img src={UserPath} alt="로그아웃 아이콘" draggable={false} />
                 <span>로그아웃</span>
               </StyledIcon>
               <StyledIcon onClick={() => handleProtectedRoute("/mypage/order")}>
-                <img src={MypagePath} alt="마이페이지 아이콘" />
+                <img src={MypagePath} alt="마이페이지 아이콘" draggable={false} />
                 <span>마이페이지</span>
               </StyledIcon>
             </>
           ) : (
             <StyledIcon onClick={() => navigate("/login")}>
-              <img src={UserPath} alt="로그인 아이콘" />
+              <img src={UserPath} alt="로그인 아이콘" draggable={false} />
               <span>로그인</span>
             </StyledIcon>
           )}
         </StyledIconList>
         <StyledTopNav>
           <NavMenu title="클릭 시 전체상품 페이지로 이동" onClick={() => navigate("/list")}>
-            <img src={MenuPath} alt="메뉴 아이콘" />
+            <img src={MenuPath} alt="메뉴 아이콘" draggable={false} />
             전체상품
           </NavMenu>
           <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommend")}>

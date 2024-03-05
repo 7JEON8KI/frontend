@@ -95,7 +95,12 @@ const PageMealkeatResult: React.FC = () => {
               }}
             >
               <div>
-                <img style={{ width: "620px", height: "620px" }} alt="" src={product.thumbnailImageUrl} />
+                <img
+                  style={{ width: "620px", height: "620px" }}
+                  alt=""
+                  src={product.thumbnailImageUrl}
+                  draggable={false}
+                />
               </div>
               <div
                 style={{
