@@ -56,7 +56,7 @@ const Reviewable: React.FC = () => {
               justifyContent: "space-between",
             }}
           >
-            <img src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
+            <img src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} draggable={false} />
             <div
               style={{
                 width: "550px",

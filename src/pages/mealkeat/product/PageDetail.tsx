@@ -25,9 +25,12 @@ import likeApi from "apis/likeApi";
 import reviewApi from "apis/reviewApi";
 import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
+import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
+import cartApi from "apis/cartApi";
+import { CartProduct } from "models/mealkeat/CartModels";
 
 interface Review {
   reviewId: number;
@@ -42,8 +45,10 @@ interface Review {
 
 const PageDetail: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
   const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
+  const [detailImageList, setDetailImageList] = React.useState<string[]>([]);
   const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
   const [recommendWine, setRecommendWine] = React.useState<ProductResponseDTO[]>([]);
   const [likeProduct, setLikeProduct] = React.useState<number>(productDetail.isLike);
@@ -62,6 +67,8 @@ const PageDetail: React.FC = () => {
     const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
     setLikeProduct(detail.data.isLike);
+    const urlList: string[] = detail.data?.productDetail?.split(",");
+    setDetailImageList(urlList.map(url => url.replace(/'/g, "").trim()));
   };
 
   const getReviewList = async () => {
@@ -106,25 +113,39 @@ const PageDetail: React.FC = () => {
     }
   };
 
+  const handleClickCart = async () => {
+    const res = await cartApi.saveCart({ productId: productDetail.productId, cartProductCnt: purchaseCnt });
+
+    if (res.status === 200) {
+      setCartModal(true);
+    } else {
+      console.log("장바구니 실패...!!!");
+      window.alert(res.data.message);
+    }
+  };
+
+  const handleClickPurchase = () => {
+    const currentProduct: CartProduct = {
+      ...productDetail,
+      cartProductId: new Date().getTime(),
+      cartProductCnt: purchaseCnt,
+      selected: true,
+    };
+    navigate("/payment", { state: { cartList: [{ ...currentProduct }] } });
+  };
+
   useEffect(() => {
     getProductDetail();
     getReviewList();
     return () => {};
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
-      getRecommendProduct();
+      if (productDetail.productType !== "wine") getRecommendProduct();
       getRecommendWine();
     }
   }, [productDetail]);
-  // "'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b0ea42d5-d8ff-11ee-8ed0-ac198ebc401d.jpg',
-  //  'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b12e5516-d8ff-11ee-97a6-ac198ebc401d.jpg',
-  //   'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b158048e-d8ff-11ee-aea2-ac198ebc401d.jpg',
-  //    'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b1e6e08a-d8ff-11ee-bf35-ac198ebc401d.jpg',
-  //     'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b235ee19-d8ff-11ee-9774-ac198ebc401d.jpg',
-  //      'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2808466-d8ff-11ee-be8d-ac198ebc401d.jpg',
-  //       'https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/detail/3_b2cec175-d8ff-11ee-b38e-ac198ebc401d.jpg'"
 
   return (
     <Layout>
@@ -191,7 +212,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
-                  <span>3,000원 / 40,000원 이상 무료 배송</span>
+                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })}원 / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })}원 이상 무료 배송`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>판매자</span>
@@ -286,7 +307,7 @@ const PageDetail: React.FC = () => {
                     fontSize: "1.25rem",
                     fontWeight: "bold",
                   }}
-                  onClick={() => setCartModal(true)}
+                  onClick={handleClickCart}
                   title="클릭 시 장바구니 모달이 열립니다"
                 >
                   장바구니
@@ -300,6 +321,8 @@ const PageDetail: React.FC = () => {
                     fontSize: "1.25rem",
                     fontWeight: "bold",
                   }}
+                  title="클릭 시 현재 상품을 구매할 수 있는 구매 페이지로 이동"
+                  onClick={handleClickPurchase}
                 >
                   구매하기
                 </button>
@@ -392,11 +415,15 @@ const PageDetail: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
-              <img
-                src="https://via.placeholder.com/640x2770"
-                alt="대체 텍스트가 들어가야합니다~~~!!"
-                style={{ width: "640px", height: "2770px", margin: "auto" }}
-              />
+              {detailImageList?.map(url => (
+                <img
+                  key={url}
+                  src={url}
+                  alt="대체 텍스트가 들어가야합니다~~~!!"
+                  style={{ width: "640px", margin: "auto", objectFit: "contain" }}
+                  draggable={false}
+                />
+              ))}
             </div>
             {!clickDetailView && (
               <button
@@ -474,7 +501,12 @@ const PageDetail: React.FC = () => {
         width="670px"
         height="300px"
       >
-        <CartModal onClickBtn1={() => setCartModal(false)} onClickBtn2={() => {}} />
+        <CartModal
+          onClickBtn1={() => setCartModal(false)}
+          onClickBtn2={() => {
+            navigate("/cart");
+          }}
+        />
       </ModalContainer>
     </Layout>
   );

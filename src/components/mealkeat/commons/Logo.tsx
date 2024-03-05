@@ -13,7 +13,7 @@ const Logo = (): JSX.Element => {
         navigate("/");
       }}
     >
-      <img src={logo} alt="mealkeat 로고" title="클릭 시 메인으로 이동" />
+      <img draggable={false} src={logo} alt="mealkeat 로고" title="클릭 시 메인으로 이동" />
     </StyledLogo>
   );
 };

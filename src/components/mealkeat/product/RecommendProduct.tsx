@@ -62,7 +62,7 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
       }}
       tabIndex={0}
     >
-      <img className="food_img" src={productInfo.thumbnailImageUrl} alt="" />
+      <img className="food_img" src={productInfo.thumbnailImageUrl} alt="" draggable={false} />
       <div className="content">
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
@@ -76,6 +76,7 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
               src={AddCart}
               alt="장바구니 추가 아이콘"
               style={{ width: "25px", height: "25px" }}
+              draggable={false}
             />
           </button>
         </div>
