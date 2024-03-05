@@ -25,7 +25,7 @@ import likeApi from "apis/likeApi";
 import reviewApi from "apis/reviewApi";
 import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
@@ -42,6 +42,7 @@ interface Review {
 
 const PageDetail: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
   const [productDetail, setProductDetail] = React.useState<ProductResponseDTO>({} as ProductResponseDTO);
   const [recommendProduct, setRecommendProduct] = React.useState<ProductRecommendResponse[]>([]);
@@ -110,7 +111,7 @@ const PageDetail: React.FC = () => {
     getProductDetail();
     getReviewList();
     return () => {};
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
@@ -475,7 +476,12 @@ const PageDetail: React.FC = () => {
         width="670px"
         height="300px"
       >
-        <CartModal onClickBtn1={() => setCartModal(false)} onClickBtn2={() => {}} />
+        <CartModal
+          onClickBtn1={() => setCartModal(false)}
+          onClickBtn2={() => {
+            navigate("/cart");
+          }}
+        />
       </ModalContainer>
     </Layout>
   );
