@@ -28,6 +28,7 @@ import formatCurrency from "utils/formatCurrency";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
+import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
 
 interface Review {
   reviewId: number;
@@ -188,7 +189,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
-                  <span>3,000원 / 40,000원 이상 무료 배송</span>
+                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })}원 / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })}원 이상 무료 배송`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>판매자</span>
