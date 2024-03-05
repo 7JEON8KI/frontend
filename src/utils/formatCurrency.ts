@@ -3,7 +3,7 @@ interface Props {
   locale?: string;
 }
 
-function formatCurrency({ amount, locale }: Props) {
+function formatCurrency({ amount = 0, locale = "ko-KR" }: Props) {
   if (amount === undefined) return "";
   return new Intl.NumberFormat(locale).format(amount);
 }
