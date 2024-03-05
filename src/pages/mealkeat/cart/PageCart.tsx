@@ -3,10 +3,18 @@ import { Layout } from "components/mealkeat";
 import checktPath from "assets/images/icons/except.png";
 import checkClickPath from "assets/images/icons/except_click.png";
 import formatCurrency from "utils/formatCurrency";
-import { MIN_PRODUCT_AMOUNT, MAX_PRODUCT_AMOUNT, DEFAULT_DELIVERY_FEE } from "constants/productConstants";
+import {
+  MIN_PRODUCT_AMOUNT,
+  MAX_PRODUCT_AMOUNT,
+  DEFAULT_DELIVERY_FEE,
+  FREE_SHIPPING_THRESHOLD,
+} from "constants/productConstants";
 import styled from "styled-components";
 import scrollToTop from "utils/scrollToTop";
 import { useNavigate } from "react-router-dom";
+import cartApi from "apis/cartApi";
+import calculateDiscountPrice from "utils/calculateDiscoundPrice";
+import { CartData, CartProduct, CartProductDTO } from "models/mealkeat/CartModels";
 
 const StyledAmountBtn = styled.button.attrs({ type: "button" })`
   padding: 1rem;
@@ -28,18 +36,11 @@ const StyledPurchaseBtn = styled.button.attrs({ type: "button" })`
     color: #282828;
   }
 `;
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-  selected: boolean;
-}
+
 const PageCart: React.FC = () => {
   const navigate = useNavigate();
   const [selectAll, setSelectAll] = useState<boolean>(true);
-  const [cartProduct, setCartProduct] = useState<Product[]>([]);
+  const [cartProduct, setCartProduct] = useState<CartProduct[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   const handleSelectAllClick = () => {
@@ -48,7 +49,15 @@ const PageCart: React.FC = () => {
 
     const newCartProduct = cartProduct.map(item => ({ ...item, selected: !prev }));
     setCartProduct(newCartProduct);
-    setTotalPrice(newCartProduct.reduce((acc, cur) => (cur.selected ? acc + cur.price * cur.quantity : acc), 0));
+    setTotalPrice(
+      newCartProduct.reduce(
+        (acc, cur) =>
+          cur.selected
+            ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+            : acc,
+        0,
+      ),
+    );
   };
 
   const handleSelectItemClick = (index: number) => {
@@ -60,41 +69,77 @@ const PageCart: React.FC = () => {
     });
     const isAll = newCartProduct.every(item => item.selected);
     setSelectAll(isAll);
-    setTotalPrice(newCartProduct.reduce((acc, cur) => (cur.selected ? acc + cur.price * cur.quantity : acc), 0));
+    setTotalPrice(
+      newCartProduct.reduce(
+        (acc, cur) =>
+          cur.selected
+            ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+            : acc,
+        0,
+      ),
+    );
     setCartProduct(newCartProduct);
   };
 
   const handleAmountBtnClick = (index: number, type: "plus" | "minus") => {
     const newCartProduct = cartProduct.map((item, i) => {
       if (i === index) {
-        return { ...item, quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1 };
+        return { ...item, cartProductCnt: type === "plus" ? item.cartProductCnt + 1 : item.cartProductCnt - 1 };
       }
       return { ...item };
     });
-    setTotalPrice(newCartProduct.reduce((acc, cur) => (cur.selected ? acc + cur.price * cur.quantity : acc), 0));
+    setTotalPrice(
+      newCartProduct.reduce(
+        (acc, cur) =>
+          cur.selected
+            ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+            : acc,
+        0,
+      ),
+    );
     setCartProduct(newCartProduct);
   };
 
   const handleDeleteSelected = () => {
+    // 카트 아이템 삭제
+    cartProduct.filter(item => item.selected).forEach(item => cartApi.deleteCart({ productId: item.productId }));
     const newCartProduct = cartProduct.filter(item => !item.selected);
+
     setCartProduct(newCartProduct);
-    setTotalPrice(newCartProduct.reduce((acc, cur) => (cur.selected ? acc + cur.price * cur.quantity : acc), 0));
+    setTotalPrice(
+      newCartProduct.reduce(
+        (acc, cur) =>
+          cur.selected
+            ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+            : acc,
+        0,
+      ),
+    );
+  };
+
+  // cartProducts
+  const getCarts = async () => {
+    const response = await cartApi.getCarts(); // cartApi 호출로부터 응답 받기
+    const cartData: CartData = response?.data; // CartData 타입 사용
+    const cartProducts: CartProduct[] = cartData.cartProducts.map((el: CartProductDTO) => ({
+      ...el,
+      selected: true,
+    }));
+
+    setTotalPrice(
+      cartProducts.reduce(
+        (acc, cur) =>
+          cur.selected
+            ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+            : acc,
+        0,
+      ),
+    );
+    setCartProduct(cartProducts);
   };
 
   useEffect(() => {
-    const dummy = Array.from({ length: 3 }).map(
-      (_, i) =>
-        ({
-          id: i,
-          name: "[지투지샵] 마이무 무뼈닭발",
-          price: 1000,
-          quantity: 1,
-          imageUrl: "https://via.placeholder.com/150x150",
-          selected: true,
-        }) as Product,
-    );
-    setTotalPrice(dummy.reduce((acc, cur) => (cur.selected ? acc + cur.price * cur.quantity : acc), 0));
-    setCartProduct(dummy);
+    getCarts();
   }, []);
 
   const countSelectedItems = () => {
@@ -188,7 +233,7 @@ const PageCart: React.FC = () => {
                       handleSelectItemClick(i);
                     }}
                   ></button>
-                  <img src={product.imageUrl} style={{ width: "150px", height: "150px" }} />
+                  <img src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
                   <div
                     style={{
                       width: "550px",
@@ -199,8 +244,14 @@ const PageCart: React.FC = () => {
                       justifyContent: "space-evenly",
                     }}
                   >
-                    <span>{product.name}</span>
-                    <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}원</span>
+                    <span>{product.productName}</span>
+                    <span>
+                      {formatCurrency({
+                        amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
+                        locale: "ko-KR",
+                      })}
+                      원
+                    </span>
                   </div>
                   <div
                     style={{
@@ -215,16 +266,16 @@ const PageCart: React.FC = () => {
                   >
                     <StyledAmountBtn
                       onClick={() => handleAmountBtnClick(i, "minus")}
-                      disabled={product.quantity <= MIN_PRODUCT_AMOUNT || !product.selected}
-                      aria-disabled={product.quantity <= MIN_PRODUCT_AMOUNT || !product.selected}
+                      disabled={product.cartProductCnt <= MIN_PRODUCT_AMOUNT || !product.selected}
+                      aria-disabled={product.cartProductCnt <= MIN_PRODUCT_AMOUNT || !product.selected}
                     >
                       -
                     </StyledAmountBtn>
-                    <span>{product.quantity} 개</span>
+                    <span>{product.cartProductCnt} 개</span>
                     <StyledAmountBtn
                       onClick={() => handleAmountBtnClick(i, "plus")}
-                      disabled={product.quantity >= MAX_PRODUCT_AMOUNT || !product.selected}
-                      aria-disabled={product.quantity >= MAX_PRODUCT_AMOUNT || !product.selected}
+                      disabled={product.cartProductCnt >= MAX_PRODUCT_AMOUNT || !product.selected}
+                      aria-disabled={product.cartProductCnt >= MAX_PRODUCT_AMOUNT || !product.selected}
                     >
                       +
                     </StyledAmountBtn>
@@ -270,6 +321,7 @@ const PageCart: React.FC = () => {
               padding: "5%",
             }}
           >
+            <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>40,000원 이상 무료배송</span>
             <span
               style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}
             >{`선택한 상품 (${countSelectedItems()})`}</span>
@@ -282,14 +334,25 @@ const PageCart: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                + {formatCurrency({ amount: countSelectedItems() === 0 ? 0 : DEFAULT_DELIVERY_FEE, locale: "ko-KR" })}원
+                +{" "}
+                {formatCurrency({
+                  amount:
+                    countSelectedItems() === 0 ? 0 : totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE,
+                  locale: "ko-KR",
+                })}
+                원
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}>총 주문 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold", color: "#fd6f21" }}>
                 {formatCurrency({
-                  amount: countSelectedItems() === 0 ? 0 : totalPrice + DEFAULT_DELIVERY_FEE,
+                  amount:
+                    countSelectedItems() === 0
+                      ? 0
+                      : totalPrice >= FREE_SHIPPING_THRESHOLD
+                        ? totalPrice
+                        : totalPrice + DEFAULT_DELIVERY_FEE,
                   locale: "ko-KR",
                 })}
                 원
@@ -304,7 +367,7 @@ const PageCart: React.FC = () => {
               aria-disabled={countSelectedItems() === 0}
               onClick={() => {
                 scrollToTop({});
-                navigate("/payment");
+                navigate("/payment", { state: { cartList: [...cartProduct] } });
               }}
               title="선택상품 구매하기, 클릭 시 결제 페이지로 이동"
             >
