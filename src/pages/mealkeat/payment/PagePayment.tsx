@@ -1,48 +1,65 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Layout, Product } from "components/mealkeat";
+import { Layout } from "components/mealkeat";
 import formatCurrency from "utils/formatCurrency";
-import { DEFAULT_DELIVERY_FEE } from "constants/productConstants";
-import styled from "styled-components";
+import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
 import paymentApi from "apis/paymentApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Iamport, { RequestPayParams, RequestPayResponse } from "iamport-typings"; // 아임포트 타입 라이브러리 추가
+import { PurchaseBtn } from "./PagePayment.style";
+import { CartProduct } from "models/mealkeat/CartModels";
+import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    IMP: any;
+    IMP?: Iamport;
   }
 }
 
-const StyledPurchaseBtn = styled.button.attrs({ type: "button" })`
-  width: 90%;
-  height: 60px;
-  background: #fd6f21;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  margin: 1.5rem auto 0;
-  &:disabled {
-    background: #d0d0d0;
-    color: #282828;
-  }
-`;
-interface Product {
+export interface ValidateResponse {
+  channel: string;
+  escrow: boolean;
+  name: string;
   amount: number;
-  calorie: number;
-  cartProductCnt: number;
-  cartProductId: number;
-  discountRate: number;
-  price: number;
-  productDetail: string; // URL 문자열 배열로 처리할 경우 string[] 타입을 고려해야 합니다.
-  productId: number;
-  productName: string;
-  productSubName: string;
-  productType: string;
-  selected: boolean;
-  stock: number;
-  storage: string;
-  thumbnailImageUrl: string;
+  currency: string;
+  status: string;
+  payMethod: string;
+  merchantUid: string;
+  pgProvider: string;
+  applyNum: string;
+  bankCode?: string | null;
+  bankName?: string | null;
+  cardCode?: string | null;
+  cardName?: string | null;
+  cardNumber?: string | null;
+  cardQuota: number;
+  cardType: number;
+  vbankCode?: string | null;
+  vbankName?: string | null;
+  vbankNum?: string | null;
+  vbankHolder?: string | null;
+  vbankDate: number;
+  vbankIssuedAt: number;
+  cancelAmount: number;
+  buyerName: string;
+  buyerEmail?: string | null;
+  buyerTel: string;
+  buyerAddr: string;
+  buyerPostcode: string;
+  customData?: string;
+  startedAt: number;
+  failedAt: number;
+  cancelledAt: number;
+  failReason?: string | null;
+  cancelReason?: string | null;
+  receiptUrl: string;
+  cancelHistory: string[];
+  cashReceiptIssued: boolean;
+  customerUid?: string | null;
+  customerUidUsage?: string;
+  impUid: string;
+  pgTid: string;
+  paidAt: number;
 }
 
 interface Order {
@@ -54,7 +71,7 @@ interface Order {
   productImage: string;
   receiverName: string;
   phoneNumber: string;
-  orderNumber: number;
+  orderNumber: string;
   zipcode: number;
   address: string;
   orderRequired: string;
@@ -86,15 +103,28 @@ function createOrderNum() {
   for (let i = 0; i < 5; i++) {
     orderNum += Math.floor(Math.random() * 8);
   }
-  return parseInt(orderNum);
+  return "merchant_" + orderNum;
 }
 
 const orderNumber = createOrderNum();
 
 const PagePayment: React.FC = () => {
   const location = useLocation();
-  const [cartProduct, setCartProduct] = useState<Product[]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const navigate = useNavigate();
+  const cartProduct: CartProduct[] = location?.state?.cartList;
+  const [totalPrice, setTotalPrice] = useState<number>(
+    cartProduct?.reduce(
+      (acc, cur) =>
+        cur.selected
+          ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+          : acc,
+      0,
+    ),
+  );
+  const [shippingPrice, setShippingPrice] = useState<number>(
+    totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE,
+  );
+  const [discountPrice, setDiscountPrice] = useState<number>(0);
   const [receiverName, setReceiverName] = useState<string>("");
   const [zipcode, setZipcode] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -102,12 +132,10 @@ const PagePayment: React.FC = () => {
   const [orderRequired, setOrderRequired] = useState<string>("");
   const [orders, setOrders] = useState(initialOrders);
 
-  const products = location?.state?.cartList;
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const response = await paymentApi.getUserInfo();
-        // 실제 응답 구조에 따라서는 아래의 분해 할당을 조정할 필요가 있습니다.
         const { memberName, memberPhone, infoZipcode, infoAddr }: UserInfo = response.data;
         setReceiverName(memberName);
         setZipcode(infoZipcode);
@@ -125,8 +153,9 @@ const PagePayment: React.FC = () => {
   const countSelectedItems = () => {
     return cartProduct.filter(item => item.selected).length;
   };
+
   const handleSubmit = () => {
-    const newOrders: Order[] = products.map(product => ({
+    const newOrders: Order[] = cartProduct.map(product => ({
       productId: product.productId,
       orderPrice: product.price,
       orderCount: product.cartProductCnt,
@@ -137,37 +166,18 @@ const PagePayment: React.FC = () => {
       phoneNumber: phoneNumber,
       orderNumber: orderNumber,
       zipcode: parseInt(zipcode, 10),
-      address,
-      orderRequired,
+      address: address,
+      orderRequired: orderRequired,
     }));
     setOrders(newOrders);
   };
 
-  useEffect(() => {
-    const jquery = document.createElement("script");
-    jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
-    const iamport = document.createElement("script");
-    iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
-    document.head.appendChild(jquery);
-    document.head.appendChild(iamport);
-    return () => {
-      document.head.removeChild(jquery);
-      document.head.removeChild(iamport);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (orders.length > 0) {
-      requestPay();
-    }
-  }, [orders]);
-
   const requestPay = () => {
     const { IMP } = window;
-    IMP.init("imp18410150");
+    if (IMP) {
+      IMP.init("imp18410150");
 
-    IMP.request_pay(
-      {
+      const params: RequestPayParams = {
         pg: "kakaopay",
         pay_method: "card",
         merchant_uid: orderNumber,
@@ -177,39 +187,73 @@ const PagePayment: React.FC = () => {
         buyer_tel: phoneNumber,
         buyer_addr: address,
         buyer_postcode: zipcode,
-      },
-      async (rsp: any) => {
-        if (rsp.success) {
-          // validatePayment 호출로 수정
-          paymentApi
-            .validatePayment(rsp.imp_uid)
-            .then(res => {
-              if (100 == res.response.amount) {
-                // completePayment 호출로 수정
-                paymentApi
-                  .completePayment({ orders: orders })
-                  .then(res => {
-                    const msg = "결제가 완료되었습니다.";
-                    alert(msg);
-                  })
-                  .catch(error => {
-                    // 오류 처리를 더 명확하게 할 수 있습니다.
-                    console.error("결제 완료 처리 중 오류 발생:", error);
-                    alert("결제 완료 처리 중 오류가 발생하였습니다.");
-                  });
-              }
-            })
-            .catch(error => {
-              // 오류 처리를 더 명확하게 할 수 있습니다.
-              console.error("결제 검증 중 오류 발생:", error);
-              alert("결제에 실패하였습니다. " + error.message);
-            });
-        } else {
-          alert(rsp.error_msg);
-        }
-      },
-    );
+      };
+
+      IMP.request_pay(params, onPaymentAccepted);
+    }
   };
+
+  const onPaymentAccepted = (response: RequestPayResponse) => {
+    if (response.success && response.imp_uid) {
+      const { imp_uid } = response;
+
+      paymentApi
+        .validatePayment(imp_uid)
+        .then(res => {
+          if (totalPrice == res.data.response.amount) {
+            // completePayment 호출로 수정
+            paymentApi
+              .completePayment({ orderSaveDtos: orders })
+              .then(res => {
+                const msg = "결제가 완료되었습니다.";
+                console.log("결제가 완료되었습니다.", res);
+                window.alert(msg);
+                // navigate()
+              })
+              .catch(error => {
+                console.error("결제 완료 처리 중 오류 발생:", error);
+                window.alert("결제 완료 처리 중 오류가 발생하였습니다.");
+              });
+          } else {
+            console.error("결제 처리 중 오류가 발생했습니다. 금액이 맞지 않음.");
+            window.alert("결제 처리 중 오류가 발생했습니다.");
+          }
+        })
+        .catch(error => {
+          console.error("결제 검증 중 오류 발생:", error);
+          window.alert("결제에 실패하였습니다. " + error.message);
+        });
+    } else {
+      window.alert(response.error_msg);
+    }
+  };
+
+  useEffect(() => {
+    const jquery = document.createElement("script");
+    jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
+    const iamport = document.createElement("script");
+    iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+    document.head.appendChild(jquery);
+    document.head.appendChild(iamport);
+
+    if (countSelectedItems() === 0) {
+      window.alert("잘못된 접근입니다.");
+      navigate(-1);
+    }
+    return () => {
+      document.head.removeChild(jquery);
+      document.head.removeChild(iamport);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (countSelectedItems() === 0) {
+      window.alert("구매 가능한 상품이 없습니다.");
+    }
+    if (orders.length > 0) {
+      requestPay();
+    }
+  }, [orders]);
 
   return (
     <Layout>
@@ -305,7 +349,7 @@ const PagePayment: React.FC = () => {
                       fontWeight: "bold",
                       fontSize: "1.25rem",
                     }}
-                    type="text"
+                    type="number"
                     value={zipcode}
                     onChange={e => setZipcode(e.target.value)}
                   ></input>
@@ -352,8 +396,9 @@ const PagePayment: React.FC = () => {
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                 }}
-                type="text"
+                type="number"
                 value={phoneNumber}
+                maxLength={11}
                 onChange={e => setPhoneNumber(e.target.value)}
               ></input>
             </div>
@@ -396,10 +441,10 @@ const PagePayment: React.FC = () => {
             상품정보
           </section>
           <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
-            {products.length > 0 ? (
-              products.map((product, i) => (
+            {cartProduct.length > 0 ? (
+              cartProduct.map(product => (
                 <div
-                  key={i}
+                  key={product.productId}
                   style={{
                     height: "210px",
                     display: "flex",
@@ -421,7 +466,13 @@ const PagePayment: React.FC = () => {
                     }}
                   >
                     <span>{product.productName}</span>
-                    <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}원</span>
+                    <span>
+                      {formatCurrency({
+                        amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
+                        locale: "ko-KR",
+                      })}
+                      원
+                    </span>
                   </div>
                   <div
                     style={{
@@ -460,42 +511,6 @@ const PagePayment: React.FC = () => {
                 </span>
               </div>
             )}
-          </section>
-          <section style={{ fontSize: "32px", color: "#282828", width: "90%", padding: "24px", margin: "auto" }}>
-            포인트
-          </section>
-          <section
-            style={{
-              background: "#f4f4f4",
-              width: "90%",
-              padding: "1rem 0",
-              margin: "auto",
-            }}
-          >
-            <div
-              style={{
-                width: "90%",
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-                margin: "auto",
-              }}
-            >
-              <span style={{ fontSize: "1.25rem", fontWeight: "500" }}>사용 포인트</span>
-              <input
-                style={{
-                  width: "400px",
-                  height: "50px",
-                  border: "1px solid black",
-                  padding: "0.5rem",
-                  color: "#3a3a3a",
-                  fontWeight: "bold",
-                  fontSize: "1.25rem",
-                }}
-              ></input>
-              <button style={{ fontWeight: "500" }}>모두 사용</button>
-              <div style={{ fontWeight: "500" }}>사용 가능 10000p</div>
-            </div>
           </section>
           <section style={{ fontSize: "32px", color: "#282828", width: "90%", padding: "24px", margin: "auto" }}>
             쿠폰
@@ -570,54 +585,47 @@ const PagePayment: React.FC = () => {
                   할인 금액
                 </span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem", fontWeight: "bold", color: "#fd6f21" }}>
-                  - {formatCurrency({ amount: 21000, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>쿠폰</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  - {formatCurrency({ amount: 11000, locale: "ko-KR" })}원
-                </span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>포인트</span>
-                <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  - {formatCurrency({ amount: 10000, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
                 </span>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                + {formatCurrency({ amount: 3000, locale: "ko-KR" })}원
+                + {formatCurrency({ amount: shippingPrice, locale: "ko-KR" })}원
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}>총 결제 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold", color: "#fd6f21" }}>
                 {formatCurrency({
-                  amount: countSelectedItems() === 0 ? 0 : totalPrice + DEFAULT_DELIVERY_FEE,
+                  amount: totalPrice + shippingPrice,
                   locale: "ko-KR",
                 })}
                 원
               </span>
             </div>
+            <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>40,000원 이상 무료배송</span>
             <span style={{ margin: "1rem 0" }}>
               결제 및 계좌 안내 시 상호명은 <span style={{ color: "#fd6f21" }}>밀킷</span>으로 표기되니 참고
               부탁드립니다.
             </span>
-            <StyledPurchaseBtn
+            <PurchaseBtn
               disabled={countSelectedItems() === 0}
               aria-disabled={countSelectedItems() === 0}
               onClick={() => {
-                // handleSubmit 함수가 완료될 때까지 기다립니다.
                 handleSubmit();
-                // navigate("/payment/complete");
               }}
               title="선택상품 구매하기, 클릭 시 주문 완료 페이지로 이동"
             >
               결제하기
-            </StyledPurchaseBtn>
+            </PurchaseBtn>
           </div>
         </aside>
       </div>

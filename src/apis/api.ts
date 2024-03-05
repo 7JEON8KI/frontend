@@ -16,7 +16,7 @@ api.interceptors.response.use(
     //debugging console.log
     console.log(`api: ${response.config.baseURL}${response.config.url}\n${response.data?.message}`);
     console.log(response.data);
-
+    if (response.config.url?.startsWith("/payment/imp_")) return response;
     return response.data;
   },
 
