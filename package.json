@@ -32,6 +32,8 @@
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "framer-motion": "^11.0.8",
+    "iamport": "^0.3.4",
+    "jquery": "^3.6.0",
     "menu-items": "^0.0.1",
     "nanoid": "^5.0.5",
     "quill-image-resize-module-react": "^3.0.0",
