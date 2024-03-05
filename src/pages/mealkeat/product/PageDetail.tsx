@@ -20,14 +20,25 @@ import {
   ProductAmountInput,
 } from "./PageDetail.style";
 import scrollToTop from "utils/scrollToTop";
-// import HeartPath from "assets/images/icons/Heart.png";
 import productApi from "apis/productApi";
 import likeApi from "apis/likeApi";
+import reviewApi from "apis/reviewApi";
 import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
 import { useParams } from "react-router-dom";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
+
+interface Review {
+  reviewId: number;
+  productId: number;
+  memberNickname: number;
+  reviewTitle: string;
+  reviewContent: string;
+  reviewImageUrl: string;
+  reviewStar: string;
+  modifiedAt: number;
+}
 
 const PageDetail: React.FC = () => {
   const { id } = useParams();
@@ -38,6 +49,7 @@ const PageDetail: React.FC = () => {
   const [likeProduct, setLikeProduct] = React.useState<number>(productDetail.isLike);
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
+  const [reviewList, setReviewList] = React.useState<Review[]>([]);
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
     if (detailContainer) {
@@ -50,6 +62,14 @@ const PageDetail: React.FC = () => {
     const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
     setLikeProduct(detail.data.isLike);
+  };
+
+  const getReviewList = async () => {
+    const review = await reviewApi.getProductReviews(id ? Number(id) : 1, 1);
+    if (review?.data) {
+      console.log(review.data);
+      setReviewList(review?.data);
+    }
   };
 
   const getRecommendProduct = async () => {
@@ -88,7 +108,7 @@ const PageDetail: React.FC = () => {
 
   useEffect(() => {
     getProductDetail();
-
+    getReviewList();
     return () => {};
   }, []);
 
@@ -235,7 +255,8 @@ const PageDetail: React.FC = () => {
                   style={{
                     width: "60px",
                     height: "60px",
-                    border: "1px solid #5f5f5f",
+                    // border: "1px solid #5f5f5f",
+                    boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 3px",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -243,8 +264,7 @@ const PageDetail: React.FC = () => {
                   }}
                   onClick={toggleLike}
                 >
-                  <button
-                    type="button"
+                  <span
                     title="찜하기 버튼"
                     style={{
                       cursor: "pointer",
@@ -252,13 +272,9 @@ const PageDetail: React.FC = () => {
                       fontSize: "32px",
                       padding: "0 0.25rem",
                     }}
-                    onClick={e => {
-                      e.stopPropagation();
-                      toggleLike();
-                    }}
                   >
                     ♥
-                  </button>
+                  </span>
                   <span style={{ marginTop: "0.2rem", fontWeight: "bold" }}>찜</span>
                 </button>
                 <button
@@ -290,7 +306,89 @@ const PageDetail: React.FC = () => {
               </div>
             </ProductDescription>
           </ProductDetailContainer>
-          <div style={{ width: "1320px", height: "250px", border: "1px solid black", margin: "40px auto" }}>리뷰</div>
+
+          {reviewList.length > 0 && (
+            <div style={{ width: "1200px", height: "250px", margin: "40px auto" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "Right",
+                  alignItems: "center",
+                  marginLeft: "10rem",
+                  marginRight: "2rem",
+                  marginTop: "2rem",
+                  gap: "1rem",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  전체 보기
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <span
+                  style={{
+                    width: "10%",
+                    marginTop: "3rem",
+                    display: "flex",
+                    justifyContent: "right",
+                    paddingRight: "1rem",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  상품의
+                  <br />
+                  리뷰사진
+                </span>
+                <div
+                  style={{
+                    width: "90%",
+                    height: "200px",
+                    display: "flex",
+                    alignItems: "center",
+                    overflowX: "auto",
+                    gap: "2rem",
+                    padding: "1rem",
+                  }}
+                >
+                  {reviewList.map((review, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: "180px",
+                        height: "180px",
+                      }}
+                    >
+                      <img
+                        src={review.reviewImageUrl}
+                        alt={`리뷰 이미지 ${index + 1}`}
+                        style={{
+                          cursor: "pointer",
+                          objectFit: "contain",
+                        }}
+                        draggable="false"
+                        onMouseOver={e => {
+                          e.currentTarget.style.transform = "scale(1.1)";
+                        }}
+                        onMouseOut={e => {
+                          e.currentTarget.style.transform = "scale(1)";
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
