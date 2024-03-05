@@ -52,7 +52,7 @@ export const UserRecommendSlider = styled.div`
   margin: 0px auto;
 `;
 
-export const SlideImage = styled.img`
+export const SlideImage = styled.img.attrs({ draggable: false })`
   width: 390px;
   height: 250px;
   display: block;

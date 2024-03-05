@@ -234,7 +234,7 @@ const PagePayment: React.FC = () => {
                     justifyContent: "space-around",
                   }}
                 >
-                  <img src={product.imageUrl} style={{ width: "150px", height: "150px" }} />
+                  <img draggable={false} src={product.imageUrl} style={{ width: "150px", height: "150px" }} />
                   <div
                     style={{
                       width: "550px",

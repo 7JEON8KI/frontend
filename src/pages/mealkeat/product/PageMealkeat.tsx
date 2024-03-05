@@ -95,7 +95,7 @@ export const IngredientButton = styled.button<IngredientButtonProps>`
   }
 `;
 
-export const IngredientImage = styled.img`
+export const IngredientImage = styled.img.attrs({ draggable: false })`
   width: 170px;
   height: 100px;
   border-radius: 50px;
@@ -119,7 +119,7 @@ export const TrayContainer = styled.div`
   position: relative;
 `;
 
-export const EmptyTrayImage = styled.img`
+export const EmptyTrayImage = styled.img.attrs({ draggable: false })`
   width: 680px;
   height: 260px;
   position: absolute;
@@ -129,7 +129,7 @@ export const EmptyTrayImage = styled.img`
 interface TrayProps {
   $disable: boolean;
 }
-export const TrayImage = styled.img<TrayProps>`
+export const TrayImage = styled.img.attrs({ draggable: false })<TrayProps>`
   width: 665px;
   height: 375px;
   position: absolute;
@@ -250,7 +250,7 @@ const PageMealkeat: React.FC = () => {
             {selectAny ? "뚜껑을 열어 추천 확인해주세요!" : "원하는 재료를 넣고 클릭해주세요!"}
           </TrayTitle>
           <EmptyTrayImage src={EmptyTray} />
-          <TrayImage src={Tray} $disable={selectAny} />
+          <TrayImage src={Tray} $disable={selectAny} draggable={false} />
         </TrayContainer>
       </FlexContainer>
     </Layout>

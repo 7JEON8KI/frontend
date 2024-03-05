@@ -100,7 +100,7 @@ export const StyledMenuButton = styled.button.attrs({ type: "button" })`
 `;
 
 // 상품 메뉴 이미지 스타일
-export const StyledMenuImage = styled.img`
+export const StyledMenuImage = styled.img.attrs({ draggable: false })`
   width: 35px;
   height: 35px;
   display: inline-block;
