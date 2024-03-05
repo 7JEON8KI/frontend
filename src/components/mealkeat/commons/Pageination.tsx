@@ -37,7 +37,7 @@ const Pageination = ({ total, pageAmount = 12, onClickPage }: PaginationProps): 
     onClickPage(page);
   };
 
-  return <StyledPagination count={count} shape="rounded" size="large" color="secondary" onChange={handleChange} />;
+  return <StyledPagination count={count} shape="rounded" size="large" onChange={handleChange} />;
 };
 
 export default Pageination;
