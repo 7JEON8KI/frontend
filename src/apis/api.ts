@@ -17,6 +17,7 @@ api.interceptors.response.use(
     console.log(`api: ${response.config.baseURL}${response.config.url}\n${response.data?.message}`);
     console.log(response.data);
 
+    if (response.config.url === "/carts" && response.config.method === "post") return response;
     return response.data;
   },
 

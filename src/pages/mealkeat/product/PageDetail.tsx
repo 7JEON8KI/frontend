@@ -29,6 +29,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
+import cartApi from "apis/cartApi";
 
 interface Review {
   reviewId: number;
@@ -108,6 +109,17 @@ const PageDetail: React.FC = () => {
       // 현재 찜하지 않은 상태이면 찜하기 API 호출
       await likeApi.saveLikes(productDetail.productId);
       setLikeProduct(1);
+    }
+  };
+
+  const handleClickCart = async () => {
+    const res = await cartApi.saveCart({ productId: productDetail.productId, cartProductCnt: purchaseCnt });
+
+    if (res.status === 200) {
+      setCartModal(true);
+    } else {
+      console.log("장바구니 실패...!!!");
+      window.alert(res.data.message);
     }
   };
 
@@ -284,7 +296,7 @@ const PageDetail: React.FC = () => {
                     fontSize: "1.25rem",
                     fontWeight: "bold",
                   }}
-                  onClick={() => setCartModal(true)}
+                  onClick={handleClickCart}
                   title="클릭 시 장바구니 모달이 열립니다"
                 >
                   장바구니
