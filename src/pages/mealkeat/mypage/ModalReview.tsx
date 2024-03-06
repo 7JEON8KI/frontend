@@ -46,6 +46,11 @@ const ModalReview: React.FC = () => {
       const formData = new FormData();
       formData.append("multipartFile", file);
       await reviewApi.uploadImage(formData).then(response => setImageUrl(response.data));
+
+      // 입력 값을 리셋
+      if (event.target && event.target.files) {
+        event.target.value = "";
+      }
     }
   };
 
