@@ -7,7 +7,7 @@ export interface RecommendRequset {
 export interface ProductRecommendResponse {
   productId: string;
   productName: string;
-  price: string;
+  price: number;
   productType: string;
   discountRate: number;
   mainImgUrl: string;
