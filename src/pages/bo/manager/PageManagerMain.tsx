@@ -2,58 +2,37 @@ import { Box, Card, Divider, Grid, Paper, Stack, Typography, Chip } from "@mui/m
 import BoManagerLayout from "components/bo/commons/BoManagerLayout";
 import MainChart from "components/bo/graph/RevenueChart";
 import React from "react";
-import { Image } from "components/mealkeat";
+import TopProduct from "components/bo/manager/TopProduct";
+import BoOrderTable from "components/bo/manager/BoOrderTable";
+import SaleAmountChart from "components/bo/graph/SaleAmountChart";
 const PageManagerMain: React.FC = () => {
   return (
     <BoManagerLayout>
-      <Box display="flex" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
+      <Box display="flex" flexWrap="wrap" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
         <Grid container height={"100%"} width={"100%"} spacing={6}>
-          <Grid item xs={4} height={"50%"} gridColumn={6} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}></Paper>
+          <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
+            <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
+              <Box paddingTop={2}>
+                <h3>판매량(일별)</h3>
+              </Box>
+              <SaleAmountChart />
+            </Paper>
           </Grid>
-          <Grid item xs={4} height={"50%"} gridColumn={6} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-              <Card variant="outlined" sx={{ width: "100%" }}>
-                <Box sx={{ p: 2 }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography gutterBottom variant="h6" component="div">
-                      최고 인기 상품
-                    </Typography>
-                    <Typography gutterBottom variant="h6" component="div">
-                      12,000원
-                    </Typography>
-                  </Stack>
-                  <Typography color="text.secondary" variant="body2">
-                    상품명 : [프레시지] 오늘 시켜먹는 마라탕
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box sx={{ p: 2, alignItems: "center", justifyContent: "center" }}>
-                  <Typography gutterBottom variant="body2">
-                    상품 이미지
-                  </Typography>
-                  <Divider />
-                  <Paper elevation={3} sx={{ width: "160px", height: "160px", paddingTop: "2" }}>
-                    <Image
-                      alt={"test"}
-                      src={
-                        "https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/2_ae3e149d-d8ff-11ee-834f-ac198ebc401d.jpg"
-                      }
-                      width={160}
-                      height={160}
-                    />
-                  </Paper>
-                </Box>
-              </Card>
+          <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
+            <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center", overflow: "auto" }}>
+              <Box paddingTop={2}>
+                <h3>인기 판매 상품</h3>
+              </Box>
+              <TopProduct />
             </Paper>
           </Grid>
           <Grid item xs={4} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={4} sx={{ width: "100%", height: "100%" }}>
+              <Box paddingTop={2} textAlign={"center"}>
+                <h3>재고 부족 상품</h3>
+              </Box>
               <Card variant="outlined">
                 <Box sx={{ p: 2 }}>
-                  <Typography gutterBottom variant="h6" component="div" textAlign="center">
-                    판매 상품 인기순
-                  </Typography>
                   <Divider />
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography gutterBottom variant="h6" component="div">
@@ -72,8 +51,8 @@ const PageManagerMain: React.FC = () => {
                     정보
                   </Typography>
                   <Stack direction="row" spacing={1}>
-                    <Chip color="primary" label="판매량" size="small" />
-                    <Chip label="재고" size="small" />
+                    <Chip color="primary" label="재고" size="small" />
+                    <Chip label="1개" size="small" />
                   </Stack>
                 </Box>
               </Card>
@@ -96,8 +75,32 @@ const PageManagerMain: React.FC = () => {
                     정보
                   </Typography>
                   <Stack direction="row" spacing={1}>
-                    <Chip color="primary" label="판매량" size="small" />
-                    <Chip label="재고" size="small" />
+                    <Chip color="primary" label="재고" size="small" />
+                    <Chip label="1개" size="small" />
+                  </Stack>
+                </Box>
+              </Card>
+              <Card variant="outlined">
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h6" component="div">
+                      3.상품명 : [프레시지] 밤 11시에 끓여먹는 라면
+                    </Typography>
+                    <Typography gutterBottom variant="h6" component="div">
+                      45,500원
+                    </Typography>
+                  </Stack>
+                  <Typography color="text.secondary" variant="body2">
+                    맛도 좋고 양도 많아요
+                  </Typography>
+                </Box>
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    정보
+                  </Typography>
+                  <Stack direction="row" spacing={1}>
+                    <Chip color="primary" label="재고" size="small" />
+                    <Chip label="1개" size="small" />
                   </Stack>
                 </Box>
               </Card>
@@ -106,13 +109,18 @@ const PageManagerMain: React.FC = () => {
           <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box paddingTop={2}>
-                <h3>판매액(천)</h3>
+                <h3>판매금액(일별)</h3>
               </Box>
               <MainChart />
             </Paper>
           </Grid>
           <Grid item xs={8} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%" }}></Paper>
+            <Paper elevation={4} sx={{ width: "100%", height: "100%", overflowX: "auto", overflowY: "auto" }}>
+              <Box paddingTop={2} textAlign={"center"}>
+                <h3>주문 내역</h3>
+              </Box>
+              <BoOrderTable />
+            </Paper>
           </Grid>
         </Grid>
       </Box>
