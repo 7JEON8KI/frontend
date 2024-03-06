@@ -29,7 +29,7 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
     if ("mainImgUrl" in product) {
       return {
         thumbnailImageUrl: product.mainImgUrl,
-        price: product?.price ? Number(product.price.replace("원", "").replace(",", "")) : 0,
+        price: product.price,
         stock: 1,
         productId: product?.productId ? Number(product.productId) : 1,
         discountRate: product?.discountRate ? Number(product.discountRate) : 0,
