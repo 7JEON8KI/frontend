@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
-import { Layout, RecommendProduct } from "components/mealkeat";
+import { Layout, NoProduct, RecommendProduct, LoadingSpinner } from "components/mealkeat";
 import { ProductMealkeatRequest, ProductResponseDTO } from "models/mealkeat/ProductModels";
 import productApi from "apis/productApi";
 import { CenteredDiv, HighlightedText, MainText, VerticalCenterDiv } from "./PageMealkeat";
@@ -37,10 +36,16 @@ const PageMealkeatResult: React.FC = () => {
   const searchRequest = location?.state;
   const navigate = useNavigate();
   const [recommendProduct, setRecommendProduct] = React.useState<ProductResponseDTO[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true); // 로딩 상태 추가
 
   const getRecommendProduct = async () => {
-    const fetchData = await productApi.getProductsMealkeatRecommend({ ...searchRequest } as ProductMealkeatRequest);
-    setRecommendProduct(fetchData.data);
+    setIsLoading(true); // API 호출 전 로딩 상태를 true로 설정
+    try {
+      const fetchData = await productApi.getProductsMealkeatRecommend({ ...searchRequest } as ProductMealkeatRequest);
+      setRecommendProduct(fetchData.data);
+    } finally {
+      setIsLoading(false); // API 호출 후 로딩 상태를 false로 설정
+    }
   };
 
   useEffect(() => {
@@ -57,32 +62,28 @@ const PageMealkeatResult: React.FC = () => {
           </MainText>
         </VerticalCenterDiv>
       </CenteredDiv>
-
-      <p
-        style={{
-          fontSize: "32px",
-          fontWeight: "bold",
-          margin: "0 auto 5rem",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {recommendProduct.length > 0 ? (
-          <>고객님의 입맛에 맞는 밀킷입니다</>
-        ) : (
-          <>
-            죄송합니다
-            <br />
-            고객님의 취향에 맞는 밀킷을 찾지 못했습니다
-          </>
-        )}
-      </p>
-
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : recommendProduct.length > 0 ? (
+        <p
+          style={{
+            fontSize: "32px",
+            fontWeight: "bold",
+            margin: "0 auto 5rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          고객님의 입맛에 맞는 밀킷입니다
+        </p>
+      ) : (
+        <NoProduct />
+      )}
       {recommendProduct.length > 0 &&
         recommendProduct
           .filter((_, idx) => idx === 0)
-          .map((product, index) => (
+          .map(product => (
             <div
               key={product.productId}
               style={{
@@ -95,7 +96,12 @@ const PageMealkeatResult: React.FC = () => {
               }}
             >
               <div>
-                <img style={{ width: "620px", height: "620px" }} alt="" src={product.thumbnailImageUrl} />
+                <img
+                  style={{ width: "620px", height: "620px" }}
+                  alt=""
+                  src={product.thumbnailImageUrl}
+                  draggable={false}
+                />
               </div>
               <div
                 style={{
@@ -138,7 +144,7 @@ const PageMealkeatResult: React.FC = () => {
           <div style={{ display: "flex", gap: "2rem", justifyContent: "space-between" }}>
             {recommendProduct
               .filter((_, idx) => idx !== 0 && idx < 6)
-              .map((product, index) => (
+              .map(product => (
                 <RecommendProduct key={product.productId} product={product} />
               ))}
           </div>

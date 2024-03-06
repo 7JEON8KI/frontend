@@ -113,6 +113,7 @@ const PageMypageOrder: React.FC = () => {
                     src={product.thumbnailImageUrl}
                     alt={product.productName}
                     style={{ width: "150px", height: "150px" }}
+                    draggable={false}
                   />
                   <div
                     style={{

@@ -46,6 +46,11 @@ const ModalReview: React.FC = () => {
       const formData = new FormData();
       formData.append("multipartFile", file);
       await reviewApi.uploadImage(formData).then(response => setImageUrl(response.data));
+
+      // 입력 값을 리셋
+      if (event.target && event.target.files) {
+        event.target.value = "";
+      }
     }
   };
 
@@ -153,7 +158,7 @@ const ModalReview: React.FC = () => {
                 justifyContent: "space-between",
               }}
             >
-              <img src={product!.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
+              <img draggable={false} src={product!.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
               <div
                 style={{
                   width: "550px",
@@ -231,7 +236,7 @@ const ModalReview: React.FC = () => {
                 </div>
                 {imageUrl && (
                   <div style={{ position: "relative", display: "inline-block" }}>
-                    <img src={imageUrl} alt="Preview" style={{ maxWidth: "150px" }} />
+                    <img draggable={false} src={imageUrl} alt="Preview" style={{ maxWidth: "150px" }} />
                     <IoMdCloseCircleOutline
                       style={{
                         position: "absolute",

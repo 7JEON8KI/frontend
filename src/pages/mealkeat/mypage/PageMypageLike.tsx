@@ -149,7 +149,7 @@ const PageMypageLike: React.FC = () => {
                   handleSelectItemClick(i);
                 }}
               ></button>
-              <img src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
+              <img draggable={false} src={product.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
               <div
                 style={{
                   width: "550px",

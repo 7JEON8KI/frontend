@@ -137,6 +137,7 @@ const PageMain: React.FC = () => {
                   src={item?.bannerImageUrl}
                   alt="푹 쉬고 싶은 주말! 푹 끓여 먹는 국물요리 기획전 3.1 ~ 3.3"
                   title={item?.bannerTitle}
+                  draggable={false}
                 />
               </div>
             ))}
@@ -169,7 +170,7 @@ const PageMain: React.FC = () => {
                   }}
                   title="클릭 시 해당 상품 페이지로 이동"
                 >
-                  <SlideImage src={product.mainImgUrl} alt={product.productName} />
+                  <SlideImage src={product.mainImgUrl} alt={product.productName} draggable={false} />
                   <SlideInfoBox>
                     <SlideContent>
                       <ProductName>{product.productName}</ProductName>

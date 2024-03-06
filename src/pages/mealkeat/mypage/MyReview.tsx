@@ -67,7 +67,7 @@ const MyReview: React.FC = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <img src={review.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
+                <img draggable={false} src={review.thumbnailImageUrl} style={{ width: "150px", height: "150px" }} />
                 <div
                   style={{
                     width: "550px",
@@ -158,6 +158,7 @@ const MyReview: React.FC = () => {
                   }}
                 >
                   <img
+                    draggable={false}
                     src={review.reviewImageUrl}
                     alt={review.reviewTitle}
                     style={{
