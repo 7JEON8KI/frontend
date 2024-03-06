@@ -1,11 +1,11 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import { blueGrey, grey } from "@mui/material/colors";
+import { green, grey } from "@mui/material/colors";
 import { BoIcon } from "components/bo/global/BoIcon";
-// import BoTopbar from "components/bo/global/BoTopbar";
+import BoTopbar from "components/bo/global/BoTopbar";
 import { StyledBoBody, StyledBoContent, StyledBoLayout, StyledBoSidebar } from "./BoLayout.style";
 import { Box } from "@mui/system";
-import { BoManagerNav } from "../global/BoManagerNav";
+import BoManagerNav from "components/bo/commons/BoManagerNav";
 
 interface Props {
   children: React.ReactNode;
@@ -17,24 +17,17 @@ const BoManagerLayout = ({ children }: Props): JSX.Element => {
       <StyledBoBody>
         <StyledBoSidebar>
           <Grid container direction="column" justifyContent="flex-start" alignItems="center">
-            <Grid
-              item
-              container
-              xs={2}
-              width={"100%"}
-              alignItems="center"
-              justifyContent="center"
-              bgcolor={blueGrey[200]}
-            >
+            <Grid item container xs={2} width={"100%"} alignItems="center" justifyContent="center" bgcolor={green[700]}>
               <BoIcon />
             </Grid>
-            <Grid item xs={10} width={"100%"} bgcolor={blueGrey[200]}>
+            <Grid item xs={10} width={"100%"} bgcolor={green[700]}>
               <BoManagerNav />
             </Grid>
           </Grid>
         </StyledBoSidebar>
         <StyledBoContent>
-          <Box sx={{ bgcolor: grey[300], height: "100%", p: 2 }}>{children}</Box>
+          <BoTopbar />
+          <Box sx={{ bgcolor: grey[100], height: "100%", p: 2 }}>{children}</Box>
         </StyledBoContent>
       </StyledBoBody>
     </StyledBoLayout>

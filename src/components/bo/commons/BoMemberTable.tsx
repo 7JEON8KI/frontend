@@ -15,6 +15,7 @@ import { visuallyHidden } from "@mui/utils";
 import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
 import BoMemberModal from "./BoMemberModal";
+import { green } from "@mui/material/colors";
 interface Member {
   member_id: string;
   name: string;
@@ -171,6 +172,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align="center"
             // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: "bold", backgroundColor: green[200] }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -179,9 +181,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
+                <Box sx={visuallyHidden}>{order === "desc" ? "sorted descending" : "sorted ascending"}</Box>
               ) : null}
             </TableSortLabel>
           </TableCell>

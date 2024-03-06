@@ -14,32 +14,11 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
-interface Banner {
-  banner_id: string;
-  banner_title: string;
-  banner_image_url: string;
-  banner_start_day: string;
-  banner_end_day: string;
-  created_at: string;
-}
-
-function createBanner(
-  banner_id: string,
-  banner_title: string,
-  banner_image_url: string,
-  banner_start_day: string,
-  banner_end_day: string,
-  created_at: string,
-): Banner {
-  return {
-    banner_id,
-    banner_title,
-    banner_image_url,
-    banner_start_day,
-    banner_end_day,
-    created_at,
-  };
-}
+import { green } from "@mui/material/colors";
+import { Banner, createBanner } from "../type/AdminData";
+import { useDispatch, useSelector } from "react-redux";
+import { changeBanner } from "pages/bo/redux/banner";
+import { RootState } from "pages/bo/redux";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -137,6 +116,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align="center"
             // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: "bold", backgroundColor: green[200] }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -162,17 +142,21 @@ export default function BoBannerTable() {
   const [orderBy, setOrderBy] = React.useState<keyof Banner>("created_at");
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 10;
-
+  const dispatch = useDispatch();
   const [bannerdata, setBannerdata] = React.useState<Banner[]>([]);
+
+  const onChangeBanner = (diff: Banner) => {
+    dispatch(changeBanner(diff));
+  };
   const getBannerList = async () => {
     const detail = await boAdminApi.getBannerList();
     const bannerList = await detail.data.map((item: any) => {
-      const [s_year, s_month, s_day, s_hours, s_minutes, s_seconds] = item.bannerStartDay;
-      const startDay = `${s_year}-${s_month}-${s_day} ${s_hours}:${s_minutes}:${s_seconds}`;
-      const [e_year, e_month, e_day, e_hours, e_minutes, e_seconds] = item.bannerEndDay;
-      const endDay = `${e_year}-${e_month}-${e_day} ${e_hours}:${e_minutes}:${e_seconds}`;
-      const [c_year, c_month, c_day, c_hours, c_minutes, c_seconds] = item.createAt;
-      const createAt = `${c_year}-${c_month}-${c_day} ${c_hours}:${c_minutes}:${c_seconds}`;
+      const [s_year, s_month, s_day, s_hours, s_minutes] = item.bannerStartDay;
+      const startDay = `${s_year}-${s_month}-${s_day} ${s_hours}:${s_minutes}`;
+      const [e_year, e_month, e_day, e_hours, e_minutes] = item.bannerEndDay;
+      const endDay = `${e_year}-${e_month}-${e_day} ${e_hours}:${e_minutes}`;
+      const [c_year, c_month, c_day, c_hours, c_minutes] = item.createAt;
+      const createAt = `${c_year}-${c_month}-${c_day} ${c_hours}:${c_minutes}`;
 
       return createBanner(item.bannerId, item.bannerTitle, item.bannerImageUrl, startDay, endDay, createAt);
     });
@@ -181,7 +165,6 @@ export default function BoBannerTable() {
 
   useEffect(() => {
     getBannerList();
-    console.log(bannerdata);
     return () => {};
   }, []);
 
@@ -193,6 +176,8 @@ export default function BoBannerTable() {
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     // const selectedIndex = selected.indexOf(id);
+    const temp = bannerdata.find(banner => banner.banner_id === id) as Banner;
+    onChangeBanner(temp);
     console.log(id);
   };
 
@@ -211,10 +196,10 @@ export default function BoBannerTable() {
 
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box display={"flex"}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <TableContainer>
-            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"small"}>
+            <Table sx={{ minWidth: 650 }} aria-labelledby="tableTitle" size={"small"}>
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}

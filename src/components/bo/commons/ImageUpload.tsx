@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import FileUploadService from "./FileUploadService";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useDispatch } from "react-redux";
+import { changeBy } from "pages/bo/redux/imagelist";
 const ImageUpload: React.FC = () => {
   const [currentImage, setCurrentImage] = useState<File>();
-  const [previewImage, setPreviewImage] = useState<string>("");
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
   const [imageInfos, setImageInfos] = useState<Array<string>>([]);
+  const dispatch = useDispatch();
+
+  const onChangeBy = (diff: string[]) => {
+    dispatch(changeBy(diff));
+  };
+
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files as FileList;
     setCurrentImage(selectedFiles?.[0]);
-    setPreviewImage(URL.createObjectURL(selectedFiles?.[0]));
     setProgress(0);
   };
 
@@ -24,7 +30,6 @@ const ImageUpload: React.FC = () => {
       setProgress(Math.round((100 * event.loaded) / event.total));
     })
       .then(response => {
-        setMessage(response.data.message);
         setImageInfos(prevInfos => [...prevInfos, response.data.data]);
         return response.data;
       })
@@ -33,13 +38,14 @@ const ImageUpload: React.FC = () => {
 
         if (err.response && err.response.data && err.response.data.message) {
           setMessage(err.response.data.message);
-        } else {
-          setMessage("Could not upload the Image!");
         }
-
         setCurrentImage(undefined);
       });
   };
+  useEffect(() => {
+    console.log("imageInfos : url:::", imageInfos);
+    onChangeBy(imageInfos);
+  }, [imageInfos]);
 
   return (
     <div>
@@ -52,7 +58,7 @@ const ImageUpload: React.FC = () => {
 
         <div className="col-4">
           <button className="btn btn-success btn-sm" disabled={!currentImage} onClick={upload}>
-            Upload
+            이미지 업로드
           </button>
         </div>
       </div>
@@ -72,12 +78,6 @@ const ImageUpload: React.FC = () => {
         </div>
       )}
 
-      {previewImage && (
-        <div>
-          <img className="preview" src={previewImage} alt="" style={{ maxWidth: "800px" }} />
-        </div>
-      )}
-
       {message && (
         <div className="alert alert-secondary mt-3" role="alert">
           {message}
@@ -86,14 +86,11 @@ const ImageUpload: React.FC = () => {
 
       {imageInfos.length > 0 && (
         <div className="card mt-3">
-          <div className="card-header">List of Images</div>
+          <div className="card-header">상품 이미지 리스트</div>
           <ul className="list-group list-group-flush">
             {imageInfos.map((img, index) => (
               <li className="list-group-item" key={index}>
-                <p>
-                  <a href={img}>{img}</a>
-                </p>
-                <img src={img} alt={img} height="80px" />
+                <img src={img} alt={img} />
               </li>
             ))}
           </ul>

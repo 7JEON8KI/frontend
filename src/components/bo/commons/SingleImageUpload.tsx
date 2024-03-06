@@ -9,13 +9,11 @@ import { changeBy } from "pages/bo/redux/changer";
 
 const SingleImageUpload: React.FC = () => {
   const [currentImage, setCurrentImage] = useState<File>();
-  const [previewImage, setPreviewImage] = useState<string>("");
   const [progress, setProgress] = useState<number>(0);
-  const [message, setMessage] = useState<string>("");
   const [imageInfos, setImageInfos] = useState<string>("");
-  const change = useSelector((state: RootState) => state.changer.url);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const dispatch = useDispatch();
-
+  const bannerData = useSelector((state: RootState) => state.banner.banner);
   const onChangeBy = (diff: string) => {
     dispatch(changeBy(diff));
   };
@@ -23,7 +21,6 @@ const SingleImageUpload: React.FC = () => {
   const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files as FileList;
     setCurrentImage(selectedFiles?.[0]);
-    setPreviewImage(URL.createObjectURL(selectedFiles?.[0]));
     setProgress(0);
   };
 
@@ -35,7 +32,6 @@ const SingleImageUpload: React.FC = () => {
       setProgress(Math.round((100 * event.loaded) / event.total));
     })
       .then(response => {
-        setMessage(response.data.message);
         setImageInfos(response.data.data);
         onChangeBy(response.data.data);
         return response.data;
@@ -44,17 +40,17 @@ const SingleImageUpload: React.FC = () => {
         setProgress(0);
 
         if (err.response && err.response.data && err.response.data.message) {
-          setMessage(err.response.data.message);
-        } else {
-          setMessage("Could not upload the Image!");
+          console.log(err.response.data.message);
         }
         setCurrentImage(undefined);
       });
   };
 
   useEffect(() => {
-    console.log("change : url:::", change);
-  }, [change]);
+    if (Object.keys(bannerData).length > 0) {
+      setImageUrl(bannerData.banner_image_url);
+    }
+  }, [bannerData]);
   return (
     <div>
       <div className="row">
@@ -66,7 +62,7 @@ const SingleImageUpload: React.FC = () => {
 
         <div className="col-4">
           <button className="btn btn-success btn-sm" disabled={!currentImage} onClick={upload}>
-            업로드
+            이미지업로드
           </button>
         </div>
       </div>
@@ -86,27 +82,22 @@ const SingleImageUpload: React.FC = () => {
         </div>
       )}
 
-      {previewImage && (
-        <div>
-          <img className="preview" src={previewImage} alt="" style={{ maxWidth: "700px" }} />
-        </div>
-      )}
-
-      {message && (
-        <div className="alert alert-secondary mt-3" role="alert">
-          {message}
-        </div>
-      )}
-
       {imageInfos.length > 0 && (
         <div className="card mt-3">
-          <div className="card-header">List of Images</div>
+          <div className="card-header">배너 이미지</div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
-              <p>
-                <a href={imageInfos}>{imageInfos}</a>
-              </p>
-              <img src={imageInfos} alt={imageInfos} style={{ maxWidth: "700px" }} />
+              <img src={imageInfos} alt={imageInfos} style={{ maxWidth: "80%" }} />
+            </li>
+          </ul>
+        </div>
+      )}
+      {imageUrl.length > 0 && (
+        <div className="card mt-3">
+          <div className="card-header">기존 이미지</div>
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item">
+              <img src={imageUrl} style={{ maxWidth: "80%" }} />
             </li>
           </ul>
         </div>
