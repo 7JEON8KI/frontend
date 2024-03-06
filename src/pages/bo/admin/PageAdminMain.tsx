@@ -3,7 +3,8 @@ import BoLayout from "components/bo/commons/BoLayout";
 import { Box, Grid, Paper } from "@mui/material";
 import RevenueChart from "components/bo/graph/RevenueChart";
 import SaleAmountChart from "components/bo/graph/SaleAmountChart";
-import ItemList from "components/bo/global/ItemList";
+import BestList from "components/bo/global/BestList";
+
 const PageAdminMain: React.FC = () => {
   return (
     <BoLayout>
@@ -19,19 +20,18 @@ const PageAdminMain: React.FC = () => {
               </Box>
             </Paper>
           </Grid>
-          <Grid item xs={4} sx={{ alignItems: "center", justifyContent: "center" }}>
+          <Grid item xs={8} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={4} sx={{ width: "100%", height: "100%" }}>
               <Box sx={{ p: 2 }}>
-                <h2>최근 판매된 상품</h2>
-                <ItemList />
-              </Box>
-            </Paper>
-          </Grid>
-          <Grid item xs={4} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%" }}>
-              <Box sx={{ p: 2 }}>
-                <h2>가장 많이 팔린 상품</h2>
-                <ItemList />
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  가장 많이 팔린 상품
+                </span>
+                <BestList />
               </Box>
             </Paper>
           </Grid>
