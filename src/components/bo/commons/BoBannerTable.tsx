@@ -16,9 +16,8 @@ import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
 import { green } from "@mui/material/colors";
 import { Banner, createBanner } from "../type/AdminData";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeBanner } from "pages/bo/redux/banner";
-import { RootState } from "pages/bo/redux";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
