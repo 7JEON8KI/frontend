@@ -36,7 +36,7 @@ export const Footer = (): JSX.Element => {
           title="선택 시 밀킷 추천 페이지로 이동"
           onClick={() => {
             scrollToTop({});
-            navigate("/recommand");
+            navigate("/recommend");
           }}
         >
           밀킷 추천

@@ -1,16 +1,16 @@
 import React from "react";
-import { MiniProduct, MiniContentText, MiniContentPrice } from "./RecommandProduct.style";
+import { MiniProduct, MiniContentText, MiniContentPrice } from "./RecommendProduct.style";
 import { useNavigate } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import scrollToTop from "utils/scrollToTop";
 import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
-import { ProductRecommandResponse } from "models/mealkeat/RecommandModels";
+import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 
 interface Props {
-  product: ProductResponseDTO | ProductRecommandResponse;
+  product: ProductResponseDTO | ProductRecommendResponse;
 }
 
 interface DisplayInfo {
@@ -22,14 +22,14 @@ interface DisplayInfo {
   productName: string;
 }
 
-const RecommandProduct = ({ product }: Props): JSX.Element => {
+const RecommendProduct = ({ product }: Props): JSX.Element => {
   const navigate = useNavigate();
 
   const displayInfo = (): DisplayInfo => {
     if ("mainImgUrl" in product) {
       return {
         thumbnailImageUrl: product.mainImgUrl,
-        price: product?.price ? Number(product.price) : 0,
+        price: product.price,
         stock: 1,
         productId: product?.productId ? Number(product.productId) : 1,
         discountRate: product?.discountRate ? Number(product.discountRate) : 0,
@@ -51,7 +51,7 @@ const RecommandProduct = ({ product }: Props): JSX.Element => {
 
   const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
     e.stopPropagation();
-    await cartApi.saveOrDeleteCart({ productId: productId, cartProductCnt: 1 });
+    await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
   };
 
   return (
@@ -62,7 +62,7 @@ const RecommandProduct = ({ product }: Props): JSX.Element => {
       }}
       tabIndex={0}
     >
-      <img className="food_img" src={productInfo.thumbnailImageUrl} alt="" />
+      <img className="food_img" src={productInfo.thumbnailImageUrl} alt="" draggable={false} />
       <div className="content">
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
@@ -76,17 +76,20 @@ const RecommandProduct = ({ product }: Props): JSX.Element => {
               src={AddCart}
               alt="장바구니 추가 아이콘"
               style={{ width: "25px", height: "25px" }}
+              draggable={false}
             />
           </button>
         </div>
-        <MiniContentText $title={true}>{productInfo.productName}</MiniContentText>
+        <MiniContentText $title={true} title={productInfo.productName}>
+          {productInfo.productName}
+        </MiniContentText>
         <MiniContentPrice>
           <div>{productInfo?.discountRate > 0 && `${productInfo.discountRate}%`}</div>
           <div>
-            {formatCurrency({
+            {`${formatCurrency({
               amount: calculateDiscountPrice({ price: productInfo.price, discountRate: productInfo.discountRate }),
               locale: "ko-KR",
-            })}
+            })}원`}
           </div>
         </MiniContentPrice>
         {productInfo.stock === 0 && <div>일시 품절</div>}
@@ -95,4 +98,4 @@ const RecommandProduct = ({ product }: Props): JSX.Element => {
   );
 };
 
-export default RecommandProduct;
+export default RecommendProduct;

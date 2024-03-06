@@ -45,14 +45,14 @@ export const TopSlider = styled.div`
   }
 `;
 
-export const UserRecommandSlider = styled.div`
+export const UserRecommendSlider = styled.div`
   width: 80%;
   max-width: 1600px;
   height: 500px;
   margin: 0px auto;
 `;
 
-export const SlideImage = styled.img`
+export const SlideImage = styled.img.attrs({ draggable: false })`
   width: 390px;
   height: 250px;
   display: block;

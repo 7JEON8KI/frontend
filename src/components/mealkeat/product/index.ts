@@ -1,4 +1,4 @@
 import Product from "./Product";
-import RecommandProduct from "./RecommandProduct";
+import RecommendProduct from "./RecommendProduct";
 
-export { Product, RecommandProduct };
+export { Product, RecommendProduct };

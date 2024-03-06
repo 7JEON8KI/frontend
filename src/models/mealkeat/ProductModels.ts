@@ -41,3 +41,16 @@ export interface ProductThemeRequest extends DefaultProductRequest {
 export interface ProductSortRequest {
   productCriteria: DefaultProductRequest;
 }
+
+export interface ProductSearchRequest extends Partial<ProductSortRequest> {
+  searchRequestDTO: {
+    keyword: string;
+  };
+}
+
+export interface ProductMealkeatRequest extends Partial<ProductSortRequest> {
+  searchRequestDTO: {
+    preferredIngredients: string[];
+    unwantedIngredients: string[];
+  };
+}

@@ -1,13 +1,13 @@
 // 추천
-export interface RecommandRequset {
+export interface RecommendRequset {
   productId: number;
   productMainImage: string;
   productName: string;
 }
-export interface ProductRecommandResponse {
+export interface ProductRecommendResponse {
   productId: string;
   productName: string;
-  price: string;
+  price: number;
   productType: string;
   discountRate: number;
   mainImgUrl: string;
