@@ -6,5 +6,6 @@ import Image from "./Image";
 import LoadingSpinner from "./LoadingSpinner";
 import ModalContainer from "./ModalContainer";
 import Pagination from "./Pagination";
+import NoProduct from "./NoProduct";
 
-export { Footer, Header, Layout, Logo, Image, LoadingSpinner, ModalContainer, Pagination };
+export { Footer, Header, Layout, Logo, Image, LoadingSpinner, ModalContainer, Pagination, NoProduct };
