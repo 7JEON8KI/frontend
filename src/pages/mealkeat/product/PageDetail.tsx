@@ -90,14 +90,6 @@ const PageDetail: React.FC = () => {
     }
   };
 
-  const getReviewList = async () => {
-    const review = await reviewApi.getProductReviews(id ? Number(id) : 1, 1);
-    if (review?.data) {
-      console.log(review.data);
-      setReviewList(review?.data);
-    }
-  };
-
   const getRecommendProduct = async () => {
     if (productDetail?.thumbnailImageUrl) {
       const recommend = await recommendApi.getRecommendations({
