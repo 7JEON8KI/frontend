@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout } from "components/mealkeat";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import scrollToTop from "utils/scrollToTop";
 import formatCurrency from "utils/formatCurrency";
 
 const PagePaymentComplete: React.FC = () => {
   const navigate = useNavigate();
-  return (
+  const location = useLocation();
+
+  const paymentInfo = location?.state?.paymentResult;
+
+  useEffect(() => {
+    if (!paymentInfo) {
+      navigate("/", { replace: true });
+      window.alert("잘못된 접근입니다.");
+    }
+  }, []);
+
+  return paymentInfo ? (
     <Layout>
       <div style={{ display: "flex", width: "90%", margin: "60px auto 0" }}>
         <main style={{ width: "75%", minHeight: "100vh", margin: "auto" }}>
@@ -46,17 +57,17 @@ const PagePaymentComplete: React.FC = () => {
                 width: "90%",
                 border: "5px solid #282828",
                 borderRadius: "5px",
-                background: "#f4f4f4",
                 display: "flex",
                 flexDirection: "column",
                 padding: "5%",
+                height: "500px",
               }}
             >
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}>결제완료</span>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  {formatCurrency({ amount: 110000, locale: "ko-KR" })}원
+                  {formatCurrency({ amount: paymentInfo.totalPrice, locale: "ko-KR" })}원
                 </span>
               </div>
               <div
@@ -73,33 +84,21 @@ const PagePaymentComplete: React.FC = () => {
                     할인 금액
                   </span>
                   <span style={{ padding: "0.5rem 0", fontSize: "1.25rem", fontWeight: "bold", color: "#fd6f21" }}>
-                    - {formatCurrency({ amount: 21000, locale: "ko-KR" })}원
-                  </span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>쿠폰</span>
-                  <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                    - {formatCurrency({ amount: 11000, locale: "ko-KR" })}원
-                  </span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>포인트</span>
-                  <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                    - {formatCurrency({ amount: 10000, locale: "ko-KR" })}원
+                    - {formatCurrency({ amount: paymentInfo.discountPrice, locale: "ko-KR" })}원
                   </span>
                 </div>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  + {formatCurrency({ amount: 3000, locale: "ko-KR" })}원
+                  + {formatCurrency({ amount: paymentInfo.shippingPrice, locale: "ko-KR" })}원
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}>총 결제 금액</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold", color: "#fd6f21" }}>
                   {formatCurrency({
-                    amount: 92000,
+                    amount: paymentInfo.totalPrice + paymentInfo.shippingPrice - paymentInfo.discountPrice,
                     locale: "ko-KR",
                   })}
                   원
@@ -107,15 +106,11 @@ const PagePaymentComplete: React.FC = () => {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>주문번호</span>
-                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>20240211012345</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>적립 포인트</span>
-                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>920점</span>
+                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>{paymentInfo.orderNumber}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>결제일시</span>
-                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>2024.02.10. 17:33:55</span>
+                <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>{paymentInfo.paidAt}</span>
               </div>
             </div>
             <button
@@ -131,7 +126,7 @@ const PagePaymentComplete: React.FC = () => {
               title="클릭 시 주문내역 페이지로 이동"
               onClick={() => {
                 scrollToTop({});
-                // navigate("/order");
+                navigate("/mypage/order");
               }}
             >
               주문내역 보러가기
@@ -158,6 +153,8 @@ const PagePaymentComplete: React.FC = () => {
         </main>
       </div>
     </Layout>
+  ) : (
+    <></>
   );
 };
 

@@ -1,7 +1,7 @@
 import api from "./api";
 
-export const mypageCouponApi = {
+export const couponApi = {
   getCoupons: () => api.get("/coupons"),
 };
 
-export default mypageCouponApi;
+export default couponApi;

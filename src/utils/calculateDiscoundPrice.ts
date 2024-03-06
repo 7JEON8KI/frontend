@@ -5,7 +5,7 @@ interface Props {
 
 function calculateDiscountPrice({ price, discountRate }: Props) {
   if (discountRate <= 0) return price;
-  return Math.round(price * (1 - discountRate / 100));
+  return Math.floor(price * (1 - discountRate / 100));
 }
 
 export default calculateDiscountPrice;
