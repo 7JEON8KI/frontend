@@ -16,7 +16,7 @@ import {
 import { FaShoppingCart } from "react-icons/fa";
 import { PiPercentLight } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
-import mypageCouponApi from "apis/MypageCouponApi";
+import couponApi from "apis/couponApi";
 
 interface Coupon {
   couponId: number;
@@ -52,7 +52,7 @@ const MyPageCoupon: React.FC = () => {
   const [couponList, setCouponList] = React.useState<Coupon[]>([]);
   const [couponCount, setCouponCount] = React.useState(0); // 쿠폰 수를 저장하는 상태를 추가
   const getCoupons = async () => {
-    const detail = await mypageCouponApi.getCoupons();
+    const detail = await couponApi.getCoupons();
     const coupons = await detail.data.map((coupon: Coupon) => {
       return createCoupon(
         coupon.couponId,
