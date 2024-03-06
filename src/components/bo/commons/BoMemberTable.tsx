@@ -10,7 +10,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-
 import { visuallyHidden } from "@mui/utils";
 import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";

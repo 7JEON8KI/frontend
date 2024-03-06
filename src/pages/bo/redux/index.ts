@@ -4,6 +4,7 @@ import content from "./content";
 import menu from "./menu";
 import imagelist from "./imagelist";
 import banner from "./banner";
+import statistics from "./statistics";
 
 const rootReducer = combineReducers({
   changer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   menu,
   imagelist,
   banner,
+  statistics,
 });
 
 export default rootReducer;

@@ -16,6 +16,7 @@ import boManagerApi from "apis/boManagerApi";
 // import BoProductModal from "./BoProductModal";
 import { SalesOrder, createSalesOrder, Product, createProduct } from "components/bo/type/ManagerData";
 import BoOrderModal from "./BoOrderModal";
+import { green } from "@mui/material/colors";
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -155,6 +156,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align="center"
             // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: "bold", backgroundColor: green[200] }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}

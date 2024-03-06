@@ -30,7 +30,6 @@ export const boAdminApi = {
   deleteMember: ({ ...body }) => api.delete("/admin/member/delete", body),
   commitAuth: ({ ...body }) => api.post("/admin/member/auth", body),
   getBoManagerList: () => api.get("/admin/member/manager"),
-  modifyManager: ({ ...body }) => api.post("/admin/manager/modify", body),
   uploadImage: ({ ...formData }) => api.post("/upload", formData),
   getBoProductList: () => api.get("/admin/products"),
   insertEvent: ({ ...body }) => api.post("/admin/event", body),
@@ -39,6 +38,8 @@ export const boAdminApi = {
   insertBanner: ({ ...body }) => api.post("/admin/banner", body),
   getThemeAndIngredient: (productNum: string) => api.post(`/admin/products/${productNum}`),
   deleteBanner: (bannerId: string) => api.delete(`/admin/banner/${bannerId}`),
+  deleteProduct: (productNum: number) => api.delete(`/admin/products/delete/${productNum}`),
+  getSalesList: () => api.get("/admin/products/orders/total"),
 };
 
 export default boAdminApi;

@@ -64,6 +64,18 @@ const BoProductModal = ({ data, onClose }: Props) => {
     getProductThemeAndIngredient();
   };
 
+  const deleteProduct = async () => {
+    try {
+      await boAdminApi.deleteProduct(Number(data.productId));
+    } catch (error) {
+      console.error("Error fetching product list:", error);
+    }
+  };
+  const handleDeleteClick = () => {
+    deleteProduct();
+    onClose();
+  };
+
   useEffect(() => {});
 
   return (
@@ -141,12 +153,15 @@ const BoProductModal = ({ data, onClose }: Props) => {
             />
           </Grid>
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField id="ingredient" label="재료" value={ingredientList.join(", ")} sx={{ margin: 1 }} />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Typography variant="body1" sx={{ margin: 1 }}>
+              상품 메인 이미지
+            </Typography>
             <Paper elevation={3} sx={{ width: "200px", height: "200px" }}>
               <Image alt={"test"} src={data.thumbnail} width={200} height={200} />
             </Paper>
-          </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <TextField id="ingredient" label="재료" value={ingredientList.join(", ")} sx={{ margin: 1 }} />
           </Grid>
         </Grid>
         <Box
@@ -168,6 +183,15 @@ const BoProductModal = ({ data, onClose }: Props) => {
           >
             상품 디테일 가져오기
           </Button>
+          <Button
+            variant="contained"
+            onClick={handleDeleteClick}
+            sx={{ backgroundColor: grey[800], marginRight: 2 }}
+            endIcon={<SendIcon />}
+          >
+            상품 삭제
+          </Button>
+
           <Button variant="contained" onClick={onClose} sx={{ backgroundColor: grey[500] }} endIcon={<SendIcon />}>
             취소
           </Button>

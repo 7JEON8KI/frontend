@@ -1,6 +1,6 @@
 import { Box, Card, Divider, Grid, Paper, Stack, Typography, Chip } from "@mui/material";
 import BoManagerLayout from "components/bo/commons/BoManagerLayout";
-import MainChart from "components/bo/graph/MainChart";
+import MainChart from "components/bo/graph/RevenueChart";
 import React from "react";
 import { Image } from "components/mealkeat";
 const PageManagerMain: React.FC = () => {
