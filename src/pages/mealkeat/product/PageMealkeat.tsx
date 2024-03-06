@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
-import { Layout } from "components/mealkeat";
+import { Layout, Image } from "components/mealkeat";
 import Tray from "assets/images/tray.png";
 import EmptyTray from "assets/images/empty_tray.png";
 import styled, { css } from "styled-components";
 import { wantIngredients, wontIngredients } from "constants/ingredientsConstants";
 import scrollToTop from "utils/scrollToTop";
 import { useNavigate } from "react-router-dom";
+import Pencil from "assets/images/icons/pencil.png";
 
 export const CenteredDiv = styled.div`
   width: 600px;
@@ -35,14 +36,14 @@ export const FlexContainer = styled.div`
   display: flex;
   width: 80%;
   margin: auto;
-  align-items: center;
+  align-items: flex-start;
   gap: 3rem;
   justify-content: center;
 `;
 
 export const IngredientsPanel = styled.div`
   width: 720px;
-  height: 1420px;
+  height: 1220px;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
@@ -50,10 +51,13 @@ export const IngredientsPanel = styled.div`
   background: #f4f4f4;
 `;
 
-export const PanelTitle = styled.p`
+export const PanelTitle = styled.div`
   font-size: 50px;
   margin: 2rem auto;
   font-weight: bold;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 `;
 
 export const IngredientsGrid = styled.div`
@@ -117,6 +121,7 @@ export const TrayContainer = styled.div`
   width: 700px;
   height: 375px;
   position: relative;
+  top: 400px;
 `;
 
 export const EmptyTrayImage = styled.img.attrs({ draggable: false })`
@@ -137,7 +142,7 @@ export const TrayImage = styled.img.attrs({ draggable: false })<TrayProps>`
   transition: 0.5s;
   transform-origin: right bottom;
   &:hover {
-    transform: rotate(5deg);
+    transform: rotate(10deg);
   }
   display: ${({ $disable }) => ($disable ? "block" : "none")};
 `;
@@ -209,7 +214,10 @@ const PageMealkeat: React.FC = () => {
       </CenteredDiv>
       <FlexContainer>
         <IngredientsPanel>
-          <PanelTitle>재료 메뉴판</PanelTitle>
+          <PanelTitle>
+            <Image alt="연필 아이콘" src={Pencil} width={40} height={40} />
+            재료 메뉴판
+          </PanelTitle>
           <p style={{ fontSize: "50px" }}>
             I <span style={{ fontWeight: "bold", color: "#FD6F21" }}>want</span> it
           </p>
