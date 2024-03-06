@@ -11,6 +11,8 @@ import { CartProduct } from "models/mealkeat/CartModels";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import moment from "moment-timezone";
 import scrollToTop from "utils/scrollToTop";
+import couponApi from "apis/couponApi";
+import { Coupon } from "models/mealkeat/CouponModels";
 
 declare global {
   interface Window {
@@ -101,11 +103,7 @@ function createOrderNum() {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
 
-  let orderNum = year + month + day;
-  for (let i = 0; i < 5; i++) {
-    orderNum += Math.floor(Math.random() * 8);
-  }
-  return orderNum;
+  return "" + year + month + day + Math.floor(Math.random() * 100000);
 }
 
 const orderNumber = createOrderNum();
@@ -114,24 +112,22 @@ const PagePayment: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const cartProduct: CartProduct[] = location?.state?.cartList;
-  const [totalPrice, setTotalPrice] = useState<number>(
-    cartProduct?.reduce(
-      (acc, cur) =>
-        cur.selected
-          ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
-          : acc,
-      0,
-    ),
+  const totalPrice: number = cartProduct?.reduce(
+    (acc, cur) =>
+      cur.selected
+        ? acc + calculateDiscountPrice({ price: cur.price, discountRate: cur.discountRate }) * cur.cartProductCnt
+        : acc,
+    0,
   );
-  const [shippingPrice, setShippingPrice] = useState<number>(
-    totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE,
-  );
+  const shippingPrice: number = totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE;
   const [discountPrice, setDiscountPrice] = useState<number>(0);
   const [receiverName, setReceiverName] = useState<string>("");
   const [zipcode, setZipcode] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [orderRequired, setOrderRequired] = useState<string>("");
+  const [couponList, setCouponList] = useState<Coupon[]>([]);
+  const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
   const [orders, setOrders] = useState(initialOrders);
 
   useEffect(() => {
@@ -154,6 +150,39 @@ const PagePayment: React.FC = () => {
 
   const countSelectedItems = () => {
     return cartProduct.filter(item => item.selected).length;
+  };
+
+  const handleSelectCoupon = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "") {
+      setSelectedCoupon(null);
+      alert("쿠폰 사용을 취소하였습니다.");
+      return;
+    }
+
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    const confirmSelection = confirm("선택한 쿠폰을 사용하시겠습니까?");
+
+    if (!confirmSelection) {
+      e.target.value = "";
+      setSelectedCoupon(null);
+      window.alert("쿠폰 사용을 취소하였습니다.");
+    } else {
+      // 사용자가 확인을 선택한 경우, 선택한 옵션을 그대로 유지
+      console.log(selectedOption.dataset.rate);
+      console.log(selectedOption.dataset.price);
+      setSelectedCoupon(couponList[parseInt(e.target.value)]);
+    }
+  };
+
+  const getDiscountPrice = () => {
+    if (selectedCoupon) {
+      if (selectedCoupon.discountRate) {
+        return Math.floor((totalPrice * selectedCoupon.discountRate) / 100);
+      } else {
+        return selectedCoupon.discountPrice;
+      }
+    }
+    return 0;
   };
 
   const handleSubmit = () => {
@@ -183,7 +212,7 @@ const PagePayment: React.FC = () => {
         pg: "kakaopay",
         pay_method: "card",
         merchant_uid: orderNumber,
-        amount: totalPrice,
+        amount: totalPrice + shippingPrice - discountPrice,
         name: "mealkeat",
         buyer_name: receiverName,
         buyer_tel: phoneNumber,
@@ -202,7 +231,7 @@ const PagePayment: React.FC = () => {
       paymentApi
         .validatePayment(imp_uid)
         .then(res => {
-          if (totalPrice == res.data.response.amount) {
+          if (totalPrice + shippingPrice - discountPrice == res.data.response.amount) {
             // completePayment 호출로 수정
             paymentApi
               .completePayment({ orders: orders })
@@ -241,6 +270,12 @@ const PagePayment: React.FC = () => {
     }
   };
 
+  const getCoupons = async () => {
+    const detail = await couponApi.getCoupons();
+    console.log(detail.data);
+    setCouponList(detail.data);
+  };
+
   useEffect(() => {
     const jquery = document.createElement("script");
     jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
@@ -258,6 +293,14 @@ const PagePayment: React.FC = () => {
       document.head.removeChild(iamport);
     };
   }, []);
+
+  useEffect(() => {
+    getCoupons();
+  }, []);
+
+  useEffect(() => {
+    setDiscountPrice(getDiscountPrice());
+  }, [selectedCoupon]);
 
   useEffect(() => {
     if (countSelectedItems() === 0) {
@@ -556,9 +599,20 @@ const PagePayment: React.FC = () => {
                   fontWeight: "bold",
                   fontSize: "1.25rem",
                 }}
+                onChange={handleSelectCoupon}
+                title="쿠폰 선택 시 할인 금액이 적용됩니다."
               >
-                <option>쿠폰 선택</option>
-                <option>[신규회원] 할인쿠폰 10%</option>
+                <option value="">쿠폰 선택</option>
+                {couponList.map((coupon, idx) => (
+                  <option
+                    key={coupon.couponId}
+                    value={idx}
+                    data-rate={coupon.discountRate}
+                    data-price={coupon.discountPrice}
+                  >
+                    {coupon.couponName}
+                  </option>
+                ))}
               </select>
             </div>
           </section>
@@ -618,13 +672,16 @@ const PagePayment: React.FC = () => {
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold" }}>총 결제 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.5rem", fontWeight: "bold", color: "#fd6f21" }}>
                 {formatCurrency({
-                  amount: totalPrice + shippingPrice,
+                  amount: totalPrice + shippingPrice - discountPrice,
                   locale: "ko-KR",
                 })}
                 원
               </span>
             </div>
-            <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>40,000원 이상 무료배송</span>
+            <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>{`상품금액 ${formatCurrency({
+              amount: FREE_SHIPPING_THRESHOLD,
+              locale: "ko-KR",
+            })}원 이상 무료배송`}</span>
             <span style={{ margin: "1rem 0" }}>
               결제 및 계좌 안내 시 상호명은 <span style={{ color: "#fd6f21" }}>밀킷</span>으로 표기되니 참고
               부탁드립니다.

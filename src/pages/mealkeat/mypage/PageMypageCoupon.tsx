@@ -17,16 +17,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { PiPercentLight } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
 import couponApi from "apis/couponApi";
-
-interface Coupon {
-  couponId: number;
-  memberId: string;
-  couponName: string;
-  discountRate: number;
-  discountPrice: number;
-  createdAt: Date;
-  expiredAt: Date;
-}
+import { Coupon } from "models/mealkeat/CouponModels";
 
 function createCoupon(
   couponId: number,
@@ -107,33 +98,6 @@ const MyPageCoupon: React.FC = () => {
             </CouponItem>
           ))}
         </FlexContainer>
-
-        {/* <FlexContainer>
-          <CouponItem>
-            <IconContainer>
-              <FaShoppingCart size={60} />
-            </IconContainer>
-            <CouponInfo>
-              <button>
-                <IoTrashOutline size={25} />
-              </button>
-              <Title style={{ marginRight: "40px" }}>[장바구니 쿠폰]</Title>
-              <div>3,000원</div>
-            </CouponInfo>
-          </CouponItem>
-          <CouponItem>
-            <IconContainer>
-              <PiPercentLight size={60} />
-            </IconContainer>
-            <CouponInfo>
-              <button>
-                <IoTrashOutline size={25} />
-              </button>
-              <Title style={{ marginRight: "40px" }}>[브랜드 10% 쿠폰]</Title>
-              <div>최대 3,000원</div>
-            </CouponInfo>
-          </CouponItem>
-        </FlexContainer> */}
       </MainContainer>
     </>
   );

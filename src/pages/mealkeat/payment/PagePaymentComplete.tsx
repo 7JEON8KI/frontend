@@ -91,7 +91,7 @@ const PagePaymentComplete: React.FC = () => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  + {formatCurrency({ amount: paymentInfo.discountPrice, locale: "ko-KR" })}원
+                  + {formatCurrency({ amount: paymentInfo.shippingPrice, locale: "ko-KR" })}원
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
