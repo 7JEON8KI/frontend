@@ -9,6 +9,8 @@ import Iamport, { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import { PurchaseBtn } from "./PagePayment.style";
 import { CartProduct } from "models/mealkeat/CartModels";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
+import moment from "moment-timezone";
+import scrollToTop from "utils/scrollToTop";
 
 declare global {
   interface Window {
@@ -103,7 +105,7 @@ function createOrderNum() {
   for (let i = 0; i < 5; i++) {
     orderNum += Math.floor(Math.random() * 8);
   }
-  return "merchant_" + orderNum;
+  return orderNum;
 }
 
 const orderNumber = createOrderNum();
@@ -203,12 +205,23 @@ const PagePayment: React.FC = () => {
           if (totalPrice == res.data.response.amount) {
             // completePayment 호출로 수정
             paymentApi
-              .completePayment({ orderSaveDtos: orders })
+              .completePayment({ orders: orders })
               .then(res => {
                 const msg = "결제가 완료되었습니다.";
                 console.log("결제가 완료되었습니다.", res);
                 window.alert(msg);
-                // navigate()
+                scrollToTop({});
+                navigate("/payment/complete", {
+                  state: {
+                    paymentResult: {
+                      orderNumber: res.data,
+                      paidAt: moment().tz("Asia/Seoul").format("YYYY.MM.DD. HH:mm:ss"),
+                      totalPrice: totalPrice,
+                      shippingPrice: shippingPrice,
+                      discountPrice: discountPrice,
+                    },
+                  },
+                });
               })
               .catch(error => {
                 console.error("결제 완료 처리 중 오류 발생:", error);
