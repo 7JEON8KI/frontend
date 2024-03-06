@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledBoLayout = styled.div.attrs({ id: "container" })`
+export const StyledBoLayout = styled.div`
   width: 100%;
   height: 100%;
 `;
@@ -18,6 +18,8 @@ export const StyledBoSidebar = styled.div`
   display: grid;
 `;
 export const StyledBoContent = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: #e6e6e6;
 `;

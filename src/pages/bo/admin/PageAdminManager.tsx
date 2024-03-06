@@ -1,6 +1,6 @@
 import React from "react";
 import BoLayout from "components/bo/commons/BoLayout";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Paper, Tab, Tabs } from "@mui/material";
 import BoManagerTable from "components/bo/commons/BoManagerTable";
 
 const PageAdminManager: React.FC = () => {
@@ -11,14 +11,18 @@ const PageAdminManager: React.FC = () => {
   };
   return (
     <BoLayout>
-      <Box height="95vh" width="100%" bgcolor="white" p={2} overflow={"auto"}>
-        <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
-          <Tabs value={value} onChange={handleChange} centered>
-            <Tab label="판매자 리스트" />
-            <Tab label="판매자 신청 리스트" />
-          </Tabs>
+      <Box sx={{ display: "flex", width: "100%", height: "100%" }}>
+        <Box sx={{ width: "100%", height: "100%" }}>
+          <Paper elevation={8} sx={{ p: 2, m: 2, height: "95%" }}>
+            <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
+              <Tabs value={value} onChange={handleChange} centered>
+                <Tab label="판매자 리스트" />
+                <Tab label="판매자 신청 리스트" />
+              </Tabs>
+            </Box>
+            <BoManagerTable tab={value} />
+          </Paper>
         </Box>
-        <BoManagerTable />
       </Box>
     </BoLayout>
   );

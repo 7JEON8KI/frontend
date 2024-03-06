@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,59 +11,12 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 
 import { visuallyHidden } from "@mui/utils";
-import boAdminApi from "apis/boAdminApi";
 import { useEffect } from "react";
-import BoProductModal from "./BoProductModal";
-import { green } from "@mui/material/colors";
+import boManagerApi from "apis/boManagerApi";
 // import BoProductModal from "./BoProductModal";
-interface Product {
-  productId: string;
-  productName: string;
-  productSubName: string;
-  price: string;
-  productType: string;
-  stock: string;
-  discountRate: string;
-  amount: number;
-  calorie: number;
-  storage: string;
-  thumbnail: string;
-  productDetail: string;
-  createdAt: string;
-}
-
-function createProduct(
-  productId: string,
-  productName: string,
-  productSubName: string,
-  price: string,
-  productType: string,
-  stock: string,
-  discountRate: string,
-  amount: number,
-  calorie: number,
-  storage: string,
-  thumbnail: string,
-  productDetail: string,
-  createdAt: string,
-): Product {
-  return {
-    productId,
-    productName,
-    productSubName,
-    price,
-    productType,
-    stock,
-    discountRate,
-    amount,
-    calorie,
-    storage,
-    thumbnail,
-    productDetail,
-    createdAt,
-  };
-}
-
+import { SalesOrder, createSalesOrder, Product, createProduct } from "components/bo/type/ManagerData";
+import BoOrderModal from "./BoOrderModal";
+import { green } from "@mui/material/colors";
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -77,6 +29,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = "asc" | "desc";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,
@@ -100,58 +53,88 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Product;
+  id: keyof SalesOrder;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
+    id: "orderProductId",
+    numeric: false,
+    disablePadding: false,
+    label: "주문번호",
+  },
+  {
     id: "productId",
     numeric: false,
     disablePadding: false,
-    label: "상품 번호",
+    label: "상품번호",
   },
   {
-    id: "productName",
+    id: "orderProductCount",
     numeric: false,
     disablePadding: false,
-    label: "상품명",
+    label: "주문량",
   },
   {
-    id: "productSubName",
+    id: "orderProductPrice",
     numeric: false,
-    disablePadding: false,
-    label: "상품 서브 네임",
-  },
-  {
-    id: "price",
-    numeric: true,
     disablePadding: false,
     label: "가격",
   },
   {
-    id: "productType",
-    numeric: false,
+    id: "orderProductDiscount",
+    numeric: true,
     disablePadding: false,
-    label: "카테고리",
+    label: "할인률",
   },
   {
-    id: "stock",
+    id: "orderDate",
     numeric: false,
     disablePadding: false,
-    label: "재고",
+    label: "주문일",
   },
   {
-    id: "discountRate",
+    id: "address",
     numeric: false,
     disablePadding: false,
-    label: "할인율",
+    label: "주소",
+  },
+  {
+    id: "zipCode",
+    numeric: false,
+    disablePadding: false,
+    label: "우편번호",
+  },
+  {
+    id: "receiverName",
+    numeric: false,
+    disablePadding: false,
+    label: "수령인",
+  },
+  {
+    id: "phoneNumber",
+    numeric: false,
+    disablePadding: false,
+    label: "전화번호",
+  },
+  {
+    id: "orderStatus",
+    numeric: false,
+    disablePadding: false,
+    label: "주문상태",
+  },
+  {
+    id: "orderRequired",
+    numeric: false,
+    disablePadding: false,
+    label: "주문요구사항",
   },
 ];
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Product) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof SalesOrder) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -160,7 +143,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
-  const createSortHandler = (property: keyof Product) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: keyof SalesOrder) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -193,51 +176,41 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-export default function BoProductTable() {
+export default function BoOrderTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Product>("productId");
+  const [orderBy, setOrderBy] = React.useState<keyof SalesOrder>("productId");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [modalOpen, setModalOpen] = React.useState(false);
-
-  const [productData, setProductdata] = React.useState<Product[]>([]);
   const [productId, setProductId] = React.useState("");
-  // productId: string,
-  // productName: string,
-  // productSubName: string,
-  // price: string,
-  // productType: string,
-  // stock: string,
-  // discountRate: string,
-  // amount: number,
-  // calorie: number,
-  // storage: string,
-  // thumbnail: string,
-  // productDetail: string,
-  // createdAt: string,
+  const [orderData, setOrderdata] = React.useState<SalesOrder[]>([]);
+  const [productData, setProductData] = React.useState<Product>({} as Product);
+
   const getProductList = async () => {
     try {
-      const detail = await boAdminApi.getBoProductList();
-      const productList = await detail.data.map((item: any) => {
-        const [m_year, m_month, m_day, m_hours, m_minutes, m_seconds] = item.createdAt;
-        const created = `${m_year}-${m_month}-${m_day} ${m_hours}:${m_minutes}:${m_seconds}`;
-        return createProduct(
+      const detail = await boManagerApi.getOrderList();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const orderList = await detail.data.map((item: any) => {
+        const [m_year, m_month, m_day, m_hours, m_minutes, m_seconds] = item.orderDate;
+        const orderDate = `${m_year}-${m_month}-${m_day} ${m_hours}:${m_minutes}:${m_seconds}`;
+        return createSalesOrder(
+          item.orderProductId,
           item.productId,
-          item.productName,
-          item.productSubName,
-          item.price,
-          item.productType,
-          item.stock,
-          item.discountRate,
-          item.amount,
-          item.calorie,
-          item.storage,
-          item.thumbnailImageUrl,
-          item.productDetail,
-          created,
+          item.orderProductCount,
+          item.orderProductPrice,
+          item.orderProductDiscount,
+          orderDate,
+          item.address,
+          item.zipCode,
+          item.receiverName,
+          item.phoneNumber,
+          item.orderStatus,
+          item.orderNumber,
+          item.orderRequired,
+          item.paymentMethod,
         );
       });
-      setProductdata(productList);
+      setOrderdata(orderList);
     } catch (error) {
       console.error("Error fetching product list:", error);
     }
@@ -245,19 +218,39 @@ export default function BoProductTable() {
 
   useEffect(() => {
     getProductList();
-    console.log(productData);
     return () => {};
   }, []);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Product) => {
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof SalesOrder) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const getProductDetail = async (id: string) => {
+    const item = await (await boManagerApi.getProductDetail(id)).data;
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    setModalOpen(true);
+    const product = createProduct(
+      item.productId,
+      item.productName,
+      item.productSubName,
+      item.price,
+      item.productType,
+      item.stock,
+      item.discountRate,
+      item.amunt,
+      item.calorie,
+      item.storage,
+      item.thumbnailImageUrl,
+      item.productDetail,
+      " ",
+    );
+    setProductData(product);
+  };
+
+  const handleClick = async (event: React.MouseEvent<unknown>, id: string) => {
     setProductId(id);
+    await getProductDetail(id);
+    setModalOpen(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -270,17 +263,13 @@ export default function BoProductTable() {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productData.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orderData.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(productData, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage, productData],
+      stableSort(orderData, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, orderData],
   );
-
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -291,7 +280,7 @@ export default function BoProductTable() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={productData.length}
+                rowCount={orderData.length}
               />
               <TableBody>
                 {visibleRows.map((row, index) => {
@@ -303,37 +292,23 @@ export default function BoProductTable() {
                       onClick={event => handleClick(event, row.productId)}
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.productId}
+                      key={row.orderProductId}
                       sx={{ cursor: "pointer", height: 33 }}
                     >
-                      <TableCell
-                        component="th"
-                        align="center"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        sx={{ width: "10%" }}
-                      >
-                        {row.productId}
+                      <TableCell component="th" align="center" id={labelId} scope="row" padding="none">
+                        {row.orderProductId}
                       </TableCell>
-                      <TableCell align="center" sx={{ width: "20%" }}>
-                        {row.productName}
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: "30%" }}>
-                        {row.productSubName}
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: "10%" }}>
-                        {row.price}
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: "10%" }}>
-                        {row.productType}
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: "10%" }}>
-                        {row.stock}
-                      </TableCell>
-                      <TableCell align="center" sx={{ width: "10%" }}>
-                        {row.discountRate}
-                      </TableCell>
+                      <TableCell align="center">{row.productId}</TableCell>
+                      <TableCell align="center">{row.orderProductCount}</TableCell>
+                      <TableCell align="center">{row.orderProductPrice}</TableCell>
+                      <TableCell align="center">{row.orderProductDiscount}</TableCell>
+                      <TableCell align="center">{row.orderDate}</TableCell>
+                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="center">{row.zipCode}</TableCell>
+                      <TableCell align="center">{row.receiverName}</TableCell>
+                      <TableCell align="center">{row.phoneNumber}</TableCell>
+                      <TableCell align="center">{row.orderStatus}</TableCell>
+                      <TableCell align="center">{row.orderRequired}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -352,7 +327,7 @@ export default function BoProductTable() {
           <TablePagination
             rowsPerPageOptions={[10, 15]}
             component="div"
-            count={productData.length}
+            count={orderData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -361,8 +336,9 @@ export default function BoProductTable() {
         </Paper>
       </Box>
       {modalOpen && (
-        <BoProductModal
-          data={productData.find(product => product.productId === productId) as Product}
+        <BoOrderModal
+          salesOrder={orderData.find(order => order.productId === productId) as SalesOrder}
+          products={productData}
           onClose={() => {
             setModalOpen(false);
           }}

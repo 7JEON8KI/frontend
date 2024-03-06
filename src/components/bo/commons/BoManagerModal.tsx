@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 import { grey } from "@mui/material/colors";
 import { styled } from "styled-components";
+import boAdminApi from "apis/boAdminApi";
 
 interface Data {
   storeId: string;
@@ -42,8 +43,19 @@ const BoManagerModal = ({ data, onClose }: Props) => {
   const [createdAt, setCreatedAt] = React.useState(data.createdAt);
   const [approvedAt, setApprovedAt] = React.useState(data.approvedAt);
 
-  const handleClick = () => {
-    onClose();
+  const handleAuthClick = () => {
+    boAdminApi
+      .commitAuth({
+        memberId: data.memberId,
+      })
+      .then(() => {
+        alert("승인되었습니다.");
+        onClose();
+      })
+      .catch(error => {
+        console.error(error);
+        alert("승인에 실패했습니다.");
+      });
   };
 
   return (
@@ -156,11 +168,11 @@ const BoManagerModal = ({ data, onClose }: Props) => {
         >
           <Button
             variant="contained"
-            onClick={handleClick}
+            onClick={handleAuthClick}
             sx={{ backgroundColor: grey[800], marginRight: 2 }}
             endIcon={<SendIcon />}
           >
-            수정
+            판매자 승인
           </Button>
           <Button variant="contained" onClick={onClose} sx={{ backgroundColor: grey[500] }} endIcon={<SendIcon />}>
             취소

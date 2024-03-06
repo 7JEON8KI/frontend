@@ -1,30 +1,26 @@
-import React from "react";
-import BoLayout from "components/bo/commons/BoLayout";
 import { Box, Paper, Tab, Tabs } from "@mui/material";
+import BoManagerLayout from "components/bo/commons/BoManagerLayout";
 import BoProductTable from "components/bo/commons/BoProductTable";
 
-const PageAdminProduct: React.FC = () => {
-  const [value, setValue] = React.useState(0);
+import React from "react";
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+const PageManagerProduct: React.FC = () => {
   return (
-    <BoLayout>
+    <BoManagerLayout>
       <Box sx={{ display: "flex", width: "100%", height: "100%" }}>
         <Box sx={{ width: "100%", height: "100%" }}>
           <Paper elevation={8} sx={{ p: 2, m: 2, height: "95%" }}>
             <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
-              <Tabs value={value} onChange={handleChange} centered>
-                <Tab label="상품 리스트" />
+              <Tabs value="1" centered>
+                <Tab label="판매 상품 리스트" />
               </Tabs>
             </Box>
             <BoProductTable />
           </Paper>
         </Box>
       </Box>
-    </BoLayout>
+    </BoManagerLayout>
   );
 };
 
-export default PageAdminProduct;
+export default PageManagerProduct;

@@ -1,7 +1,6 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
-import React from "react";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { Box, Button, Grid, Paper, TextField } from "@mui/material";
+import React, { useEffect } from "react";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import SingleImageUpload from "./SingleImageUpload";
 import { useSelector } from "react-redux";
 import { RootState } from "pages/bo/redux";
@@ -9,11 +8,17 @@ import boAdminApi from "apis/boAdminApi";
 import { grey } from "@mui/material/colors";
 import SendIcon from "@mui/icons-material/Send";
 import BoBannerTable from "./BoBannerTable";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 const BoBannerAdd: React.FC = () => {
-  const [title, setTitle] = React.useState("배너 이름");
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const banner = useSelector((state: RootState) => state.banner.banner);
+  const [title, setTitle] = React.useState(banner.banner_title);
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
   const imageUrl = useSelector((state: RootState) => state.changer.url);
+  const bannerData = useSelector((state: RootState) => state.banner.banner);
   const insertBanner = () => {
     boAdminApi.insertBanner({
       bannerTitle: title,
@@ -28,63 +33,77 @@ const BoBannerAdd: React.FC = () => {
     insertBanner();
     alert("등록되었습니다.");
   };
+
+  const handleDeleteClick = () => {
+    if (Object.keys(bannerData).length > 0) {
+      boAdminApi.deleteBanner(bannerData.banner_id);
+      alert("삭제되었습니다.");
+    } else {
+      alert("삭제할 배너가 없습니다.");
+    }
+  };
+
+  useEffect(() => {
+    console.log("star", startDate);
+    if (Object.keys(bannerData).length > 0) {
+      setTitle(bannerData.banner_title);
+      const startDayString = bannerData.banner_start_day;
+      const endDayString = bannerData.banner_end_day;
+      console.log("click", startDayString, endDayString);
+      const startString = dayjs(startDayString.replace(" ", "T"));
+      const endString = dayjs(endDayString.replace(" ", "T"));
+
+      console.log(startString);
+      setStartDate(startString);
+      setEndDate(endString);
+    }
+  }, [bannerData]);
   return (
     <Grid container>
       <Grid item xs={6}>
         <BoBannerTable />
       </Grid>
       <Grid item xs={6}>
-        <Grid container direction={"column"}>
-          <Grid item>
-            <Box marginRight={2}>
-              <TextField
-                id="title"
-                label="배너"
-                value={title}
-                sx={{ margin: 2 }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setTitle(event.target.value);
-                }}
-              />
-            </Box>
-          </Grid>
-          <Grid item>
-            <Box>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  sx={{ margin: 2 }}
-                  value={startDate}
-                  label="시작일"
-                  onChange={newValue => {
-                    setStartDate(newValue);
+        <Paper elevation={8} sx={{ marginLeft: 3 }}>
+          <Grid container direction={"column"}>
+            <Grid item>
+              <Box margin={2}>
+                <TextField
+                  id="title"
+                  placeholder="배너 제목 입력"
+                  value={title}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setTitle(event.target.value);
                   }}
                 />
-                <DatePicker
-                  sx={{ margin: 2 }}
-                  value={endDate}
-                  label="종료일"
-                  onChange={newValue => {
-                    setEndDate(newValue);
-                  }}
-                />
-              </LocalizationProvider>
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Box sx={{ width: "600px", height: "400px", margin: 2, overflowY: "scroll", overflowX: "hidden" }}>
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box marginLeft={2}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker value={startDate} onChange={setStartDate} />
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker value={endDate} onChange={setEndDate} />
+                </LocalizationProvider>
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Box sx={{ width: "90%", height: "500px", margin: 2, overflowX: "hidden" }}>
                   <Box m={2}>
                     <h4>배너 이미지 입력</h4>
                   </Box>
                   <SingleImageUpload />
                 </Box>
               </Box>
+            </Grid>
+            <Grid item>
               <Box
                 sx={{
                   display: "flex",
                   boxSizing: "border-box",
                   alignItems: "end",
                   justifyContent: "flex-end",
-                  paddingTop: 2,
-                  paddingRight: 2,
-                  paddingBottom: 2,
+                  marginBottom: 2,
                 }}
               >
                 <Button
@@ -95,10 +114,18 @@ const BoBannerAdd: React.FC = () => {
                 >
                   등록
                 </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleDeleteClick}
+                  sx={{ backgroundColor: grey[600], marginRight: 2 }}
+                  endIcon={<SendIcon />}
+                >
+                  삭제
+                </Button>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Paper>
       </Grid>
     </Grid>
   );
