@@ -1,3 +1,4 @@
+import BoError from "components/bo/commons/BoError";
 import PageAdminBanner from "pages/bo/admin/PageAdminBanner";
 import PageAdminEvent from "pages/bo/admin/PageAdminEvent";
 import PageAdminMain from "pages/bo/admin/PageAdminMain";
@@ -15,6 +16,7 @@ interface Route {
 }
 
 const boRoutes: Route[] = [
+  { path: "/error", component: BoError },
   { path: "/admin", component: PageAdminMain },
   { path: "/admin/product", component: PageAdminProduct },
   { path: "/admin/event", component: PageAdminEvent },
