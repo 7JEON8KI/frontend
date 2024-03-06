@@ -42,8 +42,8 @@ export const wantIngredients = [
   },
   {
     src: Namul,
-    name: "나물",
-    value: "나물",
+    name: "야채",
+    value: "야채",
   },
   {
     src: Lamb,
@@ -100,8 +100,8 @@ export const wontIngredients = [
   },
   {
     src: Milk,
-    name: "우유",
-    value: "우유",
+    name: "유제품",
+    value: "유제품",
   },
   {
     src: Peach,
