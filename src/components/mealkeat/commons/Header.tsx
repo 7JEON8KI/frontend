@@ -48,7 +48,13 @@ export const Header = (): JSX.Element => {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append("image", file);
-      productApi.getProductsWithImageSearch(formData);
+      const res = await productApi.getProductsWithImageSearch(formData);
+      navigate("/search", { state: { imageProduct: [...res.data] } });
+
+      // 입력 값을 리셋
+      if (event.target && event.target.files) {
+        event.target.value = ""; // 파일 입력을 리셋합니다.
+      }
     }
   };
 
