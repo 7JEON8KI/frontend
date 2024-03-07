@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ProductContainer = styled.div`
   width: 285px;
-  height: 426px;
+  height: 435px;
   position: relative;
   box-shadow: ${({ theme }) => theme.shadows.default};
   cursor: pointer;
@@ -51,6 +51,8 @@ export const ContentText = styled.div<ContentTextProps>`
   ${({ theme }) => theme.util.truncate};
   color: ${({ $description }) => ($description ? "#1C5641" : "black")};
   font-weight: ${({ $title }) => ($title ? "bold" : "normal")};
+  overflow: hidden;
+  white-space: wrap;
 `;
 
 export const ContentPrice = styled.div`
