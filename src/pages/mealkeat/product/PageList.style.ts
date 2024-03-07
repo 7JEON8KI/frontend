@@ -91,12 +91,18 @@ export const StyledMenuInfo = styled.div`
   margin: auto;
 `;
 
+interface StyledMenuButtonProps {
+  $selected?: boolean;
+}
+
 // 상품 메뉴 버튼 스타일
-export const StyledMenuButton = styled.button.attrs({ type: "button" })`
+export const StyledMenuButton = styled.button.attrs<StyledMenuButtonProps>({ type: "button" })`
   display: inline-block;
   padding: 0 1rem;
   font-size: 0.875rem;
   border-right: 1px solid #dfdfdf;
+  font-weight: ${({ $selected }) => ($selected ? "bold" : "normal")};
+  color: ${({ $selected }) => ($selected ? "#fd6f21" : "black")};
 `;
 
 // 상품 메뉴 이미지 스타일

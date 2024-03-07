@@ -33,6 +33,7 @@ const PageWine: React.FC = () => {
     sort: Sort.NEW,
     includeSoldOut: 1,
   });
+  const [selectedSort, setSelectedSort] = React.useState<Sort>(Sort.NEW);
 
   const handleClickExcept = () => {
     const prev = clickExcept;
@@ -45,6 +46,7 @@ const PageWine: React.FC = () => {
 
   const handleClickSort = (sortValue: Sort) => {
     setProductSort({ ...productSort, sort: sortValue });
+    setSelectedSort(sortValue);
   };
 
   const getProducts = async () => {
@@ -75,14 +77,37 @@ const PageWine: React.FC = () => {
             <StyledMenuInfo>
               <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
               <StyledProductInfoDivider>
-                <StyledMenuButton onClick={handleClickExcept}>
+                <StyledMenuButton onClick={handleClickExcept} aria-selected={clickExcept}>
                   <StyledMenuImage src={clickExcept ? exceptClick : except} alt="" />
-                  <span>품절 상품제외</span>
+                  <span style={{ fontWeight: clickExcept ? "bold" : "normal" }}>품절 상품제외</span>
                 </StyledMenuButton>
-                <StyledMenuButton onClick={() => handleClickSort(Sort.NEW)}>최신상품</StyledMenuButton>
-                <StyledMenuButton onClick={() => handleClickSort(Sort.LOW_PRICE)}>낮은가격</StyledMenuButton>
-                <StyledMenuButton onClick={() => handleClickSort(Sort.HIGH_PRICE)}>높은가격</StyledMenuButton>
-                <StyledMenuButton onClick={() => handleClickSort(Sort.MOST_ORDER)} style={{ borderRight: "none" }}>
+                <StyledMenuButton
+                  onClick={() => handleClickSort(Sort.NEW)}
+                  $selected={selectedSort == Sort.NEW ? true : false}
+                  aria-selected={selectedSort == Sort.NEW ? true : false}
+                >
+                  최신상품
+                </StyledMenuButton>
+                <StyledMenuButton
+                  onClick={() => handleClickSort(Sort.LOW_PRICE)}
+                  $selected={selectedSort == Sort.LOW_PRICE ? true : false}
+                  aria-selected={selectedSort == Sort.LOW_PRICE ? true : false}
+                >
+                  낮은가격
+                </StyledMenuButton>
+                <StyledMenuButton
+                  onClick={() => handleClickSort(Sort.HIGH_PRICE)}
+                  $selected={selectedSort == Sort.HIGH_PRICE ? true : false}
+                  aria-selected={selectedSort == Sort.HIGH_PRICE ? true : false}
+                >
+                  높은가격
+                </StyledMenuButton>
+                <StyledMenuButton
+                  onClick={() => handleClickSort(Sort.MOST_ORDER)}
+                  style={{ borderRight: "none" }}
+                  $selected={selectedSort == Sort.MOST_ORDER ? true : false}
+                  aria-selected={selectedSort == Sort.MOST_ORDER ? true : false}
+                >
                   인기상품
                 </StyledMenuButton>
               </StyledProductInfoDivider>
