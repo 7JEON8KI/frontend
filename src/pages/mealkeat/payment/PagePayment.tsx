@@ -527,7 +527,6 @@ const PagePayment: React.FC = () => {
                         amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
                         locale: "ko-KR",
                       })}
-                      원
                     </span>
                   </div>
                   <div
@@ -635,7 +634,7 @@ const PagePayment: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}원
+                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div
@@ -652,13 +651,13 @@ const PagePayment: React.FC = () => {
                   할인 금액
                 </span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem", fontWeight: "bold", color: "#fd6f21" }}>
-                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>쿠폰</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}
                 </span>
               </div>
             </div>
@@ -675,13 +674,12 @@ const PagePayment: React.FC = () => {
                   amount: totalPrice + shippingPrice - discountPrice,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>{`상품금액 ${formatCurrency({
               amount: FREE_SHIPPING_THRESHOLD,
               locale: "ko-KR",
-            })}원 이상 무료배송`}</span>
+            })} 이상 무료배송`}</span>
             <span style={{ margin: "1rem 0" }}>
               결제 및 계좌 안내 시 상호명은 <span style={{ color: "#fd6f21" }}>밀킷</span>으로 표기되니 참고
               부탁드립니다.

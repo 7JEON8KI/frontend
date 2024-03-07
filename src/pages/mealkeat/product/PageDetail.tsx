@@ -190,15 +190,14 @@ const PageDetail: React.FC = () => {
                           }),
                           locale: "ko-KR",
                         })}
-                        원
                       </span>
                       <span className="text-[1rem] text-darkGrey line-through">
-                        {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                        {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
                       </span>
                     </>
                   ) : (
                     <span className="text-[2rem] font-bold">
-                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
                     </span>
                   )}
                 </div>
@@ -234,7 +233,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
-                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })}원 / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })}원 이상 무료 배송`}</span>
+                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })} / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })} 이상 무료 배송`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>판매자</span>
@@ -273,7 +272,6 @@ const PageDetail: React.FC = () => {
                             }),
                           locale: "ko-KR",
                         })}
-                      원
                     </div>
                   </div>
                 </ProductFlexCol>
@@ -298,7 +296,6 @@ const PageDetail: React.FC = () => {
                         }),
                       locale: "ko-KR",
                     })}
-                    원
                   </span>
                 </div>
               </div>

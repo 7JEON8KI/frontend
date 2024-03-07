@@ -250,7 +250,6 @@ const PageCart: React.FC = () => {
                         amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
                         locale: "ko-KR",
                       })}
-                      원
                     </span>
                   </div>
                   <div
@@ -328,19 +327,17 @@ const PageCart: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}원
+                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                +{" "}
                 {formatCurrency({
                   amount:
                     countSelectedItems() === 0 ? 0 : totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -355,7 +352,6 @@ const PageCart: React.FC = () => {
                         : totalPrice + DEFAULT_DELIVERY_FEE,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <span style={{ margin: "1rem 0" }}>

@@ -86,10 +86,10 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
         <MiniContentPrice>
           <div>{productInfo?.discountRate > 0 && `${productInfo.discountRate}%`}</div>
           <div>
-            {`${formatCurrency({
+            {formatCurrency({
               amount: calculateDiscountPrice({ price: productInfo.price, discountRate: productInfo.discountRate }),
               locale: "ko-KR",
-            })}원`}
+            })}
           </div>
         </MiniContentPrice>
         {productInfo.stock === 0 && <div>일시 품절</div>}

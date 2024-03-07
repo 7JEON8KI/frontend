@@ -139,7 +139,7 @@ const PageMypageOrder: React.FC = () => {
                         marginBottom: "1rem",
                       }}
                     >
-                      {formatCurrency({ amount: product.orderProductPrice, locale: "ko-KR" })}원
+                      {formatCurrency({ amount: product.orderProductPrice, locale: "ko-KR" })}
                     </span>
                     <span
                       style={{

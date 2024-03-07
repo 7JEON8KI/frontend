@@ -161,7 +161,7 @@ const PageMypageLike: React.FC = () => {
                 }}
               >
                 <span>{product.productName}</span>
-                <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}원</span>
+                <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}</span>
               </div>
               <div
                 style={{
