@@ -10,7 +10,7 @@ const Layout = ({ children }: Props): JSX.Element => {
   return (
     <StyledLayout>
       <Header />
-      {children}
+      <div id="content">{children}</div>
       <Footer />
     </StyledLayout>
   );
