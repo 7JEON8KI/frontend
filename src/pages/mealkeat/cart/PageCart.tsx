@@ -367,7 +367,7 @@ const PageCart: React.FC = () => {
               aria-disabled={countSelectedItems() === 0}
               onClick={() => {
                 scrollToTop({});
-                navigate("/payment", { state: { cartList: [...cartProduct] } });
+                navigate("/payment", { state: { cartList: cartProduct.filter(el => el.selected) } });
               }}
               title="선택상품 구매하기, 클릭 시 결제 페이지로 이동"
             >

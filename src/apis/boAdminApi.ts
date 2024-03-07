@@ -9,6 +9,7 @@ const api: AxiosInstance = axios.create({
     Authorization: localStorage.getItem("Authorization"),
   },
 });
+
 api.interceptors.response.use(
   function (response) {
     //debugging console.log
@@ -19,6 +20,9 @@ api.interceptors.response.use(
   },
 
   function (error) {
+    if (error.response.status === 403) {
+      window.location.href = "/bo/error";
+    }
     return Promise.reject(error);
   },
 );

@@ -31,6 +31,18 @@ import { ProductResponseDTO } from "models/mealkeat/ProductModels";
 import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/productConstants";
 import cartApi from "apis/cartApi";
 import { CartProduct } from "models/mealkeat/CartModels";
+import calculateDiscountPrice from "utils/calculateDiscoundPrice";
+
+interface Review {
+  reviewId: number;
+  productId: number;
+  memberNickname: number;
+  reviewTitle: string;
+  reviewContent: string;
+  reviewImageUrl: string;
+  reviewStar: string;
+  modifiedAt: number;
+}
 
 interface Review {
   reviewId: number;
@@ -67,8 +79,9 @@ const PageDetail: React.FC = () => {
     const detail = await productApi.getProductDetail({ productId: id ? Number(id) : 1 });
     setProductDetail(detail.data);
     setLikeProduct(detail.data.isLike);
-    const urlList: string[] = detail.data?.productDetail?.split(",");
-    setDetailImageList(urlList.map(url => url.replace(/'/g, "").trim()));
+    const urlList: string[] = detail.data?.productDetail !== null ? detail.data?.productDetail?.split(",") : [];
+    const imageList = urlList?.map(url => url?.replace(/'/g, "")?.trim());
+    setDetailImageList(imageList.length > 0 ? imageList : []);
   };
 
   const getReviewList = async () => {
@@ -169,7 +182,16 @@ const PageDetail: React.FC = () => {
                   {productDetail && productDetail?.discountRate > 0 ? (
                     <>
                       <span className="text-[2rem] text-red">{productDetail?.discountRate}%</span>
-                      <span className="text-[2rem] font-bold">5,700원</span>
+                      <span className="text-[2rem] font-bold">
+                        {formatCurrency({
+                          amount: calculateDiscountPrice({
+                            price: productDetail?.price,
+                            discountRate: productDetail?.discountRate,
+                          }),
+                          locale: "ko-KR",
+                        })}
+                        원
+                      </span>
                       <span className="text-[1rem] text-darkGrey line-through">
                         {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
                       </span>
@@ -241,7 +263,16 @@ const PageDetail: React.FC = () => {
                       </StyledAmountBtn>
                     </div>
                     <div>
-                      {productDetail && formatCurrency({ amount: purchaseCnt * productDetail?.price, locale: "ko-KR" })}
+                      {productDetail &&
+                        formatCurrency({
+                          amount:
+                            purchaseCnt *
+                            calculateDiscountPrice({
+                              price: productDetail?.price,
+                              discountRate: productDetail?.discountRate,
+                            }),
+                          locale: "ko-KR",
+                        })}
                       원
                     </div>
                   </div>
@@ -258,7 +289,16 @@ const PageDetail: React.FC = () => {
                 >
                   합계
                   <span className="text-[2rem] font-bold text-red">
-                    {productDetail && formatCurrency({ amount: purchaseCnt * productDetail?.price, locale: "ko-KR" })}원
+                    {formatCurrency({
+                      amount:
+                        purchaseCnt *
+                        calculateDiscountPrice({
+                          price: productDetail?.price,
+                          discountRate: productDetail?.discountRate,
+                        }),
+                      locale: "ko-KR",
+                    })}
+                    원
                   </span>
                 </div>
               </div>
