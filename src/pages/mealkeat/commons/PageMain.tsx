@@ -21,6 +21,8 @@ import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductMode
 import productApi from "apis/productApi";
 import promotionApi from "apis/promotionApi";
 import recommendApi from "apis/recommendApi";
+import formatCurrency from "utils/formatCurrency";
+import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 
 interface Banner {
   bannerId: number;
@@ -82,7 +84,7 @@ const productSettings = {
 interface RecommendProduct {
   productId: string;
   productName: string;
-  price: string;
+  price: number;
   productType: string;
   discountRate: number;
   mainImgUrl: string;
@@ -161,9 +163,9 @@ const PageMain: React.FC = () => {
         <UserRecommendSlider>
           <Slider {...productSettings}>
             {userRecommend.length > 0 &&
-              userRecommend[0].products?.map((product, idx) => (
+              userRecommend[0].products?.map(product => (
                 <div
-                  key={idx}
+                  key={product.productId}
                   onClick={() => {
                     scrollToTop({});
                     navigate(`/detail/${product.productId}`);
@@ -174,7 +176,29 @@ const PageMain: React.FC = () => {
                   <SlideInfoBox>
                     <SlideContent>
                       <ProductName>{product.productName}</ProductName>
-                      <ProductPrice>{product.price}</ProductPrice>
+                      {product.discountRate > 0 ? (
+                        <>
+                          <ProductPrice>
+                            {formatCurrency({
+                              amount: calculateDiscountPrice({
+                                price: product.price,
+                                discountRate: product.discountRate,
+                              }),
+                              locale: "ko-KR",
+                            })}
+                          </ProductPrice>
+                          <p style={{ color: "#898989", textDecoration: "line-through" }}>
+                            {formatCurrency({ amount: product.price, locale: "ko-KR" })}
+                          </p>
+                        </>
+                      ) : (
+                        <p style={{ color: "black", fontWeight: "bold", fontSize: "1.25rem", width: "100%" }}>
+                          {formatCurrency({
+                            amount: product.price,
+                            locale: "ko-KR",
+                          })}
+                        </p>
+                      )}
                     </SlideContent>
                   </SlideInfoBox>
                 </div>
