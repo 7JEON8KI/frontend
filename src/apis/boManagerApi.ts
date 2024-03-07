@@ -35,6 +35,7 @@ export const boManagerApi = {
   deleteProduct: ({ ...body }) => api.delete("/manager/products", body),
   addIngredientAndTheme: ({ ...body }) => api.post("/manager/products/addIngAndTheme", body),
   deleteIngredientAndTheme: ({ ...body }) => api.delete("/manager/products/deleteIngAndTheme", body),
+  getTopProduct: () => api.get("/manager/products/top5"),
 };
 
 export default boManagerApi;
