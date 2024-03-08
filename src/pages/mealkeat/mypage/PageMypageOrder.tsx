@@ -68,7 +68,7 @@ const PageMypageOrder: React.FC = () => {
   return (
     <>
       <Title>최근 주문 현황</Title>
-      <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+      <section style={{ width: "90%", margin: "auto" }}>
         {orderHistory.length > 0 ? (
           orderHistory.map(order => (
             <div
@@ -99,7 +99,7 @@ const PageMypageOrder: React.FC = () => {
                 </button>
               </div>
 
-              {order.orderProductDtoList.map(product => (
+              {order.orderProductDtoList.map((product, idx) => (
                 <div
                   key={product.orderproductId}
                   style={{
@@ -107,6 +107,8 @@ const PageMypageOrder: React.FC = () => {
                     gap: "1rem",
                     marginBottom: "1rem",
                     alignItems: "center",
+                    paddingTop: idx !== 0 ? "1rem" : "0",
+                    borderTop: idx !== 0 ? "1px solid #d0d0d0" : "none",
                   }}
                 >
                   <img
@@ -139,7 +141,7 @@ const PageMypageOrder: React.FC = () => {
                         marginBottom: "1rem",
                       }}
                     >
-                      {formatCurrency({ amount: product.orderProductPrice, locale: "ko-KR" })}원
+                      {formatCurrency({ amount: product.orderProductPrice, locale: "ko-KR" })}
                     </span>
                     <span
                       style={{

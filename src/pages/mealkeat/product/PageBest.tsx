@@ -1,20 +1,15 @@
 import React, { useEffect } from "react";
-import { Layout, Pagination, Product } from "components/mealkeat";
+import { Layout, Pagination, Product, ProductSidebar } from "components/mealkeat";
 import {
   StyledListGrid,
-  StyledSidebarDiv,
   StyledMain,
-  StyledSidebarAside,
-  StyledInfoDivFirst,
-  StyledInfoDiv,
-  StyledScrollToTop,
   StyledMenuNav,
   StyledMenuTitle,
   StyledMenuInfo,
   StyledItemCount,
   StyledProductGrid,
+  EmptyLeftDiv,
 } from "./PageList.style";
-import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { ProductResponse, ProductSortRequest } from "models/mealkeat/ProductModels";
 import { Sort } from "constants/productConstants";
@@ -43,7 +38,7 @@ const PageBest: React.FC = () => {
   return (
     <Layout>
       <StyledListGrid>
-        <StyledSidebarDiv />
+        <EmptyLeftDiv />
         <StyledMain>
           <StyledMenuNav>
             <StyledMenuTitle>베스트 상품</StyledMenuTitle>
@@ -54,23 +49,10 @@ const PageBest: React.FC = () => {
           <StyledProductGrid>
             {productList?.productResponseDTOList.map(product => <Product key={product.productId} product={product} />)}
           </StyledProductGrid>
+          <Pagination total={12} pageAmount={12} onClickPage={() => {}} />
         </StyledMain>
-        <StyledSidebarDiv>
-          <StyledSidebarAside>
-            <StyledInfoDivFirst>
-              <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}></div>
-              주문 시간 및<br /> 배송 안내
-            </StyledInfoDivFirst>
-            <StyledInfoDiv>최근 본 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>찜한 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>1800-0700</StyledInfoDiv>
-            <StyledScrollToTop title="클릭 시 상단으로 이동" onClick={() => scrollToTop({ smooth: true })}>
-              &uarr;
-            </StyledScrollToTop>
-          </StyledSidebarAside>
-        </StyledSidebarDiv>
+        <ProductSidebar />
       </StyledListGrid>
-      <Pagination total={12} pageAmount={12} onClickPage={() => {}} />
     </Layout>
   );
 };

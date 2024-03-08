@@ -8,10 +8,10 @@ export const MainDiv = styled.main`
 export const Title = styled.div`
   font-size: ${({ theme }) => theme.fontSize.tooBig};
   font-weight: bold;
-  padding: 3rem 1rem;
+  padding: 3rem 0;
   margin-top: 1.8rem;
   margin-bottom: 0.9rem;
-  width: 90%;
+  width: 80%;
   max-width: 2000px;
   margin: auto;
   ${({ theme }) => theme.media.sm`
@@ -23,7 +23,8 @@ export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
-  gap: 50px 0;
+  width: 86%;
+  margin: 0 auto;
 
   ${({ theme }) => theme.media.xl`
     grid-template-columns: repeat(2, 1fr);
@@ -47,14 +48,14 @@ export const TopSlider = styled.div`
 
 export const UserRecommendSlider = styled.div`
   width: 80%;
-  max-width: 1600px;
+  max-width: 1524px;
   height: 500px;
-  margin: 0px auto;
+  margin: 0px auto 10rem;
 `;
 
 export const SlideImage = styled.img.attrs({ draggable: false })`
   width: 390px;
-  height: 250px;
+  height: 390x;
   display: block;
   margin: 15px auto 0;
   box-shadow:
@@ -102,11 +103,13 @@ export const SlideContent = styled.div`
 
 export const ProductName = styled.p`
   font-weight: bold;
+  font-size: 1.5rem;
   width: 100%;
 `;
 
 export const ProductPrice = styled.p`
-  color: #898989;
-  font-size: 14px;
+  color: #fd6f21;
+  font-weight: bold;
+  font-size: 1.25rem;
   width: 100%;
 `;

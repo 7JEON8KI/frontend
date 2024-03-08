@@ -87,7 +87,7 @@ const PageMealkeatResult: React.FC = () => {
             <div
               key={product.productId}
               style={{
-                width: "1500px",
+                width: "1320px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -114,9 +114,9 @@ const PageMealkeatResult: React.FC = () => {
                 }}
               >
                 <p style={{ fontSize: "40px", fontWeight: "bold" }}>{product.productName}</p>
-                <p
-                  style={{ fontSize: "30px", fontWeight: "bold" }}
-                >{`${formatCurrency({ amount: product.price, locale: "ko-KR" })}원`}</p>
+                <p style={{ fontSize: "30px", fontWeight: "bold" }}>
+                  {formatCurrency({ amount: product.price, locale: "ko-KR" })}
+                </p>
                 <GoProductButton
                   onClick={() => {
                     scrollToTop({});

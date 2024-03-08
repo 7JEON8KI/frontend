@@ -1,14 +1,6 @@
-import { Layout, Image, ModalContainer, CartModal, RecommendProduct } from "components/mealkeat";
+import { Layout, Image, ModalContainer, CartModal, RecommendProduct, ProductSidebar } from "components/mealkeat";
 import React, { useEffect } from "react";
-import {
-  StyledListGrid,
-  StyledSidebarDiv,
-  StyledMain,
-  StyledSidebarAside,
-  StyledInfoDivFirst,
-  StyledInfoDiv,
-  StyledScrollToTop,
-} from "./PageList.style";
+import { StyledListGrid, StyledMain, EmptyLeftDiv } from "./PageList.style";
 import {
   ProductDetailContainer,
   ProductImageContainer,
@@ -19,7 +11,6 @@ import {
   ProductInfoListContainer,
   ProductAmountInput,
 } from "./PageDetail.style";
-import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import likeApi from "apis/likeApi";
 import reviewApi from "apis/reviewApi";
@@ -163,7 +154,7 @@ const PageDetail: React.FC = () => {
   return (
     <Layout>
       <StyledListGrid>
-        <StyledSidebarDiv />
+        <EmptyLeftDiv />
         <StyledMain>
           <ProductDetailContainer>
             <ProductImageContainer>
@@ -190,15 +181,14 @@ const PageDetail: React.FC = () => {
                           }),
                           locale: "ko-KR",
                         })}
-                        원
                       </span>
                       <span className="text-[1rem] text-darkGrey line-through">
-                        {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                        {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
                       </span>
                     </>
                   ) : (
                     <span className="text-[2rem] font-bold">
-                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}원
+                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
                     </span>
                   )}
                 </div>
@@ -234,7 +224,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
-                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })}원 / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })}원 이상 무료 배송`}</span>
+                  <span>{`${formatCurrency({ amount: DEFAULT_DELIVERY_FEE })} / ${formatCurrency({ amount: FREE_SHIPPING_THRESHOLD })} 이상 무료 배송`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>판매자</span>
@@ -273,7 +263,6 @@ const PageDetail: React.FC = () => {
                             }),
                           locale: "ko-KR",
                         })}
-                      원
                     </div>
                   </div>
                 </ProductFlexCol>
@@ -298,7 +287,6 @@ const PageDetail: React.FC = () => {
                         }),
                       locale: "ko-KR",
                     })}
-                    원
                   </span>
                 </div>
               </div>
@@ -371,16 +359,20 @@ const PageDetail: React.FC = () => {
           </ProductDetailContainer>
 
           {reviewList.length > 0 && (
-            <div style={{ width: "1200px", height: "250px", margin: "40px auto" }}>
+            <div
+              style={{
+                width: "1320px",
+                border: "2px solid #d0d0d0",
+                margin: "auto auto 3rem",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "Right",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  marginLeft: "10rem",
-                  marginRight: "2rem",
-                  marginTop: "2rem",
-                  gap: "1rem",
+                  width: "90%",
+                  margin: "1rem auto 0",
                 }}
               >
                 <span
@@ -388,6 +380,17 @@ const PageDetail: React.FC = () => {
                     fontSize: "1rem",
                     fontWeight: "bold",
                     cursor: "pointer",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  상품의 리뷰사진
+                </span>
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    marginBottom: "1rem",
                   }}
                 >
                   전체 보기
@@ -395,64 +398,45 @@ const PageDetail: React.FC = () => {
               </div>
               <div
                 style={{
+                  width: "90%",
                   display: "flex",
+                  alignItems: "center",
+                  overflowX: "auto",
+                  gap: "2rem",
+                  padding: "1rem",
+                  justifyContent: "space-between",
+                  margin: "auto",
                 }}
               >
-                <span
-                  style={{
-                    width: "10%",
-                    marginTop: "3rem",
-                    display: "flex",
-                    justifyContent: "right",
-                    paddingRight: "1rem",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  상품의
-                  <br />
-                  리뷰사진
-                </span>
-                <div
-                  style={{
-                    width: "90%",
-                    height: "200px",
-                    display: "flex",
-                    alignItems: "center",
-                    overflowX: "auto",
-                    gap: "2rem",
-                    padding: "1rem",
-                  }}
-                >
-                  {reviewList.map((review, index) => (
-                    <div
-                      key={index}
+                {reviewList.map((review, index) => (
+                  <div
+                    key={review.reviewId}
+                    style={{
+                      width: "180px",
+                      height: "180px",
+                    }}
+                  >
+                    <img
+                      src={review.reviewImageUrl}
+                      alt={`리뷰 이미지 ${index + 1}`}
                       style={{
-                        width: "180px",
-                        height: "180px",
+                        cursor: "pointer",
+                        objectFit: "contain",
                       }}
-                    >
-                      <img
-                        src={review.reviewImageUrl}
-                        alt={`리뷰 이미지 ${index + 1}`}
-                        style={{
-                          cursor: "pointer",
-                          objectFit: "contain",
-                        }}
-                        draggable="false"
-                        onMouseOver={e => {
-                          e.currentTarget.style.transform = "scale(1.1)";
-                        }}
-                        onMouseOut={e => {
-                          e.currentTarget.style.transform = "scale(1)";
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
+                      draggable="false"
+                      onMouseOver={e => {
+                        e.currentTarget.style.transform = "scale(1.1)";
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.transform = "scale(1)";
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           )}
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem", margin: "auto", width: "1320px" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
               {detailImageList?.map(url => (
@@ -519,20 +503,7 @@ const PageDetail: React.FC = () => {
             </div>
           )}
         </StyledMain>
-        <StyledSidebarDiv>
-          <StyledSidebarAside>
-            <StyledInfoDivFirst>
-              <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}></div>
-              주문 시간 및<br /> 배송 안내
-            </StyledInfoDivFirst>
-            <StyledInfoDiv>최근 본 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>찜한 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>1800-0700</StyledInfoDiv>
-            <StyledScrollToTop title="클릭 시 상단으로 이동" onClick={() => scrollToTop({ smooth: true })}>
-              &uarr;
-            </StyledScrollToTop>
-          </StyledSidebarAside>
-        </StyledSidebarDiv>
+        <ProductSidebar />
       </StyledListGrid>
       <ModalContainer
         title="장바구니 담기"

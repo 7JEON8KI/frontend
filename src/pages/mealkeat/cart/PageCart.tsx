@@ -172,7 +172,7 @@ const PageCart: React.FC = () => {
           <section style={{ fontSize: "32px", color: "#282828", width: "90%", padding: "24px", margin: "auto" }}>
             상품정보
           </section>
-          <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+          <section style={{ border: "1px solid #f4f4f4", width: "90%", margin: "auto" }}>
             <div
               style={{
                 height: "55px",
@@ -245,13 +245,38 @@ const PageCart: React.FC = () => {
                     }}
                   >
                     <span>{product.productName}</span>
-                    <span>
-                      {formatCurrency({
-                        amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
-                        locale: "ko-KR",
-                      })}
-                      원
-                    </span>
+                    {product.discountRate > 0 ? (
+                      <div style={{ display: "flex", gap: "2rem", alignItems: "flex-end" }}>
+                        <span style={{ color: "#fd6f21", fontSize: "1.5rem" }}>{product.discountRate}%</span>
+                        <span style={{ fontSize: "1.5rem" }}>
+                          {formatCurrency({
+                            amount: calculateDiscountPrice({
+                              price: product.price,
+                              discountRate: product.discountRate,
+                            }),
+                            locale: "ko-KR",
+                          })}
+                        </span>
+                        <span
+                          style={{
+                            color: "#d0d0d0",
+                            textDecoration: "line-through",
+                          }}
+                        >
+                          {formatCurrency({
+                            amount: product.price,
+                            locale: "ko-KR",
+                          })}
+                        </span>
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: "1.5rem" }}>
+                        {formatCurrency({
+                          amount: product.price,
+                          locale: "ko-KR",
+                        })}
+                      </span>
+                    )}
                   </div>
                   <div
                     style={{
@@ -313,7 +338,6 @@ const PageCart: React.FC = () => {
               height: "400px",
               border: "5px solid #282828",
               borderRadius: "5px",
-              background: "#f4f4f4",
               position: "sticky",
               top: "100px",
               display: "flex",
@@ -328,19 +352,17 @@ const PageCart: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}원
+                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                +{" "}
                 {formatCurrency({
                   amount:
                     countSelectedItems() === 0 ? 0 : totalPrice >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_DELIVERY_FEE,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -355,7 +377,6 @@ const PageCart: React.FC = () => {
                         : totalPrice + DEFAULT_DELIVERY_FEE,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <span style={{ margin: "1rem 0" }}>

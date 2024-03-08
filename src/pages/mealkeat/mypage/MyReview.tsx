@@ -50,7 +50,6 @@ const MyReview: React.FC = () => {
         flexDirection: "column",
         gap: "1rem",
         padding: "1.5rem 1rem",
-        borderTop: "1px solid #d0d0d0",
       }}
     >
       {reviewProduct.length > 0 ? (
@@ -63,7 +62,7 @@ const MyReview: React.FC = () => {
                   display: "flex",
                   gap: "1rem",
                   padding: "1.5rem 1rem",
-                  borderTop: "1px solid #d0d0d0",
+                  borderTop: "1px solid #c3c6c9",
                   justifyContent: "space-between",
                 }}
               >
@@ -198,7 +197,6 @@ const MyReview: React.FC = () => {
           style={{
             height: "210px",
             padding: "1.5rem 1rem",
-            borderTop: "1px solid #d0d0d0",
             fontSize: "1.5rem",
             fontFamily: "bold",
             display: "flex",
