@@ -22,7 +22,7 @@ const PageMypageReview: React.FC = () => {
   return (
     <>
       <Title>리뷰</Title>
-      <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+      <section style={{ border: "1px solid #f4f4f4", width: "90%", margin: "auto" }}>
         <div
           style={{
             height: "55px",

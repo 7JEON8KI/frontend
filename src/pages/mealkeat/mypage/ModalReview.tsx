@@ -145,7 +145,7 @@ const ModalReview: React.FC = () => {
   return (
     <>
       <Title>리뷰 등록</Title>
-      <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+      <section style={{ border: "1px solid #f4f4f4", width: "90%", margin: "auto" }}>
         {product ? (
           <>
             <div
@@ -290,10 +290,12 @@ const ModalReview: React.FC = () => {
             <button
               style={{
                 width: "100%",
+                height: "50px",
                 padding: "10px",
                 backgroundColor: "#fd6f21",
                 color: "white",
                 border: "none",
+                fontSize: "20px",
               }}
               onClick={() => handleSaveReview()}
             >

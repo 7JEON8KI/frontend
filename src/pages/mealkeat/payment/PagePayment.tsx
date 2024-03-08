@@ -349,7 +349,7 @@ const PagePayment: React.FC = () => {
           </section>
           <section
             style={{
-              background: "#f4f4f4",
+              border: "1px solid #d0d0d0",
               width: "90%",
               padding: "1rem 0",
               margin: "auto",
@@ -496,7 +496,7 @@ const PagePayment: React.FC = () => {
           >
             상품정보
           </section>
-          <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+          <section style={{ border: "1px solid #d0d0d0", width: "90%", margin: "auto" }}>
             {cartProduct.length > 0 ? (
               cartProduct.map(product => (
                 <div
@@ -572,7 +572,7 @@ const PagePayment: React.FC = () => {
           </section>
           <section
             style={{
-              background: "#f4f4f4",
+              border: "1px solid #d0d0d0",
               width: "90%",
               padding: "1rem 0",
               margin: "auto",
@@ -622,7 +622,6 @@ const PagePayment: React.FC = () => {
               width: "90%",
               border: "5px solid #282828",
               borderRadius: "5px",
-              background: "#f4f4f4",
               position: "sticky",
               top: "100px",
               display: "flex",
@@ -664,7 +663,7 @@ const PagePayment: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                + {formatCurrency({ amount: shippingPrice, locale: "ko-KR" })}원
+                + {formatCurrency({ amount: shippingPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
