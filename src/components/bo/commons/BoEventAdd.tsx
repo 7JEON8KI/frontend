@@ -96,7 +96,7 @@ const BoEventAdd: React.FC = () => {
           <Button
             variant="contained"
             onClick={handleClick}
-            sx={{ backgroundColor: grey[800], marginRight: 2 }}
+            sx={{ backgroundColor: grey[800], marginRight: 2, marginTop: 10 }}
             endIcon={<SendIcon />}
           >
             등록

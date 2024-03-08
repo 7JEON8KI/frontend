@@ -4,6 +4,7 @@ import { Box, Grid, Paper } from "@mui/material";
 import RevenueChart from "components/bo/graph/RevenueChart";
 import SaleAmountChart from "components/bo/graph/SaleAmountChart";
 import BestList from "components/bo/global/BestList";
+import SearchChart from "components/bo/graph/SearchChart";
 
 const PageAdminMain: React.FC = () => {
   return (
@@ -44,7 +45,14 @@ const PageAdminMain: React.FC = () => {
             </Paper>
           </Grid>
           <Grid item xs={8} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%" }}></Paper>
+            <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
+              <Box paddingTop={2}>
+                <h3>판매금액(일별)</h3>
+              </Box>
+              <Box paddingRight={2} height={"512px"}>
+                <SearchChart />
+              </Box>
+            </Paper>
           </Grid>
         </Grid>
       </Box>

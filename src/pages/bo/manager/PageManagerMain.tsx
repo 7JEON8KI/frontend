@@ -9,7 +9,7 @@ const PageManagerMain: React.FC = () => {
   return (
     <BoManagerLayout>
       <Box display="flex" flexWrap="wrap" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
-        <Grid container height={"100%"} width={"100%"} spacing={6}>
+        <Grid container height={"100%"} width={"100%"} spacing={6} maxHeight={"90vh"}>
           <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box paddingTop={2}>
@@ -26,8 +26,8 @@ const PageManagerMain: React.FC = () => {
               <TopProduct />
             </Paper>
           </Grid>
-          <Grid item xs={4} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%" }}>
+          <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
+            <Paper elevation={4} sx={{ width: "100%", height: "100%", overflow: "auto" }}>
               <Box paddingTop={2} textAlign={"center"}>
                 <h3>재고 부족 상품</h3>
               </Box>
@@ -114,8 +114,8 @@ const PageManagerMain: React.FC = () => {
               <MainChart />
             </Paper>
           </Grid>
-          <Grid item xs={8} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%", overflowX: "auto", overflowY: "auto" }}>
+          <Grid item xs={8} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
+            <Paper elevation={4} sx={{ width: "100%", height: "512px", overflow: "auto" }}>
               <Box paddingTop={2} textAlign={"center"}>
                 <h3>주문 내역</h3>
               </Box>

@@ -155,7 +155,11 @@ const BoProductModal = ({ data, onClose }: Props) => {
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TextField id="ingredient" label="재료" value={ingredientList.join(", ")} sx={{ margin: 1 }} />
           </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Grid
+            item
+            xs={6}
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}
+          >
             <Typography variant="body1" sx={{ margin: 1 }}>
               상품 메인 이미지
             </Typography>
@@ -181,7 +185,7 @@ const BoProductModal = ({ data, onClose }: Props) => {
             sx={{ backgroundColor: grey[800], marginRight: 2 }}
             endIcon={<SendIcon />}
           >
-            상품 디테일 가져오기
+            상품 정보 수정
           </Button>
           <Button
             variant="contained"
