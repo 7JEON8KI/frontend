@@ -4,6 +4,9 @@ export const SidebarContainer = styled.aside`
   width: 200px;
   display: inline-flex;
   flex-direction: column;
+  padding-left: 20px;
+  border: 1px solid ${({ theme }) => theme.colors.lightGrey};
+  height: 100%;
 `;
 
 export const Title = styled.p`

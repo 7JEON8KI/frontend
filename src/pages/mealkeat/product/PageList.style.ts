@@ -12,7 +12,7 @@ export const StyledListGrid = styled.div`
   `}
 `;
 
-export const StyledSidebarDiv = styled.div`
+export const EmptyLeftDiv = styled.div`
   min-height: 100vh;
   width: 200px;
   ${({ theme }) => theme.media.xxl`
@@ -28,46 +28,6 @@ export const StyledMain = styled.main`
     margin: auto;
     display: block;
 `}
-`;
-export const StyledSidebarAside = styled.aside`
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  background: lightgray;
-  top: 100px;
-`;
-
-export const StyledInfoDivFirst = styled.div`
-  text-align: center;
-  padding: 10px 10;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 50px;
-`;
-export const StyledInfoDiv = styled.div`
-  width: 100%;
-  text-align: center;
-  padding: 5px 10px;
-  font-size: 1rem;
-  height: 60px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #c3c6c9;
-  justify-content: center;
-`;
-
-export const StyledScrollToTop = styled.button.attrs({ type: "button" })`
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-  background: white;
-  font-size: 1.75rem;
-  font-weight: bold;
-  bottom: -100px;
-  border-radius: 50%;
 `;
 
 export const StyledMenuNav = styled.nav`
@@ -91,12 +51,18 @@ export const StyledMenuInfo = styled.div`
   margin: auto;
 `;
 
+interface StyledMenuButtonProps {
+  $selected?: boolean;
+}
+
 // 상품 메뉴 버튼 스타일
-export const StyledMenuButton = styled.button.attrs({ type: "button" })`
+export const StyledMenuButton = styled.button.attrs<StyledMenuButtonProps>({ type: "button" })`
   display: inline-block;
   padding: 0 1rem;
   font-size: 0.875rem;
   border-right: 1px solid #dfdfdf;
+  font-weight: ${({ $selected }) => ($selected ? "bold" : "normal")};
+  color: ${({ $selected }) => ($selected ? "#fd6f21" : "black")};
 `;
 
 // 상품 메뉴 이미지 스타일
@@ -126,4 +92,32 @@ export const StyledProductGrid = styled.div`
 // 상품 정보 디바이더 스타일
 export const StyledProductInfoDivider = styled.div`
   padding: 1rem 0;
+`;
+
+interface ThemeButtonProps {
+  $selected?: boolean;
+}
+// 테마 버튼
+export const ThemeButton = styled.button.attrs({ type: "button" })<ThemeButtonProps>`
+  width: 100px;
+  height: 50px;
+  padding: 1rem;
+  border: 2px solid ${({ theme }) => theme.colors.mediumGrey};
+  border-radius: 5px;
+  transition: background-color 0.5s;
+  font-weight: bold;
+  color: black;
+  &:hover {
+    color: white;
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    border: none;
+  }
+
+  ${({ $selected, theme }) =>
+    $selected &&
+    `
+    color: white;
+    background-color: ${theme.colors.mainColor};
+    border: none;
+  `}
 `;

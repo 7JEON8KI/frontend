@@ -87,7 +87,7 @@ const PageMypageLike: React.FC = () => {
   return (
     <>
       <Title>찜한 목록</Title>
-      <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+      <section style={{ border: "1px solid #f4f4f4", width: "90%", margin: "auto" }}>
         <div
           style={{
             height: "55px",
@@ -161,7 +161,7 @@ const PageMypageLike: React.FC = () => {
                 }}
               >
                 <span>{product.productName}</span>
-                <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}원</span>
+                <span>{formatCurrency({ amount: product.price, locale: "ko-KR" })}</span>
               </div>
               <div
                 style={{

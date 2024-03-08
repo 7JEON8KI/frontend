@@ -278,9 +278,9 @@ const PagePayment: React.FC = () => {
 
   useEffect(() => {
     const jquery = document.createElement("script");
-    jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
+    jquery.src = "https://code.jquery.com/jquery-1.12.4.min.js";
     const iamport = document.createElement("script");
-    iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+    iamport.src = "https://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
 
@@ -349,7 +349,7 @@ const PagePayment: React.FC = () => {
           </section>
           <section
             style={{
-              background: "#f4f4f4",
+              border: "1px solid #d0d0d0",
               width: "90%",
               padding: "1rem 0",
               margin: "auto",
@@ -496,7 +496,7 @@ const PagePayment: React.FC = () => {
           >
             상품정보
           </section>
-          <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+          <section style={{ border: "1px solid #d0d0d0", width: "90%", margin: "auto" }}>
             {cartProduct.length > 0 ? (
               cartProduct.map(product => (
                 <div
@@ -527,7 +527,6 @@ const PagePayment: React.FC = () => {
                         amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
                         locale: "ko-KR",
                       })}
-                      원
                     </span>
                   </div>
                   <div
@@ -573,7 +572,7 @@ const PagePayment: React.FC = () => {
           </section>
           <section
             style={{
-              background: "#f4f4f4",
+              border: "1px solid #d0d0d0",
               width: "90%",
               padding: "1rem 0",
               margin: "auto",
@@ -623,7 +622,6 @@ const PagePayment: React.FC = () => {
               width: "90%",
               border: "5px solid #282828",
               borderRadius: "5px",
-              background: "#f4f4f4",
               position: "sticky",
               top: "100px",
               display: "flex",
@@ -635,7 +633,7 @@ const PagePayment: React.FC = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}원
+                {formatCurrency({ amount: totalPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div
@@ -652,20 +650,20 @@ const PagePayment: React.FC = () => {
                   할인 금액
                 </span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem", fontWeight: "bold", color: "#fd6f21" }}>
-                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0 0.5rem 1rem", fontSize: "1.25rem" }}>쿠폰</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}원
+                  - {formatCurrency({ amount: discountPrice, locale: "ko-KR" })}
                 </span>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
               <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                + {formatCurrency({ amount: shippingPrice, locale: "ko-KR" })}원
+                + {formatCurrency({ amount: shippingPrice, locale: "ko-KR" })}
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
@@ -675,13 +673,12 @@ const PagePayment: React.FC = () => {
                   amount: totalPrice + shippingPrice - discountPrice,
                   locale: "ko-KR",
                 })}
-                원
               </span>
             </div>
             <span style={{ padding: "0.5rem 0", fontSize: "1rem" }}>{`상품금액 ${formatCurrency({
               amount: FREE_SHIPPING_THRESHOLD,
               locale: "ko-KR",
-            })}원 이상 무료배송`}</span>
+            })} 이상 무료배송`}</span>
             <span style={{ margin: "1rem 0" }}>
               결제 및 계좌 안내 시 상호명은 <span style={{ color: "#fd6f21" }}>밀킷</span>으로 표기되니 참고
               부탁드립니다.

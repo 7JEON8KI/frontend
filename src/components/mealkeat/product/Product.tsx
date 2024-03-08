@@ -20,6 +20,7 @@ const Product = ({ product }: Props): JSX.Element => {
   const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
     e.stopPropagation();
     await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
+    alert("장바구니에 상품이 추가되었습니다.");
   };
 
   const toggleLike = async () => {

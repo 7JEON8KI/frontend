@@ -67,7 +67,7 @@ const PagePaymentComplete: React.FC = () => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>총 상품 금액</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  {formatCurrency({ amount: paymentInfo.totalPrice, locale: "ko-KR" })}원
+                  {formatCurrency({ amount: paymentInfo.totalPrice, locale: "ko-KR" })}
                 </span>
               </div>
               <div
@@ -84,14 +84,14 @@ const PagePaymentComplete: React.FC = () => {
                     할인 금액
                   </span>
                   <span style={{ padding: "0.5rem 0", fontSize: "1.25rem", fontWeight: "bold", color: "#fd6f21" }}>
-                    - {formatCurrency({ amount: paymentInfo.discountPrice, locale: "ko-KR" })}원
+                    - {formatCurrency({ amount: paymentInfo.discountPrice, locale: "ko-KR" })}
                   </span>
                 </div>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>배송비</span>
                 <span style={{ padding: "0.5rem 0", fontSize: "1.25rem" }}>
-                  + {formatCurrency({ amount: paymentInfo.shippingPrice, locale: "ko-KR" })}원
+                  + {formatCurrency({ amount: paymentInfo.shippingPrice, locale: "ko-KR" })}
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
@@ -101,7 +101,6 @@ const PagePaymentComplete: React.FC = () => {
                     amount: paymentInfo.totalPrice + paymentInfo.shippingPrice - paymentInfo.discountPrice,
                     locale: "ko-KR",
                   })}
-                  원
                 </span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>

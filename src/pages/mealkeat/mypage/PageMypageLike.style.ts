@@ -6,10 +6,10 @@ import checkClickPath from "assets/images/icons/except_click.png";
 export const Title = styled.p`
   font-size: 2rem;
   font-weight: bold;
-  margin: 25px 0;
+  margin: 25px auto;
+  width: 90%;
 `;
 export const StyledSection = styled.section`
-  background: "#f4f4f4";
   width: "90%";
   margin: "auto";
 `;

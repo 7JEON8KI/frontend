@@ -115,7 +115,7 @@ const PageManagerMain: React.FC = () => {
             </Paper>
           </Grid>
           <Grid item xs={8} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "512px", overflow: "auto" }}>
+            <Paper elevation={4} sx={{ width: "100%", height: "512px", overflow: "auto" }}>=======
               <Box paddingTop={2} textAlign={"center"}>
                 <h3>주문 내역</h3>
               </Box>
