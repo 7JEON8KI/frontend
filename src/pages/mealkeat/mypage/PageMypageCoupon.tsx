@@ -12,6 +12,7 @@ import {
   CouponItem,
   IconContainer,
   CouponInfo,
+  CouponName,
 } from "./PageMypageCoupon.style";
 import { FaShoppingCart } from "react-icons/fa";
 import { PiPercentLight } from "react-icons/pi";
@@ -93,7 +94,7 @@ const MyPageCoupon: React.FC = () => {
                 <button>
                   <IoTrashOutline size={25} />
                 </button>
-                <Title style={{ marginRight: "40px" }}>{coupon.couponName}</Title>
+                <CouponName>{coupon.couponName}</CouponName>
                 <div>{coupon.discountPrice > 0 ? `${coupon.discountPrice}원` : `최대 ${coupon.discountRate}%`}</div>
               </CouponInfo>
             </CouponItem>

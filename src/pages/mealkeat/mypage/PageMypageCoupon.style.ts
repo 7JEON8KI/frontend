@@ -14,6 +14,13 @@ export const Title = styled.p`
   width: 90%;
 `;
 
+export const CouponName = styled.p`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 25px auto;
+  width: 100%;
+`;
+
 export const Container = styled.div`
   display: flex;
   border: 1px solid #5f5f5f;
@@ -25,13 +32,14 @@ export const Container = styled.div`
 `;
 
 export const InputContainer = styled.div`
-  flex: 1;
+  display: flex;
   align-items: center;
   border: 1px solid #5f5f5f;
   margin: 0 5px;
   height: 40px;
-  width: 90%;
+  width: 80%;
   margin: auto;
+  align-items: center;
 `;
 
 export const Input = styled.input`
@@ -84,8 +92,8 @@ export const CouponItem = styled.div`
   justify-content: space-between;
   align-items: center;
   border: 1px solid #e5e5e5;
-  height: 20vh;
   border-radius: 10px;
+  padding: 20px;
 `;
 
 export const IconContainer = styled.div`
