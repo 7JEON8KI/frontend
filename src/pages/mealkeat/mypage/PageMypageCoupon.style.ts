@@ -10,41 +10,52 @@ export const ContentContainer = styled.aside`
 export const Title = styled.p`
   font-size: 2rem;
   font-weight: bold;
-  margin: 25px 0;
+  margin: 25px auto;
+  width: 90%;
 `;
 
 export const Container = styled.div`
   display: flex;
-  border: 1px solid #000000;
+  border: 1px solid #5f5f5f;
   justify-content: center;
   align-items: center;
-  height: 10vh;
+  width: 90%;
+  height: 50px;
+  margin: auto;
 `;
 
 export const InputContainer = styled.div`
   flex: 1;
   align-items: center;
-  border: 1px solid #000000;
+  border: 1px solid #5f5f5f;
   margin: 0 5px;
+  height: 40px;
+  width: 90%;
+  margin: auto;
 `;
 
 export const Input = styled.input`
-  width: 70%;
+  width: 60%;
   border: none;
   padding: 5px;
+  height: 32px;
 `;
 
 export const Button = styled.button`
   margin: 0 5px;
   padding: 10px;
-  border: 1px solid orange;
-  color: orange;
+  background-color: #fd6f21;
+  color: white;
+  &:hover {
+    background-color: #ff8c4b;
+  }
 `;
 
 export const MainContainer = styled.div`
   margin: auto;
   padding: auto;
   height: 50vh;
+  width: 90%;
 `;
 
 export const FlexContainer = styled.div`
@@ -52,6 +63,7 @@ export const FlexContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   height: 10vh;
+  gap: 10px;
 `;
 
 export const SubTitle = styled.p`
@@ -62,17 +74,18 @@ export const SubTitle = styled.p`
 
 export const CouponSection = styled.div`
   height: 5vh;
+  width: 100%;
+  margin: auto;
 `;
 
 export const CouponItem = styled.div`
-  width: 48%;
+  width: 450px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   border: 1px solid #e5e5e5;
   height: 20vh;
-  margin: 10px;
-  border-radius: 10%;
+  border-radius: 10px;
 `;
 
 export const IconContainer = styled.div`

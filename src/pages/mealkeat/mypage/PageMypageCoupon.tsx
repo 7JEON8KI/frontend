@@ -80,7 +80,8 @@ const MyPageCoupon: React.FC = () => {
       <MainContainer>
         <SubTitle>보유 쿠폰</SubTitle>
         <CouponSection>
-          보유쿠폰 총 <span style={{ color: "orange" }}>{couponCount}장</span> {/* 보유 쿠폰의 수를 표시 */}
+          보유쿠폰 총 <span style={{ color: "#fd6f21", fontSize: "1.2rem", fontWeight: "bold" }}>{couponCount}</span>장{" "}
+          {/* 보유 쿠폰의 수를 표시 */}
         </CouponSection>
         <FlexContainer>
           {couponList.map(coupon => (
