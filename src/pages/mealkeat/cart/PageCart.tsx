@@ -172,7 +172,7 @@ const PageCart: React.FC = () => {
           <section style={{ fontSize: "32px", color: "#282828", width: "90%", padding: "24px", margin: "auto" }}>
             상품정보
           </section>
-          <section style={{ background: "#f4f4f4", width: "90%", margin: "auto" }}>
+          <section style={{ border: "1px solid #f4f4f4", width: "90%", margin: "auto" }}>
             <div
               style={{
                 height: "55px",
@@ -245,12 +245,38 @@ const PageCart: React.FC = () => {
                     }}
                   >
                     <span>{product.productName}</span>
-                    <span>
-                      {formatCurrency({
-                        amount: calculateDiscountPrice({ price: product.price, discountRate: product.discountRate }),
-                        locale: "ko-KR",
-                      })}
-                    </span>
+                    {product.discountRate > 0 ? (
+                      <div style={{ display: "flex", gap: "2rem", alignItems: "flex-end" }}>
+                        <span style={{ color: "#fd6f21", fontSize: "1.5rem" }}>{product.discountRate}%</span>
+                        <span style={{ fontSize: "1.5rem" }}>
+                          {formatCurrency({
+                            amount: calculateDiscountPrice({
+                              price: product.price,
+                              discountRate: product.discountRate,
+                            }),
+                            locale: "ko-KR",
+                          })}
+                        </span>
+                        <span
+                          style={{
+                            color: "#d0d0d0",
+                            textDecoration: "line-through",
+                          }}
+                        >
+                          {formatCurrency({
+                            amount: product.price,
+                            locale: "ko-KR",
+                          })}
+                        </span>
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: "1.5rem" }}>
+                        {formatCurrency({
+                          amount: product.price,
+                          locale: "ko-KR",
+                        })}
+                      </span>
+                    )}
                   </div>
                   <div
                     style={{
@@ -312,7 +338,6 @@ const PageCart: React.FC = () => {
               height: "400px",
               border: "5px solid #282828",
               borderRadius: "5px",
-              background: "#f4f4f4",
               position: "sticky",
               top: "100px",
               display: "flex",

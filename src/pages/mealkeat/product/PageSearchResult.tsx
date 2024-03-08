@@ -1,20 +1,15 @@
 import React, { useEffect } from "react";
-import { Layout, Product, NoProduct } from "components/mealkeat";
+import { Layout, Product, NoProduct, ProductSidebar } from "components/mealkeat";
 import {
   StyledListGrid,
-  StyledSidebarDiv,
   StyledMain,
-  StyledSidebarAside,
-  StyledInfoDivFirst,
-  StyledInfoDiv,
-  StyledScrollToTop,
   StyledMenuNav,
   StyledMenuTitle,
   StyledMenuInfo,
   StyledItemCount,
   StyledProductGrid,
+  EmptyLeftDiv,
 } from "./PageList.style";
-import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { useLocation } from "react-router-dom";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
@@ -72,7 +67,7 @@ const PageSearchResult: React.FC = () => {
   return (
     <Layout>
       <StyledListGrid>
-        <StyledSidebarDiv />
+        <EmptyLeftDiv />
         <StyledMain>
           <StyledMenuNav>
             <StyledMenuTitle>
@@ -90,20 +85,7 @@ const PageSearchResult: React.FC = () => {
             <NoProduct />
           )}
         </StyledMain>
-        <StyledSidebarDiv>
-          <StyledSidebarAside>
-            <StyledInfoDivFirst>
-              <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}></div>
-              주문 시간 및<br /> 배송 안내
-            </StyledInfoDivFirst>
-            <StyledInfoDiv>최근 본 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>찜한 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>1800-0700</StyledInfoDiv>
-            <StyledScrollToTop title="클릭 시 상단으로 이동" onClick={() => scrollToTop({ smooth: true })}>
-              &uarr;
-            </StyledScrollToTop>
-          </StyledSidebarAside>
-        </StyledSidebarDiv>
+        <ProductSidebar />
       </StyledListGrid>
     </Layout>
   );

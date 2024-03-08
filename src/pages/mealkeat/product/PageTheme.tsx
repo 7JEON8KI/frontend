@@ -1,15 +1,10 @@
 import React, { useEffect } from "react";
-import { Layout, Pagination, Product } from "components/mealkeat";
+import { Layout, Pagination, Product, ProductSidebar } from "components/mealkeat";
 import except from "assets/images/icons/except.png";
 import exceptClick from "assets/images/icons/except_click.png";
 import {
   StyledListGrid,
-  StyledSidebarDiv,
   StyledMain,
-  StyledSidebarAside,
-  StyledInfoDivFirst,
-  StyledInfoDiv,
-  StyledScrollToTop,
   StyledMenuNav,
   StyledMenuTitle,
   StyledMenuInfo,
@@ -18,8 +13,9 @@ import {
   StyledItemCount,
   StyledProductGrid,
   StyledProductInfoDivider,
+  ThemeButton,
+  EmptyLeftDiv,
 } from "./PageList.style";
-import scrollToTop from "utils/scrollToTop";
 import productApi from "apis/productApi";
 import { Sort, ThemeName } from "constants/productConstants";
 import { ProductResponse, ProductThemeRequest } from "models/mealkeat/ProductModels";
@@ -35,6 +31,7 @@ const PageTheme: React.FC = () => {
     themeName: ThemeName.HOME,
   });
   const [selectedSort, setSelectedSort] = React.useState<Sort>(Sort.NEW);
+  const [themeSelected, setThemeSelected] = React.useState<ThemeName>(ThemeName.HOME);
 
   const handleClickExcept = () => {
     const prev = clickExcept;
@@ -58,6 +55,7 @@ const PageTheme: React.FC = () => {
       ...productSort,
       themeName: themeName,
     });
+    setThemeSelected(themeName);
   };
 
   const handleClickPageButton = (currPage: number) => {
@@ -77,7 +75,7 @@ const PageTheme: React.FC = () => {
   return (
     <Layout>
       <StyledListGrid>
-        <StyledSidebarDiv />
+        <EmptyLeftDiv />
         <StyledMain>
           <StyledMenuNav>
             <StyledMenuTitle>테마별</StyledMenuTitle>
@@ -90,45 +88,24 @@ const PageTheme: React.FC = () => {
                 marginBottom: "2rem",
               }}
             >
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
+              <ThemeButton
                 onClick={() => handleClickTheme(ThemeName.HOME)}
+                $selected={themeSelected == ThemeName.HOME ? true : false}
               >
                 {ThemeName.HOME}
-              </button>
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
+              </ThemeButton>
+              <ThemeButton
                 onClick={() => handleClickTheme(ThemeName.SOLO)}
+                $selected={themeSelected == ThemeName.SOLO ? true : false}
               >
                 {ThemeName.SOLO}
-              </button>
-              <button
-                style={{
-                  width: "100px",
-                  height: "50px",
-                  padding: "1rem",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-                type="button"
+              </ThemeButton>
+              <ThemeButton
                 onClick={() => handleClickTheme(ThemeName.CAMPING)}
+                $selected={themeSelected == ThemeName.CAMPING ? true : false}
               >
                 {ThemeName.CAMPING}
-              </button>
+              </ThemeButton>
             </div>
             <StyledMenuInfo>
               <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
@@ -172,27 +149,10 @@ const PageTheme: React.FC = () => {
           <StyledProductGrid>
             {productList?.productResponseDTOList?.map(product => <Product key={product.productId} product={product} />)}
           </StyledProductGrid>
+          <Pagination total={productList?.total || 0} pageAmount={12} onClickPage={handleClickPageButton} />
         </StyledMain>
-        <StyledSidebarDiv>
-          <StyledSidebarAside>
-            <StyledInfoDivFirst>
-              <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}>
-                <img src="https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/117_a9a5c267-d900-11ee-9b6f-ac198ebc401d.jpg" />
-              </div>
-              <p>
-                7pm 이전 결제 시<br /> 3월 16(토) 도착 가능
-              </p>
-            </StyledInfoDivFirst>
-            <StyledInfoDiv>최근 본 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>찜한 상품 &gt;</StyledInfoDiv>
-            <StyledInfoDiv>1800-0700</StyledInfoDiv>
-            <StyledScrollToTop title="클릭 시 상단으로 이동" onClick={() => scrollToTop({ smooth: true })}>
-              &uarr;
-            </StyledScrollToTop>
-          </StyledSidebarAside>
-        </StyledSidebarDiv>
+        <ProductSidebar />
       </StyledListGrid>
-      <Pagination total={productList?.total || 0} pageAmount={12} onClickPage={handleClickPageButton} />
     </Layout>
   );
 };
