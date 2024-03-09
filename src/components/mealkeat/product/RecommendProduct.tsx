@@ -54,11 +54,18 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
     await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
   };
 
+  const moveProductDetail = () => {
+    scrollToTop({});
+    navigate(`/detail/${productInfo.productId}`);
+  };
+
   return (
     <MiniProduct
-      onClick={() => {
-        scrollToTop({});
-        navigate(`/detail/${productInfo.productId}`);
+      onClick={moveProductDetail}
+      onKeyDown={e => {
+        if (e.key === "Enter") {
+          moveProductDetail();
+        }
       }}
       tabIndex={0}
     >
