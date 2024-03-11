@@ -155,8 +155,11 @@ const PageDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    getProductDetail();
-    getReviewList();
+    if (id) {
+      getProductDetail();
+      getReviewList();
+    }
+
     return () => {};
   }, [id]);
 
