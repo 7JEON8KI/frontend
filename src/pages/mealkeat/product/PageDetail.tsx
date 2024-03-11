@@ -50,6 +50,11 @@ interface Review {
   modifiedAt: number;
 }
 
+interface Ingredients {
+  ingredientId: number;
+  ingredientName: string;
+}
+
 const PageDetail: React.FC = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -64,6 +69,8 @@ const PageDetail: React.FC = () => {
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
   const [reviewList, setReviewList] = React.useState<Review[]>([]);
+  const [ingredients, setIngredients] = React.useState<Ingredients[]>([]);
+
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
     if (detailContainer) {
@@ -154,6 +161,14 @@ const PageDetail: React.FC = () => {
     navigate("/payment", { state: { cartList: [{ ...currentProduct }] } });
   };
 
+  const getIngredients = async () => {
+    const ingredients = await productApi.getProductIngredients({ productId: id ? Number(id) : 1 });
+    if (ingredients) {
+      console.log(ingredients);
+      setIngredients(ingredients.data);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       getProductDetail();
@@ -165,7 +180,13 @@ const PageDetail: React.FC = () => {
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
-      if (productDetail.productType !== "wine") getRecommendProduct();
+      if (productDetail.productType !== "wine") {
+        getRecommendProduct();
+        getIngredients();
+      } else {
+        setIngredients([]);
+        setRecommendProduct([]);
+      }
       getRecommendWine();
     }
   }, [productDetail]);
@@ -336,7 +357,6 @@ const PageDetail: React.FC = () => {
                   style={{
                     width: "60px",
                     height: "60px",
-                    // border: "1px solid #5f5f5f",
                     boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 3px",
                     display: "flex",
                     flexDirection: "column",
@@ -389,7 +409,6 @@ const PageDetail: React.FC = () => {
               </div>
             </ProductDescription>
           </ProductDetailContainer>
-
           {reviewList.length > 0 && (
             <div
               style={{
@@ -470,6 +489,24 @@ const PageDetail: React.FC = () => {
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem", margin: "auto", width: "1320px" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
+            {productDetail.productType !== "wine" && (
+              <div style={{ display: "flex", margin: "auto", gap: "1rem", flexWrap: "wrap", width: "80%" }}>
+                {ingredients?.map(ingredient => (
+                  <span
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "bold",
+                      background: "#ff9e6d",
+                      padding: "1rem",
+                      borderRadius: "10px",
+                    }}
+                    key={ingredient.ingredientId}
+                  >
+                    {ingredient.ingredientName}
+                  </span>
+                ))}
+              </div>
+            )}
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
               {detailImageList?.map(url => (
                 <img
