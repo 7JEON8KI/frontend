@@ -186,7 +186,11 @@ const PageDetail: React.FC = () => {
                 <span className="h-[0.5rem] w-[3rem]"></span>
                 <span className="text-[2rem] font-bold">{productDetail?.productName}</span>
                 <div className="flex w-1/2 items-baseline gap-[2rem]">
-                  {productDetail && productDetail?.discountRate > 0 ? (
+                  {productDetail && productDetail?.stock === 0 ? (
+                    <span className="text-[2rem] font-bold text-darkGrey line-through">
+                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
+                    </span>
+                  ) : productDetail?.discountRate > 0 ? (
                     <>
                       <span className="text-[2rem] text-red">{productDetail?.discountRate}%</span>
                       <span className="text-[2rem] font-bold">
@@ -228,7 +232,7 @@ const PageDetail: React.FC = () => {
               <ProductFlexCol $borderTop="1px solid #c3c6c9" $padding="1rem 0" $gap="1rem">
                 <ProductInfoListContainer>
                   <span>용량</span>
-                  <span>{productDetail?.amount}g</span>
+                  <span>{`${productDetail?.amount}${productDetail?.productType === "wine" ? "ml" : "g"}`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>칼로리</span>
@@ -236,7 +240,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>보관방법</span>
-                  <span>{productDetail?.storage}</span>
+                  <span>{`${productDetail?.productType === "wine" ? "서늘하고 직사광선이 없는 곳에 보관" : productDetail?.storage}`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
@@ -253,23 +257,25 @@ const PageDetail: React.FC = () => {
                   <div className="flex justify-between">
                     <div className="flex items-center justify-start gap-[0.5rem]">
                       <StyledAmountBtn
-                        disabled={purchaseCnt <= 1}
-                        aria-disabled={purchaseCnt <= 1}
+                        disabled={purchaseCnt <= 1 || productDetail?.stock === 0}
+                        aria-disabled={purchaseCnt <= 1 || productDetail?.stock === 0}
                         onClick={() => setPurchaseCnt(prev => prev - 1)}
                       >
                         -
                       </StyledAmountBtn>
                       <ProductAmountInput value={purchaseCnt} readOnly aria-readonly />
                       <StyledAmountBtn
-                        disabled={purchaseCnt >= 10}
-                        aria-disabled={purchaseCnt >= 10}
+                        disabled={purchaseCnt >= 10 || productDetail?.stock === 0}
+                        aria-disabled={purchaseCnt >= 10 || productDetail?.stock === 0}
                         onClick={() => setPurchaseCnt(prev => prev + 1)}
                       >
                         +
                       </StyledAmountBtn>
                     </div>
                     <div>
-                      {productDetail &&
+                      {productDetail && productDetail?.stock === 0 ? (
+                        <div>일시 품절</div>
+                      ) : (
                         formatCurrency({
                           amount:
                             purchaseCnt *
@@ -278,7 +284,8 @@ const PageDetail: React.FC = () => {
                               discountRate: productDetail?.discountRate,
                             }),
                           locale: "ko-KR",
-                        })}
+                        })
+                      )}
                     </div>
                   </div>
                 </ProductFlexCol>
@@ -292,18 +299,24 @@ const PageDetail: React.FC = () => {
                     marginTop: "1rem",
                   }}
                 >
-                  합계
-                  <span className="text-[2rem] font-bold text-red">
-                    {formatCurrency({
-                      amount:
-                        purchaseCnt *
-                        calculateDiscountPrice({
-                          price: productDetail?.price,
-                          discountRate: productDetail?.discountRate,
-                        }),
-                      locale: "ko-KR",
-                    })}
-                  </span>
+                  {productDetail?.stock === 0 ? (
+                    <div className="text-[2rem] font-bold text-red">일시 품절</div>
+                  ) : (
+                    <>
+                      <div>합계</div>
+                      <span className="text-[2rem] font-bold text-red">
+                        {formatCurrency({
+                          amount:
+                            purchaseCnt *
+                            calculateDiscountPrice({
+                              price: productDetail?.price,
+                              discountRate: productDetail?.discountRate,
+                            }),
+                          locale: "ko-KR",
+                        })}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
               <div
