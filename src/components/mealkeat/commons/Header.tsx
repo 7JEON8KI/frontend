@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Logo, Image } from "components/mealkeat";
 import SearchPath from "assets/images/icons/Search.png";
 import HeartPath from "assets/images/icons/Heart.png";
@@ -11,14 +11,21 @@ import { Header as StyledHeader, Search, IconList, Icon, TopNav, NavMenu, ImageS
 import { useNavigate } from "react-router-dom";
 import cartApi from "apis/cartApi";
 import productApi from "apis/productApi";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout } from "feature/loginSlice";
+import { RootState } from "store";
+import axios from "axios";
+import { setCnt } from "feature/cartSlice";
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const cartCnt = useSelector((state: RootState) => state.cart.cartCnt);
+  const dispatch = useDispatch();
+
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [word, setWord] = React.useState<string>("");
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-  const [cartsCount, setCartsCount] = useState<number>(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWord(e.target.value);
@@ -59,30 +66,41 @@ export const Header = (): JSX.Element => {
   };
 
   const fetchCartsCount = async () => {
-    const result = await cartApi.getCartsCount();
-    setCartsCount(result.data);
+    try {
+      const result = await cartApi.getCartsCount();
+      dispatch(setCnt(result.data));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Axios 에러인 경우 추가적인 정보가 있을 수 있음
+        if (error.response?.status === 401) {
+          // 인증 에러 처리
+          dispatch(logout());
+        } else {
+          // 다른 HTTP 에러 처리
+          console.log("HTTP 에러 발생:", error.response?.status);
+        }
+      } else {
+        // 비 Axios 에러 처리
+        console.error("에러 발생:", error);
+      }
+    }
   };
 
   const handleLogout = () => {
     // 로그아웃 시 localStorage에서 Authorization 토큰 제거
     localStorage.removeItem("Authorization");
-    setIsLoggedIn(false); // 로그인 상태 업데이트
-    setCartsCount(0); // 장바구니 수량 초기화
+    // setIsLoggedIn(false); // 로그인 상태 업데이트
+    dispatch(setCnt(0));
     navigate("/"); // 홈으로 리디렉션 또는 원하는 경로로 변경
+    dispatch(logout());
   };
 
   useEffect(() => {
-    const checkAuthStatus = () => {
-      const token = localStorage.getItem("Authorization");
-      setIsLoggedIn(!!token);
-      if (token) fetchCartsCount();
-    };
-    checkAuthStatus();
-    // 페이지가 포커스를 받을 때마다 로그인 상태를 체크
-    window.addEventListener("focus", checkAuthStatus);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-    return () => window.removeEventListener("focus", checkAuthStatus);
+    const token = localStorage.getItem("Authorization");
+    if (token) {
+      dispatch(login());
+      fetchCartsCount();
+    }
   }, []);
 
   return (
@@ -112,7 +130,7 @@ export const Header = (): JSX.Element => {
             <img src={HeartPath} alt="찜 아이콘" draggable={false} />
             <span>찜 목록</span>
           </Icon>
-          <Icon onClick={() => handleProtectedRoute("/cart")} $amount={cartsCount}>
+          <Icon onClick={() => handleProtectedRoute("/cart")} $amount={cartCnt}>
             <img src={CartPath} alt="장바구니 아이콘" draggable={false} />
             <span>장바구니</span>
           </Icon>
@@ -142,12 +160,11 @@ export const Header = (): JSX.Element => {
           <NavMenu title="클릭 시 밀킷 추천 페이지로 이동" onClick={() => navigate("/recommend")}>
             밀킷 추천
           </NavMenu>
-          <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
-            와인
-          </NavMenu>
-          {/* <NavMenu title="클릭 시 이벤트 페이지로 이동" onClick={() => navigate("/event")}>
-            이벤트
-          </NavMenu> */}
+          {isLoggedIn && (
+            <NavMenu title="클릭 시 와인 페이지로 이동" onClick={() => navigate("/wine")}>
+              와인
+            </NavMenu>
+          )}
           <NavMenu title="클릭 시 테마별 페이지로 이동" onClick={() => navigate("/theme")}>
             테마별
           </NavMenu>

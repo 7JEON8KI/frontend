@@ -7,6 +7,8 @@ import likeApi from "apis/likeApi";
 import cartApi from "apis/cartApi";
 import { ModalContainer, CartModal } from "components/mealkeat";
 import { useNavigate } from "react-router-dom";
+import { setCnt } from "feature/cartSlice";
+import { useDispatch } from "react-redux";
 
 interface LikeProduct {
   likeId: number;
@@ -21,6 +23,7 @@ interface LikeProduct {
 }
 
 const PageMypageLike: React.FC = () => {
+  const dispatch = useDispatch();
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [likeProduct, setLikeProduct] = useState<LikeProduct[]>([]);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
@@ -72,7 +75,19 @@ const PageMypageLike: React.FC = () => {
       cartProductCnt: 1,
       productId: productId,
     };
-    await cartApi.saveCart(data);
+    await cartApi
+      .saveCart(data)
+      .then(() => {
+        cartApi.getCartsCount().then(res => {
+          dispatch(setCnt(res.data));
+        });
+
+        alert("장바구니에 상품이 추가되었습니다.");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("상품 추가에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   const navigate = useNavigate();

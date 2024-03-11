@@ -12,6 +12,7 @@ import {
   CouponItem,
   IconContainer,
   CouponInfo,
+  CouponName,
 } from "./PageMypageCoupon.style";
 import { FaShoppingCart } from "react-icons/fa";
 import { PiPercentLight } from "react-icons/pi";
@@ -80,7 +81,8 @@ const MyPageCoupon: React.FC = () => {
       <MainContainer>
         <SubTitle>보유 쿠폰</SubTitle>
         <CouponSection>
-          보유쿠폰 총 <span style={{ color: "orange" }}>{couponCount}장</span> {/* 보유 쿠폰의 수를 표시 */}
+          보유쿠폰 총 <span style={{ color: "#fd6f21", fontSize: "1.2rem", fontWeight: "bold" }}>{couponCount}</span>장{" "}
+          {/* 보유 쿠폰의 수를 표시 */}
         </CouponSection>
         <FlexContainer>
           {couponList.map(coupon => (
@@ -92,7 +94,7 @@ const MyPageCoupon: React.FC = () => {
                 <button>
                   <IoTrashOutline size={25} />
                 </button>
-                <Title style={{ marginRight: "40px" }}>{coupon.couponName}</Title>
+                <CouponName>{coupon.couponName}</CouponName>
                 <div>{coupon.discountPrice > 0 ? `${coupon.discountPrice}원` : `최대 ${coupon.discountRate}%`}</div>
               </CouponInfo>
             </CouponItem>

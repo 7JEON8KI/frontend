@@ -5,7 +5,7 @@ import boRoutes from "./routes/boRoutes";
 import { Provider } from "react-redux";
 import { legacy_createStore as createStore } from "redux";
 import rootReducer from "./pages/bo/redux";
-
+import { mealkeatStore } from "./store";
 const store = createStore(rootReducer);
 
 export default function App() {
@@ -24,11 +24,13 @@ export default function App() {
   });
   return (
     <Router>
-      <Routes>
-        {mealRoutes.map((route, index) => (
-          <Route key={index} path={route.path} element={<route.component />} />
-        ))}
-      </Routes>
+      <Provider store={mealkeatStore}>
+        <Routes>
+          {mealRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={<route.component />} />
+          ))}
+        </Routes>
+      </Provider>
       <Provider store={store}>
         <Routes>
           {boRoutes.map((route, index) => (

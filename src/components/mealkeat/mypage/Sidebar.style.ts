@@ -7,6 +7,9 @@ export const SidebarContainer = styled.aside`
   padding-left: 20px;
   border: 1px solid ${({ theme }) => theme.colors.lightGrey};
   height: 100%;
+  & div:last-child {
+    margin-bottom: 20px;
+  }
 `;
 
 export const Title = styled.p`
