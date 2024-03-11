@@ -19,8 +19,11 @@ import {
 import productApi from "apis/productApi";
 import { Sort, Theme, ThemeName, Themes } from "constants/productConstants";
 import { ProductResponse, ProductThemeRequest } from "models/mealkeat/ProductModels";
+import { useLocation } from "react-router-dom";
 
 const PageTheme: React.FC = () => {
+  const location = useLocation();
+  const themeName: ThemeName = location?.state?.themeName || ThemeName.HOME;
   const [clickExcept, setClickExcept] = React.useState<boolean>(false);
   const [productList, setProductList] = React.useState<ProductResponse>();
   const [productSort, setProductSort] = React.useState<ProductThemeRequest>({
@@ -28,10 +31,10 @@ const PageTheme: React.FC = () => {
     pageAmount: 12,
     sort: Sort.NEW,
     includeSoldOut: 1,
-    themeName: ThemeName.HOME,
+    themeName: themeName,
   });
   const [selectedSort, setSelectedSort] = React.useState<Sort>(Sort.NEW);
-  const [themeSelected, setThemeSelected] = React.useState<Theme>(Themes[ThemeName.HOME]);
+  const [themeSelected, setThemeSelected] = React.useState<Theme>(Themes[themeName]);
 
   const handleClickExcept = () => {
     const prev = clickExcept;
