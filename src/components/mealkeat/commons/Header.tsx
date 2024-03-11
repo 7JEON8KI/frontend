@@ -12,10 +12,10 @@ import { useNavigate } from "react-router-dom";
 import cartApi from "apis/cartApi";
 import productApi from "apis/productApi";
 import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "feature/login/loginSlice";
+import { login, logout } from "feature/loginSlice";
 import { RootState } from "store";
 import axios from "axios";
-import { setCnt } from "feature/login/cartSlice";
+import { setCnt } from "feature/cartSlice";
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate();

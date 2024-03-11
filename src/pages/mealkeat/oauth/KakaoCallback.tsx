@@ -4,7 +4,7 @@ import React from "react";
 import { Layout } from "components/mealkeat";
 import LoadingSpinner from "components/mealkeat/commons/LoadingSpinner";
 import { useDispatch } from "react-redux";
-import { login } from "feature/login/loginSlice";
+import { login } from "feature/loginSlice";
 
 function KakaoCallback() {
   const navigate = useNavigate();

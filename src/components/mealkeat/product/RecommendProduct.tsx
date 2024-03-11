@@ -8,7 +8,7 @@ import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
-import { setCnt } from "feature/login/cartSlice";
+import { setCnt } from "feature/cartSlice";
 import { useDispatch } from "react-redux";
 
 interface Props {

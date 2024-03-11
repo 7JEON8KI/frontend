@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import cartApi from "apis/cartApi";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import { CartData, CartProduct, CartProductDTO } from "models/mealkeat/CartModels";
-import { decreaseCnt } from "feature/login/cartSlice";
+import { decreaseCnt } from "feature/cartSlice";
 import { useDispatch } from "react-redux";
 
 const StyledAmountBtn = styled.button.attrs({ type: "button" })`

@@ -23,7 +23,7 @@ import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/product
 import cartApi from "apis/cartApi";
 import { CartProduct } from "models/mealkeat/CartModels";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
-import { setCnt } from "feature/login/cartSlice";
+import { setCnt } from "feature/cartSlice";
 import { useDispatch } from "react-redux";
 
 interface Review {

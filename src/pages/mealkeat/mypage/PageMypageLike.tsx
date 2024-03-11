@@ -7,7 +7,7 @@ import likeApi from "apis/likeApi";
 import cartApi from "apis/cartApi";
 import { ModalContainer, CartModal } from "components/mealkeat";
 import { useNavigate } from "react-router-dom";
-import { setCnt } from "feature/login/cartSlice";
+import { setCnt } from "feature/cartSlice";
 import { useDispatch } from "react-redux";
 
 interface LikeProduct {

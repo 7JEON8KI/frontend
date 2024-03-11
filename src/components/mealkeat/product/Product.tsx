@@ -9,7 +9,7 @@ import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import likeApi from "apis/likeApi";
 import { useDispatch } from "react-redux";
-import { setCnt } from "feature/login/cartSlice";
+import { setCnt } from "feature/cartSlice";
 
 interface Props {
   product: ProductResponseDTO;
