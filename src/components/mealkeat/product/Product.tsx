@@ -8,12 +8,16 @@ import scrollToTop from "utils/scrollToTop";
 import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import likeApi from "apis/likeApi";
+import { useDispatch } from "react-redux";
+import { setCnt } from "feature/login/cartSlice";
 
 interface Props {
   product: ProductResponseDTO;
 }
 
 const Product = ({ product }: Props): JSX.Element => {
+  const dispatch = useDispatch();
+
   const [likeProduct, setLikeProduct] = React.useState<number>(product.isLike);
   const navigate = useNavigate();
 
@@ -23,8 +27,19 @@ const Product = ({ product }: Props): JSX.Element => {
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
-    alert("장바구니에 상품이 추가되었습니다.");
+    await cartApi
+      .saveCart({ productId: productId, cartProductCnt: 1 })
+      .then(() => {
+        cartApi.getCartsCount().then(res => {
+          dispatch(setCnt(res.data));
+        });
+
+        alert("장바구니에 상품이 추가되었습니다.");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("상품 추가에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   const toggleLike = async (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {

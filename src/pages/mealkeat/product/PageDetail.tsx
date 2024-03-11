@@ -23,6 +23,8 @@ import { DEFAULT_DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from "constants/product
 import cartApi from "apis/cartApi";
 import { CartProduct } from "models/mealkeat/CartModels";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
+import { setCnt } from "feature/login/cartSlice";
+import { useDispatch } from "react-redux";
 
 interface Review {
   reviewId: number;
@@ -47,6 +49,7 @@ interface Review {
 }
 
 const PageDetail: React.FC = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
@@ -121,6 +124,9 @@ const PageDetail: React.FC = () => {
     const res = await cartApi.saveCart({ productId: productDetail.productId, cartProductCnt: purchaseCnt });
 
     if (res.status === 200) {
+      cartApi.getCartsCount().then(res => {
+        dispatch(setCnt(res.data));
+      });
       setCartModal(true);
     } else {
       console.log("장바구니 실패...!!!");

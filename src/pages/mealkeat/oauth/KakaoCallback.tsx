@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { Layout } from "components/mealkeat";
 import LoadingSpinner from "components/mealkeat/commons/LoadingSpinner";
+import { useDispatch } from "react-redux";
+import { login } from "feature/login/loginSlice";
 
 function KakaoCallback() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   // 최초 렌더링 시 발동
   React.useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
@@ -16,7 +20,7 @@ function KakaoCallback() {
     });
     console.log("kakaoParams : " + kakaoParams);
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/auth/login/kakao`, kakaoParams, {
+      .post(`${process.env.REACT_APP_BASE_URL || "http://localhost:3000"}/auth/login/kakao`, kakaoParams, {
         headers: {
           "Content-type": "application/json",
         },
@@ -28,6 +32,8 @@ function KakaoCallback() {
           localStorage.setItem("Authorization", "Bearer " + response.data.accessToken);
           //메인 페이지로 이동
           window.location.href = "/";
+          // navigate("/", { replace: true });
+          dispatch(login());
         } else {
           //회원가입 페이지로 이동
           navigate("/signup", { replace: true });
@@ -38,7 +44,7 @@ function KakaoCallback() {
         console.log(err);
         navigate("/login", { replace: true });
       });
-  }, [navigate]);
+  }, []);
 
   return (
     <Layout>

@@ -8,6 +8,8 @@ import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import { ProductRecommendResponse } from "models/mealkeat/RecommendModels";
 import { ProductResponseDTO } from "models/mealkeat/ProductModels";
+import { setCnt } from "feature/login/cartSlice";
+import { useDispatch } from "react-redux";
 
 interface Props {
   product: ProductResponseDTO | ProductRecommendResponse;
@@ -23,6 +25,7 @@ interface DisplayInfo {
 }
 
 const RecommendProduct = ({ product }: Props): JSX.Element => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const displayInfo = (): DisplayInfo => {
@@ -51,7 +54,18 @@ const RecommendProduct = ({ product }: Props): JSX.Element => {
 
   const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
     e.stopPropagation();
-    await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
+    await cartApi
+      .saveCart({ productId: productId, cartProductCnt: 1 })
+      .then(() => {
+        cartApi.getCartsCount().then(res => {
+          dispatch(setCnt(res.data));
+        });
+        alert("장바구니에 상품이 추가되었습니다.");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("상품 추가에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   const moveProductDetail = () => {

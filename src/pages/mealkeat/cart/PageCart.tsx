@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import cartApi from "apis/cartApi";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import { CartData, CartProduct, CartProductDTO } from "models/mealkeat/CartModels";
+import { decreaseCnt } from "feature/login/cartSlice";
+import { useDispatch } from "react-redux";
 
 const StyledAmountBtn = styled.button.attrs({ type: "button" })`
   padding: 1rem;
@@ -39,6 +41,7 @@ const StyledPurchaseBtn = styled.button.attrs({ type: "button" })`
 
 const PageCart: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [selectAll, setSelectAll] = useState<boolean>(true);
   const [cartProduct, setCartProduct] = useState<CartProduct[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -102,7 +105,13 @@ const PageCart: React.FC = () => {
 
   const handleDeleteSelected = () => {
     // 카트 아이템 삭제
-    cartProduct.filter(item => item.selected).forEach(item => cartApi.deleteCart({ productId: item.productId }));
+    cartProduct
+      .filter(item => item.selected)
+      .forEach(item =>
+        cartApi.deleteCart({ productId: item.productId }).then(() => {
+          dispatch(decreaseCnt());
+        }),
+      );
     const newCartProduct = cartProduct.filter(item => !item.selected);
 
     setCartProduct(newCartProduct);
@@ -204,7 +213,7 @@ const PageCart: React.FC = () => {
                   border: "1px solid #d0d0d0",
                   color: "#fd6f21",
                 }}
-                onClick={handleDeleteSelected}
+                onClick={() => handleDeleteSelected()}
               >
                 선택삭제
               </button>
