@@ -17,7 +17,7 @@ import {
   EmptyLeftDiv,
 } from "./PageList.style";
 import productApi from "apis/productApi";
-import { Sort, ThemeName } from "constants/productConstants";
+import { Sort, Theme, ThemeName, Themes } from "constants/productConstants";
 import { ProductResponse, ProductThemeRequest } from "models/mealkeat/ProductModels";
 
 const PageTheme: React.FC = () => {
@@ -31,7 +31,7 @@ const PageTheme: React.FC = () => {
     themeName: ThemeName.HOME,
   });
   const [selectedSort, setSelectedSort] = React.useState<Sort>(Sort.NEW);
-  const [themeSelected, setThemeSelected] = React.useState<ThemeName>(ThemeName.HOME);
+  const [themeSelected, setThemeSelected] = React.useState<Theme>(Themes[ThemeName.HOME]);
 
   const handleClickExcept = () => {
     const prev = clickExcept;
@@ -55,7 +55,7 @@ const PageTheme: React.FC = () => {
       ...productSort,
       themeName: themeName,
     });
-    setThemeSelected(themeName);
+    setThemeSelected(Themes[themeName]);
   };
 
   const handleClickPageButton = (currPage: number) => {
@@ -88,24 +88,26 @@ const PageTheme: React.FC = () => {
                 marginBottom: "2rem",
               }}
             >
-              <ThemeButton
-                onClick={() => handleClickTheme(ThemeName.HOME)}
-                $selected={themeSelected == ThemeName.HOME ? true : false}
-              >
-                {ThemeName.HOME}
-              </ThemeButton>
-              <ThemeButton
-                onClick={() => handleClickTheme(ThemeName.SOLO)}
-                $selected={themeSelected == ThemeName.SOLO ? true : false}
-              >
-                {ThemeName.SOLO}
-              </ThemeButton>
-              <ThemeButton
-                onClick={() => handleClickTheme(ThemeName.CAMPING)}
-                $selected={themeSelected == ThemeName.CAMPING ? true : false}
-              >
-                {ThemeName.CAMPING}
-              </ThemeButton>
+              {Object.values(Themes).map(theme => (
+                <ThemeButton
+                  key={theme.name}
+                  onClick={() => handleClickTheme(theme.name)}
+                  $selected={themeSelected?.name === theme.name}
+                >
+                  {theme.name}
+                </ThemeButton>
+              ))}
+            </div>
+            <div
+              style={{
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+                padding: "1rem 0",
+                fontSize: "1.5rem",
+              }}
+            >
+              {themeSelected.description}
             </div>
             <StyledMenuInfo>
               <StyledItemCount>{`총 ${productList?.total || 0}건`}</StyledItemCount>
