@@ -1,9 +1,33 @@
-import { Box, Paper, Tab, Tabs } from "@mui/material";
+import { Box, Button, Paper, Tab, Tabs } from "@mui/material";
 import BoManagerLayout from "components/bo/commons/BoManagerLayout";
 import BoOrderTable from "components/bo/manager/BoOrderTable";
 import React from "react";
-
+import SendIcon from "@mui/icons-material/Send";
+import { grey } from "@mui/material/colors";
+import axios from "axios";
 const PageManagerOrder: React.FC = () => {
+  const downloadExcel = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/manager/orders/exceldown`, {
+        responseType: "blob", // 데이터 형식을 Blob으로 설정
+        headers: {
+          Authorization: localStorage.getItem("Authorization"),
+        },
+      });
+
+      // Blob 데이터를 URL로 생성
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // 가짜 링크를 만들어서 클릭하는 방식으로 다운로드
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "example.xls"); // 다운로드될 파일 이름 지정
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading excel file:", error);
+    }
+  };
   return (
     <BoManagerLayout>
       <Box sx={{ display: "flex", width: "100%", height: "100%" }}>
@@ -15,6 +39,25 @@ const PageManagerOrder: React.FC = () => {
               </Tabs>
             </Box>
             <BoOrderTable />
+            <Box
+              sx={{
+                display: "flex",
+                boxSizing: "border-box",
+                alignItems: "end",
+                justifyContent: "flex",
+                paddingRight: 2,
+                paddingBottom: 2,
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={downloadExcel}
+                sx={{ backgroundColor: grey[800], marginRight: 2 }}
+                endIcon={<SendIcon />}
+              >
+                Excel 다운
+              </Button>
+            </Box>
           </Paper>
         </Box>
       </Box>

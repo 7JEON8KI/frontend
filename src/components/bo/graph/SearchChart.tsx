@@ -48,7 +48,7 @@ const SearchChart: React.FC = () => {
       data: datas.map(item => item.amount),
     },
   ];
-  return <ReactApexChart height={"512px"} options={options} series={series} />;
+  return <ReactApexChart height={"400px"} options={options} series={series} />;
 };
 
 export default SearchChart;
