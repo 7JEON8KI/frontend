@@ -209,7 +209,7 @@ const MyReview: React.FC = () => {
               verticalAlign: "middle",
             }}
           >
-            리뷰 작성이 가능한 상품이 없습니다.
+            작성한 리뷰가 없습니다.
           </span>
         </div>
       )}

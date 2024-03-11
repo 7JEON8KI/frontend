@@ -8,22 +8,43 @@ import scrollToTop from "utils/scrollToTop";
 import AddCart from "assets/images/icons/add_cart.png";
 import cartApi from "apis/cartApi";
 import likeApi from "apis/likeApi";
+import { useDispatch } from "react-redux";
+import { setCnt } from "feature/cartSlice";
 
 interface Props {
   product: ProductResponseDTO;
 }
 
 const Product = ({ product }: Props): JSX.Element => {
+  const dispatch = useDispatch();
+
   const [likeProduct, setLikeProduct] = React.useState<number>(product.isLike);
   const navigate = useNavigate();
 
-  const handleAddCart = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: number) => {
+  const handleAddCart = async (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
+    productId: number,
+  ) => {
+    e.preventDefault();
     e.stopPropagation();
-    await cartApi.saveCart({ productId: productId, cartProductCnt: 1 });
-    alert("장바구니에 상품이 추가되었습니다.");
+    await cartApi
+      .saveCart({ productId: productId, cartProductCnt: 1 })
+      .then(() => {
+        cartApi.getCartsCount().then(res => {
+          dispatch(setCnt(res.data));
+        });
+
+        alert("장바구니에 상품이 추가되었습니다.");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("상품 추가에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
-  const toggleLike = async () => {
+  const toggleLike = async (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (likeProduct === 1) {
       // 현재 찜한 상태이면 찜 해제 API 호출
       await likeApi.deleteLikes(product.productId);
@@ -35,11 +56,21 @@ const Product = ({ product }: Props): JSX.Element => {
     }
   };
 
+  const moveProductDetail = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLDivElement>,
+  ): void => {
+    e.stopPropagation();
+    scrollToTop({});
+    navigate(`/detail/${product.productId}`);
+  };
+
   return (
     <ProductContainer
-      onClick={() => {
-        scrollToTop({});
-        navigate(`/detail/${product.productId}`);
+      onClick={moveProductDetail}
+      onKeyDown={e => {
+        if (e.key === "Enter") {
+          moveProductDetail(e);
+        }
       }}
       tabIndex={0}
     >
@@ -56,9 +87,13 @@ const Product = ({ product }: Props): JSX.Element => {
               padding: "0 0.25rem",
               border: "1px solid lightgray",
             }}
-            onClick={e => {
-              e.stopPropagation();
-              toggleLike();
+            onClick={toggleLike}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleLike(e);
+              }
             }}
           >
             ♥
@@ -67,6 +102,11 @@ const Product = ({ product }: Props): JSX.Element => {
             style={{ width: "35px", height: "35px", display: "flex", justifyContent: "center", alignItems: "center" }}
             onClick={e => {
               handleAddCart(e, product.productId);
+            }}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                handleAddCart(e, product.productId);
+              }
             }}
           >
             <img

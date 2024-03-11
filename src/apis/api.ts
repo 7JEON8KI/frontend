@@ -26,6 +26,11 @@ api.interceptors.response.use(
   },
 
   function (error) {
+    if (error.response.status === 401) {
+      // Throw a custom error or modify the error object
+      error.isAuthError = true;
+      return Promise.reject(error);
+    }
     //response.config.url 이 reviews로 시작하는 경우, 404 에러를 무시
     if (error.response.status === 404) {
       if (error.config.url.startsWith("/reviews/member/") && error.config.method === "get") {
