@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import cartReducer from "feature/login/cartSlice";
-import loginReducer from "feature/login/loginSlice";
+import cartReducer from "feature/cartSlice";
+import loginReducer from "feature/loginSlice";
+import recentProductReducer from "feature/recentProductSlice";
 
 export const mealkeatStore = configureStore({
   reducer: {
     cart: cartReducer,
     auth: loginReducer,
+    recent: recentProductReducer,
   },
 });
 

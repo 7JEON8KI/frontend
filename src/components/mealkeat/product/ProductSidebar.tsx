@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import scrollToTop from "utils/scrollToTop";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
 
 export const StyledSidebarDiv = styled.div`
   min-height: 100vh;
@@ -66,6 +68,7 @@ export const StyledScrollToTop = styled.button.attrs({ type: "button" })`
 `;
 
 const ProductSidebar = () => {
+  const recentProduct = useSelector((state: RootState) => state.recent);
   const navigate = useNavigate();
 
   return (
@@ -73,13 +76,14 @@ const ProductSidebar = () => {
       <StyledSidebarAside>
         <StyledInfoDivFirst>
           <div style={{ width: "90%", height: "200px", background: "white", margin: "15px auto" }}>
-            <img src="https://mealkeat-s3.s3.ap-northeast-2.amazonaws.com/mealkeat/products/thumbnail/203_c14fa1c1-d901-11ee-9cf3-ac198ebc401d.jpg" />
+            {recentProduct.src !== "" && <img src={recentProduct.src} alt={recentProduct.title} />}
           </div>
-          <p style={{ width: "80%", margin: "auto" }}>당일 제조하여 더욱 신선한 쿡솜씨 안동찜닭</p>
+          <p style={{ width: "80%", margin: "auto" }}>{recentProduct.title}</p>
         </StyledInfoDivFirst>
         <StyledInfoButton
           onClick={() => {
-            navigate("/detail/503");
+            if (recentProduct.productId === -1) return;
+            navigate(`/detail/${recentProduct.productId}`);
             scrollToTop({});
           }}
         >

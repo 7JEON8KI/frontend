@@ -24,7 +24,9 @@ import cartApi from "apis/cartApi";
 import { CartProduct } from "models/mealkeat/CartModels";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 import { setCnt } from "feature/cartSlice";
-import { useDispatch } from "react-redux";
+import { setRecent } from "feature/recentProductSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store";
 
 interface Review {
   reviewId: number;
@@ -50,6 +52,7 @@ interface Review {
 
 const PageDetail: React.FC = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { id } = useParams();
   const navigate = useNavigate();
   const [clickDetailView, setClickDetailView] = React.useState<boolean>(false);
@@ -76,6 +79,13 @@ const PageDetail: React.FC = () => {
     const urlList: string[] = detail.data?.productDetail !== null ? detail.data?.productDetail?.split(",") : [];
     const imageList = urlList?.map(url => url?.replace(/'/g, "")?.trim());
     setDetailImageList(imageList.length > 0 ? imageList : []);
+
+    const recentProduct = {
+      src: detail.data.thumbnailImageUrl,
+      title: detail.data.productName,
+      productId: detail.data.productId,
+    };
+    dispatch(setRecent(recentProduct));
   };
 
   const getReviewList = async () => {
@@ -480,7 +490,6 @@ const PageDetail: React.FC = () => {
                 display: "flex",
                 flexDirection: "column",
                 paddingBottom: "80px",
-                borderBottom: "1px solid lightgray",
               }}
             >
               <span style={{ fontWeight: "bold", fontSize: "2rem" }}>다른 고객이 함께 본 상품입니다</span>
@@ -490,14 +499,16 @@ const PageDetail: React.FC = () => {
               </div>
             </div>
           )}
-          {recommendWine.length > 0 && (
+          {isLoggedIn && recommendWine.length > 0 && (
             <div
               style={{
                 width: "1320px",
-                margin: "60px auto",
+                margin: "auto",
                 gap: "1rem",
                 display: "flex",
                 flexDirection: "column",
+                borderTop: "1px solid lightgray",
+                padding: "60px 0",
               }}
             >
               <span style={{ fontWeight: "bold", fontSize: "2rem" }}>현재 상품과 어울리는 와인입니다</span>
