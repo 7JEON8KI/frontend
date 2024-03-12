@@ -168,6 +168,9 @@ const ProductForm: React.FC = () => {
                   sx={{ marginLeft: 2 }}
                 />
               </Box>
+              <Typography variant="subtitle1" gutterBottom>
+                품목보고번호 입력 시 식품안전나라에서 재료를 조회해 저장합니다
+              </Typography>
               <Box sx={{ marginBottom: 2 }}>
                 <TextField
                   id="foodId"

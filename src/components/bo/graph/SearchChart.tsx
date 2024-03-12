@@ -1,24 +1,33 @@
-import ReactApexChart from "react-apexcharts";
+import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import React from "react";
 
 interface SearchData {
-  month: string;
-  amount: number;
+  keyword: string;
+  Search: number;
 }
+
 const datas: SearchData[] = [
-  { month: "2023-03", amount: 127400 },
-  { month: "2023-04", amount: 112900 },
-  { month: "2023-05", amount: 113700 },
-  { month: "2023-06", amount: 101400 },
-  { month: "2023-07", amount: 104200 },
-  { month: "2023-08", amount: 114100 },
-  { month: "2023-09", amount: 83500 },
-  { month: "2023-10", amount: 83800 },
-  { month: "2023-11", amount: 80600 },
-  { month: "2023-12", amount: 95200 },
-  { month: "2024-01", amount: 68300 },
-  { month: "2024-02", amount: 69900 },
+  { keyword: "장사의신 밀키트", Search: 13990 },
+  { keyword: "캠핑 밀키트", Search: 12570 },
+  { keyword: "떡볶이 밀키트", Search: 10350 },
+  { keyword: "밀키트 전문점", Search: 7870 },
+  { keyword: "마라탕 밀키트", Search: 7050 },
+  { keyword: "밀키트 추천", Search: 5520 },
+  { keyword: "부대찌개 밀키트", Search: 5420 },
+  { keyword: "밀키트 만들기", Search: 3730 },
+  { keyword: "홈플러스 밀키트", Search: 3580 },
+  { keyword: "낙곱새 밀키트", Search: 2670 },
+  { keyword: "맛집 밀키트", Search: 2390 },
+  { keyword: "감바스 밀키트", Search: 2150 },
+  { keyword: "애슐리 밀키트", Search: 2010 },
+  { keyword: "밀키드", Search: 2000 },
+  { keyword: "파스타 밀키트", Search: 1690 },
+  { keyword: "월남쌈 밀키트", Search: 1660 },
+  { keyword: "닭갈비 밀키트", Search: 1630 },
+  { keyword: "미역국 밀키트", Search: 1260 },
+  { keyword: "요리키트", Search: 1210 },
+  { keyword: "무인밀키트", Search: 1060 },
 ];
 
 const SearchChart: React.FC = () => {
@@ -38,17 +47,17 @@ const SearchChart: React.FC = () => {
       },
     },
     xaxis: {
-      categories: datas.map(item => item.month),
+      categories: datas.map(item => item.keyword),
     },
   };
 
   const series = [
     {
       name: "검색량",
-      data: datas.map(item => item.amount),
+      data: datas.map(item => item.Search),
     },
   ];
-  return <ReactApexChart height={"400px"} options={options} series={series} />;
+  return <Chart type="bar" height={"400px"} options={options} series={series} />;
 };
 
 export default SearchChart;
