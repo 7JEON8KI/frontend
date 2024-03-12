@@ -14,7 +14,14 @@ const PageAdminMain: React.FC = () => {
           <Grid item xs={4} height={"50%"} gridColumn={6} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box paddingTop={2}>
-                <h3>판매금액(일별)</h3>
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  밀킷 판매금액(일별)
+                </span>
               </Box>
               <Box paddingRight={2}>
                 <RevenueChart />
@@ -22,7 +29,7 @@ const PageAdminMain: React.FC = () => {
             </Paper>
           </Grid>
           <Grid item xs={8} height={500} width={"100%"} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "100%" }}>
+            <Paper elevation={4} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box sx={{ p: 2 }}>
                 <span
                   style={{
@@ -30,7 +37,7 @@ const PageAdminMain: React.FC = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  가장 많이 팔린 상품
+                  밀킷 - 가장 많이 팔린 상품
                 </span>
                 <BestList />
               </Box>
@@ -39,7 +46,14 @@ const PageAdminMain: React.FC = () => {
           <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box paddingTop={2}>
-                <h3>판매량(일별)</h3>
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  밀킷 판매량(일별)
+                </span>
               </Box>
               <SaleAmountChart />
             </Paper>
@@ -47,7 +61,14 @@ const PageAdminMain: React.FC = () => {
           <Grid item xs={8} height={500} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
               <Box paddingTop={2}>
-                <h3>밀키트 검색량(월별)</h3>
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  네이버 밀키트 검색량(월별)
+                </span>
               </Box>
               <Box paddingRight={2} height={400}>
                 <SearchChart />
