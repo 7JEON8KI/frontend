@@ -113,3 +113,37 @@ export const ProductPrice = styled.p`
   font-size: 1.25rem;
   width: 100%;
 `;
+
+export const ModalIngBtnWant = styled.div`
+  & label {
+    display: inline-block;
+    padding: 0.76rem 1rem;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+
+  & input:checked + label {
+    background-color: #fd6f21;
+    color: white;
+  }
+`;
+
+export const ModalIngBtnWont = styled.div`
+  & label {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+
+  & input:checked + label {
+    background-color: #237c60;
+    color: white;
+  }
+`;

@@ -52,10 +52,10 @@ const ModalContainer = ({
         style={{
           width: "100%",
           height: "40px",
-          background: "lightgray",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          borderBottom: "1px solid #f4f4f4",
         }}
       >
         <span style={{ fontWeight: "bold", fontSize: "1.25rem", paddingLeft: "1rem" }}>{title}</span>
