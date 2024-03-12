@@ -490,7 +490,16 @@ const PageDetail: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem", margin: "auto", width: "1320px" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
             {productDetail.productType !== "wine" && (
-              <div style={{ display: "flex", margin: "auto", gap: "1rem", flexWrap: "wrap", width: "80%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  margin: "auto",
+                  gap: "1rem",
+                  flexWrap: "wrap",
+                  width: "80%",
+                  justifyContent: "center",
+                }}
+              >
                 {ingredients?.map(ingredient => (
                   <span
                     style={{
