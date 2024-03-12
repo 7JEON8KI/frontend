@@ -73,7 +73,7 @@ const BoManagerModal = ({ data, onClose }: Props) => {
         }}
       >
         <Typography variant="h5" sx={{ textAlign: "center", paddingTop: 2 }}>
-          사용자 정보
+          판매자 정보
         </Typography>
         <Divider sx={{ margin: 3 }} />
         <Grid container>

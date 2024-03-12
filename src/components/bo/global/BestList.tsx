@@ -71,7 +71,7 @@ export default function BestList() {
           <div
             style={{
               width: "250px",
-              height: "250px",
+              height: "200px",
               margin: "10px",
             }}
           >

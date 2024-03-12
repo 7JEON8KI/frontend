@@ -156,7 +156,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align="center"
             // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ fontWeight: "bold", backgroundColor: green[200] }}
+            sx={{ fontWeight: "bold", backgroundColor: green[200], minWidth: 130 }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -177,8 +177,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 export default function BoOrderTable() {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof SalesOrder>("productId");
+  const [order, setOrder] = React.useState<Order>("desc");
+  const [orderBy, setOrderBy] = React.useState<keyof SalesOrder>("orderProductId");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -272,10 +272,10 @@ export default function BoOrderTable() {
   );
   return (
     <>
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableContainer sx={{ maxHeight: 550 }}>
-            <Table sx={{ minWidth: 750, minHeight: 550 }} aria-labelledby="tableTitle" size={"small"}>
+      <Box>
+        <Paper sx={{ mb: 2 }}>
+          <TableContainer>
+            <Table sx={{ minWidth: 750, minHeight: 250 }} aria-labelledby="tableTitle" size={"small"}>
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}

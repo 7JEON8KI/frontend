@@ -24,10 +24,6 @@ export const ModalBlackOut = styled.div`
 `;
 
 const BoOrderModal = ({ salesOrder, products, onClose }: Props) => {
-  const handleClick = () => {
-    onClose();
-  };
-
   return (
     <ModalBlackOut>
       <Paper
@@ -43,7 +39,7 @@ const BoOrderModal = ({ salesOrder, products, onClose }: Props) => {
         }}
       >
         <Typography variant="h5" sx={{ textAlign: "center", paddingTop: 2 }}>
-          사용자 정보
+          구매 내역 정보
         </Typography>
         <Divider sx={{ margin: 3 }} />
         <Grid container>
@@ -54,19 +50,36 @@ const BoOrderModal = ({ salesOrder, products, onClose }: Props) => {
             <TextField id="price" label="제품 가격" value={products.price} sx={{ margin: 1 }} />
           </Grid>
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField
+              id="allPrice"
+              label="총 판매금액"
+              value={
+                salesOrder.orderProductCount *
+                ((salesOrder.orderProductPrice * (100 - Number(products.discountRate))) / 100)
+              }
+              sx={{ margin: 1 }}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TextField id="orderAmount" label="주문량" value={salesOrder.orderProductCount} sx={{ margin: 1 }} />
           </Grid>
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TextField id="stock" label="재고" value={products.stock} sx={{ margin: 1 }} />
           </Grid>
-
           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <TextField
-              id="allPrice"
-              label="총 판매금액"
-              value={salesOrder.orderProductCount * salesOrder.orderProductPrice}
-              sx={{ margin: 1 }}
-            />
+            <TextField id="orderRequired" label="요청사항" value={salesOrder.orderRequired} sx={{ margin: 1 }} />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField id="address" label="주소" value={salesOrder.address} sx={{ margin: 1 }} />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField id="zipCode" label="우편번호" value={salesOrder.zipCode} sx={{ margin: 1 }} />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField id="receiverName" label="수령인" value={salesOrder.receiverName} sx={{ margin: 1 }} />
+          </Grid>
+          <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <TextField id="phoneNumber" label="전화번호" value={salesOrder.phoneNumber} sx={{ margin: 1 }} />
           </Grid>
         </Grid>
         <Box
@@ -82,14 +95,11 @@ const BoOrderModal = ({ salesOrder, products, onClose }: Props) => {
         >
           <Button
             variant="contained"
-            onClick={handleClick}
-            sx={{ backgroundColor: grey[800], marginRight: 10 }}
+            onClick={onClose}
+            sx={{ backgroundColor: grey[500], marginLeft: 4 }}
             endIcon={<SendIcon />}
           >
-            수정
-          </Button>
-          <Button variant="contained" onClick={onClose} sx={{ backgroundColor: grey[500] }} endIcon={<SendIcon />}>
-            취소
+            닫기
           </Button>
         </Box>
       </Paper>
