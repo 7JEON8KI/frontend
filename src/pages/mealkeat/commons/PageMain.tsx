@@ -23,6 +23,7 @@ import promotionApi from "apis/promotionApi";
 import recommendApi from "apis/recommendApi";
 import formatCurrency from "utils/formatCurrency";
 import calculateDiscountPrice from "utils/calculateDiscoundPrice";
+import { ThemeName } from "constants/productConstants";
 
 interface Banner {
   bannerId: number;
@@ -137,9 +138,16 @@ const PageMain: React.FC = () => {
               <div key={index} className="sliderItem">
                 <img
                   src={item?.bannerImageUrl}
+                  style={{ cursor: "pointer" }}
                   alt="푹 쉬고 싶은 주말! 푹 끓여 먹는 국물요리 기획전 3.1 ~ 3.3"
                   title={item?.bannerTitle}
                   draggable={false}
+                  onClick={() => {
+                    scrollToTop({});
+                    navigate("/theme", {
+                      state: { themeName: item?.bannerTitle == "캠핑" ? ThemeName.CAMPING : ThemeName.HOME },
+                    });
+                  }}
                 />
               </div>
             ))}
