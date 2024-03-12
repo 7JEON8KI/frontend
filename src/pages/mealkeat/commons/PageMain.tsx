@@ -219,14 +219,11 @@ const PageMain: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const modalShown = localStorage.getItem("modalOnce");
-
-    if (!modalShown) {
-      setMealModal(isLoggedIn ? true : false);
-
-      if (isLoggedIn) {
-        localStorage.setItem("modalOnce", "true");
-      }
+    if (localStorage.getItem("modalOnce") === "true") {
+      setMealModal(false);
+    } else if (isLoggedIn) {
+      setMealModal(true);
+      localStorage.setItem("modalOnce", "true");
     }
   }, [isLoggedIn]);
 
