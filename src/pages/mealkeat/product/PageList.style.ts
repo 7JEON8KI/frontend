@@ -40,6 +40,7 @@ export const StyledMenuTitle = styled.p`
   font-size: 30px;
   text-align: center;
   margin-bottom: 60px;
+  font-weight: bold;
 `;
 
 export const StyledMenuInfo = styled.div`

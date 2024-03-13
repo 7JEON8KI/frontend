@@ -10,6 +10,7 @@ interface ModalContainerProps {
   title?: string;
   topCloseShow?: boolean;
   ariaHideApp?: boolean;
+  scroll?: boolean;
 }
 
 const customStyles = {
@@ -35,6 +36,7 @@ const ModalContainer = ({
   title = "모달 타이틀",
   topCloseShow = true,
   ariaHideApp,
+  scroll = false,
 }: ModalContainerProps) => (
   <Modal
     isOpen={isOpen}
@@ -52,10 +54,10 @@ const ModalContainer = ({
         style={{
           width: "100%",
           height: "40px",
-          background: "lightgray",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          borderBottom: "1px solid #f4f4f4",
         }}
       >
         <span style={{ fontWeight: "bold", fontSize: "1.25rem", paddingLeft: "1rem" }}>{title}</span>
@@ -74,7 +76,11 @@ const ModalContainer = ({
           </button>
         )}
       </div>
-      <div style={{ width: width, height: `calc(${parseInt(height, 10) - 40}px)` }}>{children}</div>
+      <div
+        style={{ width: width, height: `calc(${parseInt(height, 10) - 40}px)`, overflow: scroll ? "scroll" : "hidden" }}
+      >
+        {children}
+      </div>
     </div>
   </Modal>
 );

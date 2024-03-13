@@ -3,6 +3,7 @@ import { css } from "styled-components";
 /** 자주 사용하는 색상들 */
 const colors = {
   mainColor: "#fd6f21",
+  lightMainColor: "#ff9e6d",
   // bgColor: "#f7f7f7",
   bgColor: "#ffffff",
   pointSubColor: "#237c60",
