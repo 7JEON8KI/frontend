@@ -20,6 +20,7 @@ export const productApi = {
   getProductDetail: ({ productId }: ProductDetailParams) => api.get(`/products/${productId}`),
   getThemeProducts: ({ ...body }: ProductThemeRequest) => api.post("/products/theme", body),
   getWineProducts: ({ ...body }: ProductWineRequest) => api.post("/products/wine", body),
+  getProductIngredients: ({ productId }: ProductDetailParams) => api.get(`/products/ingredients/${productId}`),
 };
 
 export default productApi;

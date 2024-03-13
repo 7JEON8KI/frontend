@@ -7,6 +7,7 @@ import styled from "styled-components";
 import scrollToTop from "utils/scrollToTop";
 import { useNavigate, useLocation } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
+import calculateDiscountPrice from "utils/calculateDiscoundPrice";
 
 export const MoreProductsButton = styled.button.attrs({ type: "button" })`
   width: 245px;
@@ -115,7 +116,27 @@ const PageMealkeatResult: React.FC = () => {
               >
                 <p style={{ fontSize: "40px", fontWeight: "bold" }}>{product.productName}</p>
                 <p style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {formatCurrency({ amount: product.price, locale: "ko-KR" })}
+                  {product?.discountRate > 0 ? (
+                    <>
+                      <span className="text-[2rem] text-red">{product?.discountRate}%</span>
+                      <span className="text-[2rem] font-bold">
+                        {formatCurrency({
+                          amount: calculateDiscountPrice({
+                            price: product?.price,
+                            discountRate: product?.discountRate,
+                          }),
+                          locale: "ko-KR",
+                        })}
+                      </span>
+                      <span className="text-[1rem] text-darkGrey line-through">
+                        {formatCurrency({ amount: product?.price, locale: "ko-KR" })}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[2rem] font-bold">
+                      {formatCurrency({ amount: product?.price, locale: "ko-KR" })}
+                    </span>
+                  )}
                 </p>
                 <GoProductButton
                   onClick={() => {

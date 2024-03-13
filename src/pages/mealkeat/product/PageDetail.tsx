@@ -50,6 +50,11 @@ interface Review {
   modifiedAt: number;
 }
 
+interface Ingredients {
+  ingredientId: number;
+  ingredientName: string;
+}
+
 const PageDetail: React.FC = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -64,6 +69,10 @@ const PageDetail: React.FC = () => {
   const [purchaseCnt, setPurchaseCnt] = React.useState<number>(1);
   const [cartModal, setCartModal] = React.useState<boolean>(false);
   const [reviewList, setReviewList] = React.useState<Review[]>([]);
+  const [ingredients, setIngredients] = React.useState<Ingredients[]>([]);
+  const [reviewOpen, setReviewOpen] = React.useState<boolean>(false);
+  const [selectReview, setSelectReview] = React.useState<Review>({} as Review);
+
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
     if (detailContainer) {
@@ -154,15 +163,32 @@ const PageDetail: React.FC = () => {
     navigate("/payment", { state: { cartList: [{ ...currentProduct }] } });
   };
 
+  const getIngredients = async () => {
+    const ingredients = await productApi.getProductIngredients({ productId: id ? Number(id) : 1 });
+    if (ingredients) {
+      console.log(ingredients);
+      setIngredients(ingredients.data);
+    }
+  };
+
   useEffect(() => {
-    getProductDetail();
-    getReviewList();
+    if (id) {
+      getProductDetail();
+      getReviewList();
+    }
+
     return () => {};
   }, [id]);
 
   useEffect(() => {
     if (productDetail.thumbnailImageUrl !== "" && productDetail.productName !== "") {
-      if (productDetail.productType !== "wine") getRecommendProduct();
+      if (productDetail.productType !== "wine") {
+        getRecommendProduct();
+        getIngredients();
+      } else {
+        setIngredients([]);
+        setRecommendProduct([]);
+      }
       getRecommendWine();
     }
   }, [productDetail]);
@@ -186,7 +212,11 @@ const PageDetail: React.FC = () => {
                 <span className="h-[0.5rem] w-[3rem]"></span>
                 <span className="text-[2rem] font-bold">{productDetail?.productName}</span>
                 <div className="flex w-1/2 items-baseline gap-[2rem]">
-                  {productDetail && productDetail?.discountRate > 0 ? (
+                  {productDetail && productDetail?.stock === 0 ? (
+                    <span className="text-[2rem] font-bold text-darkGrey line-through">
+                      {formatCurrency({ amount: productDetail?.price, locale: "ko-KR" })}
+                    </span>
+                  ) : productDetail?.discountRate > 0 ? (
                     <>
                       <span className="text-[2rem] text-red">{productDetail?.discountRate}%</span>
                       <span className="text-[2rem] font-bold">
@@ -228,7 +258,7 @@ const PageDetail: React.FC = () => {
               <ProductFlexCol $borderTop="1px solid #c3c6c9" $padding="1rem 0" $gap="1rem">
                 <ProductInfoListContainer>
                   <span>용량</span>
-                  <span>{productDetail?.amount}g</span>
+                  <span>{`${productDetail?.amount}${productDetail?.productType === "wine" ? "ml" : "g"}`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>칼로리</span>
@@ -236,7 +266,7 @@ const PageDetail: React.FC = () => {
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>보관방법</span>
-                  <span>{productDetail?.storage}</span>
+                  <span>{`${productDetail?.productType === "wine" ? "서늘하고 직사광선이 없는 곳에 보관" : productDetail?.storage}`}</span>
                 </ProductInfoListContainer>
                 <ProductInfoListContainer>
                   <span>배송비</span>
@@ -253,23 +283,25 @@ const PageDetail: React.FC = () => {
                   <div className="flex justify-between">
                     <div className="flex items-center justify-start gap-[0.5rem]">
                       <StyledAmountBtn
-                        disabled={purchaseCnt <= 1}
-                        aria-disabled={purchaseCnt <= 1}
+                        disabled={purchaseCnt <= 1 || productDetail?.stock === 0}
+                        aria-disabled={purchaseCnt <= 1 || productDetail?.stock === 0}
                         onClick={() => setPurchaseCnt(prev => prev - 1)}
                       >
                         -
                       </StyledAmountBtn>
                       <ProductAmountInput value={purchaseCnt} readOnly aria-readonly />
                       <StyledAmountBtn
-                        disabled={purchaseCnt >= 10}
-                        aria-disabled={purchaseCnt >= 10}
+                        disabled={purchaseCnt >= 10 || productDetail?.stock === 0}
+                        aria-disabled={purchaseCnt >= 10 || productDetail?.stock === 0}
                         onClick={() => setPurchaseCnt(prev => prev + 1)}
                       >
                         +
                       </StyledAmountBtn>
                     </div>
                     <div>
-                      {productDetail &&
+                      {productDetail && productDetail?.stock === 0 ? (
+                        <div>일시 품절</div>
+                      ) : (
                         formatCurrency({
                           amount:
                             purchaseCnt *
@@ -278,7 +310,8 @@ const PageDetail: React.FC = () => {
                               discountRate: productDetail?.discountRate,
                             }),
                           locale: "ko-KR",
-                        })}
+                        })
+                      )}
                     </div>
                   </div>
                 </ProductFlexCol>
@@ -292,18 +325,24 @@ const PageDetail: React.FC = () => {
                     marginTop: "1rem",
                   }}
                 >
-                  합계
-                  <span className="text-[2rem] font-bold text-red">
-                    {formatCurrency({
-                      amount:
-                        purchaseCnt *
-                        calculateDiscountPrice({
-                          price: productDetail?.price,
-                          discountRate: productDetail?.discountRate,
-                        }),
-                      locale: "ko-KR",
-                    })}
-                  </span>
+                  {productDetail?.stock === 0 ? (
+                    <div className="text-[2rem] font-bold text-red">일시 품절</div>
+                  ) : (
+                    <>
+                      <div>합계</div>
+                      <span className="text-[2rem] font-bold text-red">
+                        {formatCurrency({
+                          amount:
+                            purchaseCnt *
+                            calculateDiscountPrice({
+                              price: productDetail?.price,
+                              discountRate: productDetail?.discountRate,
+                            }),
+                          locale: "ko-KR",
+                        })}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
               <div
@@ -320,7 +359,6 @@ const PageDetail: React.FC = () => {
                   style={{
                     width: "60px",
                     height: "60px",
-                    // border: "1px solid #5f5f5f",
                     boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 3px",
                     display: "flex",
                     flexDirection: "column",
@@ -373,7 +411,6 @@ const PageDetail: React.FC = () => {
               </div>
             </ProductDescription>
           </ProductDetailContainer>
-
           {reviewList.length > 0 && (
             <div
               style={{
@@ -431,6 +468,10 @@ const PageDetail: React.FC = () => {
                       width: "180px",
                       height: "180px",
                     }}
+                    onClick={() => {
+                      setReviewOpen(true);
+                      setSelectReview(review);
+                    }}
                   >
                     <img
                       src={review.reviewImageUrl}
@@ -454,6 +495,33 @@ const PageDetail: React.FC = () => {
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem", margin: "auto", width: "1320px" }}>
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>상품 상세 설명</span>
+            {productDetail.productType !== "wine" && (
+              <div
+                style={{
+                  display: "flex",
+                  margin: "auto",
+                  gap: "1rem",
+                  flexWrap: "wrap",
+                  width: "80%",
+                  justifyContent: "center",
+                }}
+              >
+                {ingredients?.map(ingredient => (
+                  <span
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "bold",
+                      background: "#ff9e6d",
+                      padding: "1rem",
+                      borderRadius: "10px",
+                    }}
+                    key={ingredient.ingredientId}
+                  >
+                    {ingredient.ingredientName}
+                  </span>
+                ))}
+              </div>
+            )}
             <div id="detail_image_container" style={{ maxHeight: "900px", overflow: "hidden" }}>
               {detailImageList?.map(url => (
                 <img
@@ -535,6 +603,112 @@ const PageDetail: React.FC = () => {
             navigate("/cart");
           }}
         />
+      </ModalContainer>
+      <ModalContainer
+        title="리뷰"
+        isOpen={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        width="1200px"
+        height="700px"
+        scroll={true}
+      >
+        <div
+          className="review-list"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            padding: "1.5rem 1rem",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                width: "550px",
+                fontSize: "20px",
+                fontWeight: "bold",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                gap: "1rem",
+                margin: "0 0 3rem",
+              }}
+            >
+              <span>{selectReview.memberNickname}</span>
+              <span>{selectReview.modifiedAt}</span>
+              <span
+                className="review-rating"
+                style={{
+                  fontSize: "30px",
+                }}
+              >
+                {Array.from({ length: 5 }, (_, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      color: index < parseInt(selectReview.reviewStar) ? "#FD6F21" : "grey",
+                    }}
+                  >
+                    ♥
+                  </span>
+                ))}
+              </span>
+            </div>
+            <div
+              className="review-item"
+              style={{
+                border: "1px solid #ccc",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                className="review-image-container"
+                style={{
+                  width: "500px",
+                  overflow: "hidden",
+                  margin: "2rem",
+                }}
+              >
+                <img
+                  draggable={false}
+                  src={selectReview.reviewImageUrl}
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                  className="review-image"
+                />
+              </div>
+              <div
+                className="review-content"
+                style={{
+                  width: "700px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  marginBottom: "1rem",
+                }}
+              >
+                <div
+                  className="review-text"
+                  style={{
+                    fontSize: "1.2rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {selectReview.reviewContent}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </ModalContainer>
     </Layout>
   );

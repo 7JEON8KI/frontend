@@ -15,3 +15,27 @@ export enum ThemeName {
   SOLO = "1인가구",
   CAMPING = "캠핑",
 }
+
+export interface Theme {
+  name: ThemeName;
+  description: string;
+}
+
+interface Themes {
+  [key: string]: Theme;
+}
+
+export const Themes: Themes = {
+  [ThemeName.HOME]: {
+    name: ThemeName.HOME,
+    description: "집에서의 완벽한 파티를 위한, 세련되고 간편한 밀키트",
+  },
+  [ThemeName.SOLO]: {
+    name: ThemeName.SOLO,
+    description: "혼자라도 완벽한 식사를!",
+  },
+  [ThemeName.CAMPING]: {
+    name: ThemeName.CAMPING,
+    description: "야외에서도 맛있고 간편하게, 캠핑의 즐거움을 극대화할 밀키트로 자연 속에서의 식사를 업그레이드",
+  },
+};

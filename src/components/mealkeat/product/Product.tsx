@@ -27,6 +27,10 @@ const Product = ({ product }: Props): JSX.Element => {
   ) => {
     e.preventDefault();
     e.stopPropagation();
+    if (product.stock === 0) {
+      alert("일시 품절된 상품입니다.");
+      return;
+    }
     await cartApi
       .saveCart({ productId: productId, cartProductCnt: 1 })
       .then(() => {
@@ -121,7 +125,7 @@ const Product = ({ product }: Props): JSX.Element => {
         <ContentText $title={true} title={product.productName}>
           {product.productName}
         </ContentText>
-        <ContentPrice>
+        <ContentPrice $soldOut={product.stock === 0 ? true : false}>
           <div>{product?.discountRate > 0 && `${product.discountRate}%`}</div>
           <div>
             {formatCurrency({
@@ -131,7 +135,9 @@ const Product = ({ product }: Props): JSX.Element => {
           </div>
           <div>{product?.discountRate > 0 && formatCurrency({ amount: product.price, locale: "ko-KR" })}</div>
         </ContentPrice>
-        {product.stock === 0 && <div>일시 품절</div>}
+        {product.stock === 0 && (
+          <div style={{ color: "#fd6f21", fontSize: "1.5rem", fontWeight: "bold" }}>일시 품절</div>
+        )}
       </div>
     </ProductContainer>
   );

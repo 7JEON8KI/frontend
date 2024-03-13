@@ -55,7 +55,11 @@ export const ContentText = styled.div<ContentTextProps>`
   white-space: wrap;
 `;
 
-export const ContentPrice = styled.div`
+interface ContentPriceProps {
+  $soldOut?: boolean;
+}
+
+export const ContentPrice = styled.div<ContentPriceProps>`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -66,10 +70,12 @@ export const ContentPrice = styled.div`
   div:nth-child(1) {
     font-size: ${({ theme }) => theme.fontSize.xxl};
     color: ${({ theme }) => theme.colors.mainColor};
+    ${({ $soldOut }) => $soldOut && "text-decoration: line-through"};
   }
   div:nth-child(2) {
     font-size: ${({ theme }) => theme.fontSize.xxl};
     font-weight: 600;
+    ${({ $soldOut, theme }) => $soldOut && `text-decoration: line-through; color: ${theme.colors.mediumGrey}`};
   }
   div:nth-child(3) {
     font-size: ${({ theme }) => theme.fontSize.xl};
