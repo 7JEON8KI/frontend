@@ -228,7 +228,7 @@ const ProductForm: React.FC = () => {
         xs={6}
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
       >
-        <Paper elevation={4} sx={{ width: "95%", height: "100%", overflow: "auto" }}>
+        <Paper elevation={4} sx={{ width: "95%", height: 900, overflow: "auto" }}>
           <Box sx={{ display: "flex", flexDirection: "column", margin: 5 }}>
             <Typography variant="h6" gutterBottom>
               썸네일 이미지
