@@ -11,7 +11,7 @@ const PageManagerProduct: React.FC = () => {
         <Box sx={{ width: "100%", height: "100%" }}>
           <Paper elevation={8} sx={{ p: 2, m: 2, height: "95%" }}>
             <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
-              <Tabs value="1" centered>
+              <Tabs value={0} centered>
                 <Tab label="판매 상품 리스트" />
               </Tabs>
             </Box>

@@ -8,7 +8,7 @@ import SaleAmountChart from "components/bo/graph/SaleAmountChart";
 const PageManagerMain: React.FC = () => {
   return (
     <BoManagerLayout>
-      <Box display="flex" flexWrap="wrap" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
+      <Box display="flex" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
         <Grid container height={"100%"} width={"100%"} spacing={6} maxHeight={"90vh"}>
           <Grid item xs={4} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={2} sx={{ width: "100%", height: "100%", textAlign: "center" }}>
@@ -38,8 +38,8 @@ const PageManagerMain: React.FC = () => {
                     <Typography gutterBottom variant="h6" component="div">
                       1.상품명 : [프레시지] 오늘 시켜먹는 마라탕
                     </Typography>
-                    <Typography gutterBottom variant="h6" component="div">
-                      4,500원
+                    <Typography gutterBottom variant="body2" component="div">
+                      8,500원
                     </Typography>
                   </Stack>
                   <Typography color="text.secondary" variant="body2">
@@ -52,7 +52,7 @@ const PageManagerMain: React.FC = () => {
                   </Typography>
                   <Stack direction="row" spacing={1}>
                     <Chip color="primary" label="재고" size="small" />
-                    <Chip label="1개" size="small" />
+                    <Chip label="6개" size="small" />
                   </Stack>
                 </Box>
               </Card>
@@ -60,10 +60,10 @@ const PageManagerMain: React.FC = () => {
                 <Box sx={{ p: 2 }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography gutterBottom variant="h6" component="div">
-                      2.상품명 : [프레시지] 오늘 시켜먹는 마라탕
+                      2.상품명 : [냉동] 쫄깃탱글 불쭈꾸미볶음
                     </Typography>
-                    <Typography gutterBottom variant="h6" component="div">
-                      4,500원
+                    <Typography gutterBottom variant="body2" component="div">
+                      14,500원
                     </Typography>
                   </Stack>
                   <Typography color="text.secondary" variant="body2">
@@ -76,7 +76,7 @@ const PageManagerMain: React.FC = () => {
                   </Typography>
                   <Stack direction="row" spacing={1}>
                     <Chip color="primary" label="재고" size="small" />
-                    <Chip label="1개" size="small" />
+                    <Chip label="10개" size="small" />
                   </Stack>
                 </Box>
               </Card>
@@ -84,14 +84,14 @@ const PageManagerMain: React.FC = () => {
                 <Box sx={{ p: 2 }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography gutterBottom variant="h6" component="div">
-                      3.상품명 : [프레시지] 밤 11시에 끓여먹는 라면
+                      3.상품명 : 스페인식 감바스
                     </Typography>
-                    <Typography gutterBottom variant="h6" component="div">
-                      45,500원
+                    <Typography gutterBottom variant="body2" component="div">
+                      15,500원
                     </Typography>
                   </Stack>
                   <Typography color="text.secondary" variant="body2">
-                    맛도 좋고 양도 많아요
+                    상세 정보 참고
                   </Typography>
                 </Box>
                 <Box sx={{ p: 2 }}>
@@ -100,7 +100,7 @@ const PageManagerMain: React.FC = () => {
                   </Typography>
                   <Stack direction="row" spacing={1}>
                     <Chip color="primary" label="재고" size="small" />
-                    <Chip label="1개" size="small" />
+                    <Chip label="14개" size="small" />
                   </Stack>
                 </Box>
               </Card>
@@ -115,7 +115,7 @@ const PageManagerMain: React.FC = () => {
             </Paper>
           </Grid>
           <Grid item xs={8} height={"50%"} sx={{ alignItems: "center", justifyContent: "center" }}>
-            <Paper elevation={4} sx={{ width: "100%", height: "438px", overflow: "auto" }}>
+            <Paper elevation={4} sx={{ width: "100%", height: "100%", overflow: "auto" }}>
               <Box paddingTop={2} textAlign={"center"}>
                 <h3>주문 내역</h3>
               </Box>

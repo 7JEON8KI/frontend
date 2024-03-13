@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "pages/bo/redux";
 import { changeMenu } from "pages/bo/redux/menu";
+import { grey } from "@mui/material/colors";
 
 const BoManagerNav: React.FC = () => {
   const adminMenu = useSelector((state: RootState) => state.menu.menu);
@@ -24,17 +25,17 @@ const BoManagerNav: React.FC = () => {
         <Box
           textAlign={"center"}
           fontSize={18}
-          sx={{ color: adminMenu === "manager/home" ? "black" : "white", padding: 2, cursor: "pointer" }}
+          sx={{ color: adminMenu === "manager/home" ? "#FD6F21" : "white", padding: 2, cursor: "pointer" }}
         >
           <Box>홈</Box>
         </Box>
       </Link>
-      <Divider sx={{ fontSize: "14px" }}>상품</Divider>
+      <Divider sx={{ fontSize: "14px", color: grey[300] }}>상품</Divider>
       <Link to="/bo/manager/product/insert" onClick={() => handleLinkClick("manager/product/insert")}>
         <Box
           textAlign={"center"}
           fontSize={18}
-          sx={{ color: adminMenu === "manager/product/insert" ? "black" : "white", padding: 2, cursor: "pointer" }}
+          sx={{ color: adminMenu === "manager/product/insert" ? "#FD6F21" : "white", padding: 2, cursor: "pointer" }}
         >
           <Box>상품 등록</Box>
         </Box>
@@ -43,7 +44,7 @@ const BoManagerNav: React.FC = () => {
         <Box
           textAlign={"center"}
           fontSize={18}
-          sx={{ color: adminMenu === "manager/product" ? "black" : "white", padding: 2, cursor: "pointer" }}
+          sx={{ color: adminMenu === "manager/product" ? "#FD6F21" : "white", padding: 2, cursor: "pointer" }}
         >
           <Box>상품 관리</Box>
         </Box>
@@ -52,7 +53,7 @@ const BoManagerNav: React.FC = () => {
         <Box
           textAlign={"center"}
           fontSize={18}
-          sx={{ color: adminMenu === "manager/order" ? "black" : "white", padding: 2, cursor: "pointer" }}
+          sx={{ color: adminMenu === "manager/order" ? "#FD6F21" : "white", padding: 2, cursor: "pointer" }}
         >
           <Box>주문 관리</Box>
         </Box>
