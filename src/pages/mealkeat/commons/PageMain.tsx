@@ -187,7 +187,7 @@ const PageMain: React.FC = () => {
   const [bestProduct, setBestProduct] = React.useState<ProductResponse>();
   const [banner, setBanner] = React.useState<Banner[]>([]);
   const [userRecommend, setUserRecommend] = React.useState<UserRecommend[]>([]);
-  const [mealModal, setMealModal] = React.useState<boolean>(isLoggedIn ? true : false);
+  const [mealModal, setMealModal] = React.useState<boolean>(false);
   const [showIngredientModal, setShowIngredientModal] = React.useState<boolean>(false);
 
   const getBestProducts = async () => {
