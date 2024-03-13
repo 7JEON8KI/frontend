@@ -10,8 +10,7 @@ const PageAdminEvent: React.FC = () => {
         <Box sx={{ width: "100%", height: "100%" }}>
           <Paper elevation={8} sx={{ p: 2, m: 2, height: "95%" }}>
             <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
-              <Tabs value={1} centered>
-                <Tab label="이벤트 관리" />
+              <Tabs value={0} centered>
                 <Tab label="이벤트 등록" />
               </Tabs>
             </Box>

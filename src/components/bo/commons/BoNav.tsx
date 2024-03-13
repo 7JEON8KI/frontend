@@ -79,11 +79,7 @@ const BoNav: React.FC = () => {
         </Box>
       </Link>
       <Link to="/bo/manager" onClick={() => handleLinkClick("manager/home")}>
-        <Box
-          textAlign={"center"}
-          fontSize={18}
-          sx={{ color: adminMenu === "banner" ? "#FD6F21" : "white", padding: 2, cursor: "pointer" }}
-        >
+        <Box textAlign={"center"} fontSize={18} sx={{ color: "white", padding: 2, cursor: "pointer" }}>
           <Box>판매자 페이지</Box>
         </Box>
       </Link>
