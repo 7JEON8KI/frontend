@@ -17,7 +17,6 @@ const PageAdminManager: React.FC = () => {
             <Box sx={{ width: "100%", bgcolor: "background.paper", paddingBottom: 2 }}>
               <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="판매자 리스트" />
-                <Tab label="판매자 신청 리스트" />
               </Tabs>
             </Box>
             <BoManagerTable tab={value} />

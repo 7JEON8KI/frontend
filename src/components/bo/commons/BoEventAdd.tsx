@@ -68,11 +68,31 @@ const BoEventAdd: React.FC = () => {
                   }}
                 />
               </LocalizationProvider>
-              <Box sx={{ width: "95%", height: "400px", overflow: "scroll", margin: 2 }}>
+              <Box sx={{ width: "95%", height: "250px", overflow: "scroll", margin: 2 }}>
                 <Box m={2}>
                   <h4>이벤트 메인 이미지 입력</h4>
                 </Box>
                 <SingleImageUpload />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  boxSizing: "border-box",
+                  alignItems: "end",
+                  justifyContent: "flex-end",
+                  paddingTop: 2,
+                  paddingRight: 2,
+                  paddingBottom: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={handleClick}
+                  sx={{ backgroundColor: grey[800], marginRight: 2, marginTop: 10 }}
+                  endIcon={<SendIcon />}
+                >
+                  등록
+                </Button>
               </Box>
             </Box>
           </Grid>
@@ -81,26 +101,6 @@ const BoEventAdd: React.FC = () => {
       <Grid item xs={6}>
         <Box m={2}>
           <Editor />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            boxSizing: "border-box",
-            alignItems: "end",
-            justifyContent: "flex-end",
-            paddingTop: 2,
-            paddingRight: 2,
-            paddingBottom: 2,
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={handleClick}
-            sx={{ backgroundColor: grey[800], marginRight: 2, marginTop: 10 }}
-            endIcon={<SendIcon />}
-          >
-            등록
-          </Button>
         </Box>
       </Grid>
     </Grid>
