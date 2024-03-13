@@ -61,9 +61,9 @@ const ProductForm: React.FC = () => {
   };
 
   return (
-    <Grid container height={"100%"} width={"100%"} spacing={7}>
-      <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Paper elevation={4} sx={{ width: "100%", height: "900px" }}>
+    <Grid container height={"90%"} width={"100%"}>
+      <Grid item xs={6} sx={{ display: "flex", justifyContent: "center" }}>
+        <Paper elevation={4} sx={{ width: "95%", height: "100%" }}>
           <Box sx={{ display: "flex", flexDirection: "column", margin: 5 }}>
             <FormControl>
               <Typography variant="h6" gutterBottom>
@@ -228,7 +228,7 @@ const ProductForm: React.FC = () => {
         xs={6}
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
       >
-        <Paper elevation={4} sx={{ width: "100%", height: "900px", overflow: "auto" }}>
+        <Paper elevation={4} sx={{ width: "95%", height: "100%", overflow: "auto" }}>
           <Box sx={{ display: "flex", flexDirection: "column", margin: 5 }}>
             <Typography variant="h6" gutterBottom>
               썸네일 이미지

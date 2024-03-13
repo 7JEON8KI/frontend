@@ -37,10 +37,10 @@ const TopProduct: React.FC = () => {
                 height={100}
               />
               <Stack direction={"column"}>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="body1" component="div">
                   상품명 : {product.productName}
                 </Typography>
-                <Typography gutterBottom variant="body1" component="div">
+                <Typography gutterBottom variant="body2" component="div">
                   설명 : {product.productSubName}
                 </Typography>
                 <Stack direction="row" justifyContent="space-between" width={"100%"}>

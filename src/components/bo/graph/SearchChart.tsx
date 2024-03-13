@@ -57,7 +57,7 @@ const SearchChart: React.FC = () => {
       data: datas.map(item => item.Search),
     },
   ];
-  return <Chart type="bar" height={"400px"} options={options} series={series} />;
+  return <Chart type="bar" height={"350px"} options={options} series={series} />;
 };
 
 export default SearchChart;

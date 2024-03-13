@@ -6,7 +6,7 @@ import React from "react";
 const PageManagerProductInsert: React.FC = () => {
   return (
     <BoManagerLayout>
-      <Box display="flex" height={"100%"} width={"100%"} justifyContent="center" alignItems="center">
+      <Box display="flex" width={"100%"} justifyContent="center" alignItems="center">
         <ProductForm />
       </Box>
     </BoManagerLayout>

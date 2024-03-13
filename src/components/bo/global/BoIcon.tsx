@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import logo from "assets/images/logo.png";
+import logo from "assets/images/logo_white.png";
 import React from "react";
 
 export const BoIcon = (): JSX.Element => {

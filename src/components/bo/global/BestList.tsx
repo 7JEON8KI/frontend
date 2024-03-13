@@ -39,7 +39,7 @@ export default function BestList() {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "40px",
+        padding: "5px",
       }}
     >
       {productList?.productResponseDTOList?.map(product => (
@@ -60,7 +60,7 @@ export default function BestList() {
         >
           <span
             style={{
-              fontSize: "30px",
+              fontSize: "18px",
               fontWeight: "bold",
               display: "flex",
               justifyContent: "left",
@@ -92,6 +92,7 @@ export default function BestList() {
                 whiteSpace: "nowrap", // 텍스트를 한 줄로 표시
                 overflow: "hidden", // 넘치는 내용 숨김
                 textOverflow: "ellipsis", // 넘치는 텍스트를 말줄임표로 표시
+                fontSize: "18px",
               }}
             >
               {product.productName}
@@ -107,13 +108,15 @@ export default function BestList() {
               <div
                 style={{
                   textAlign: "center",
+                  fontSize: "14px",
                 }}
               >
                 {product.price}원
               </div>
               <div
                 style={{
-                  marginBottom: "20px",
+                  marginBottom: "10px",
+                  fontSize: "14px",
                 }}
               >
                 남은 재고 : {product.stock}
