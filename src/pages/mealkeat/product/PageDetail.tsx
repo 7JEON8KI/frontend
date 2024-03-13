@@ -70,6 +70,8 @@ const PageDetail: React.FC = () => {
   const [cartModal, setCartModal] = React.useState<boolean>(false);
   const [reviewList, setReviewList] = React.useState<Review[]>([]);
   const [ingredients, setIngredients] = React.useState<Ingredients[]>([]);
+  const [reviewOpen, setReviewOpen] = React.useState<boolean>(false);
+  const [selectReview, setSelectReview] = React.useState<Review>({} as Review);
 
   const handleClickDetailViewBtn = () => {
     const detailContainer = document.getElementById("detail_image_container");
@@ -466,6 +468,10 @@ const PageDetail: React.FC = () => {
                       width: "180px",
                       height: "180px",
                     }}
+                    onClick={() => {
+                      setReviewOpen(true);
+                      setSelectReview(review);
+                    }}
                   >
                     <img
                       src={review.reviewImageUrl}
@@ -597,6 +603,112 @@ const PageDetail: React.FC = () => {
             navigate("/cart");
           }}
         />
+      </ModalContainer>
+      <ModalContainer
+        title="리뷰"
+        isOpen={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        width="1200px"
+        height="700px"
+        scroll={true}
+      >
+        <div
+          className="review-list"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            padding: "1.5rem 1rem",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                width: "550px",
+                fontSize: "20px",
+                fontWeight: "bold",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                gap: "1rem",
+                margin: "0 0 3rem",
+              }}
+            >
+              <span>{selectReview.memberNickname}</span>
+              <span>{selectReview.modifiedAt}</span>
+              <span
+                className="review-rating"
+                style={{
+                  fontSize: "30px",
+                }}
+              >
+                {Array.from({ length: 5 }, (_, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      color: index < parseInt(selectReview.reviewStar) ? "#FD6F21" : "grey",
+                    }}
+                  >
+                    ♥
+                  </span>
+                ))}
+              </span>
+            </div>
+            <div
+              className="review-item"
+              style={{
+                border: "1px solid #ccc",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                className="review-image-container"
+                style={{
+                  width: "500px",
+                  overflow: "hidden",
+                  margin: "2rem",
+                }}
+              >
+                <img
+                  draggable={false}
+                  src={selectReview.reviewImageUrl}
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                  className="review-image"
+                />
+              </div>
+              <div
+                className="review-content"
+                style={{
+                  width: "700px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  marginBottom: "1rem",
+                }}
+              >
+                <div
+                  className="review-text"
+                  style={{
+                    fontSize: "1.2rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {selectReview.reviewContent}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </ModalContainer>
     </Layout>
   );
