@@ -121,7 +121,7 @@ export const Header = (): JSX.Element => {
             <input type="file" style={{ display: "none" }} ref={fileInputRef} onChange={handleFileChange} />
             <ImageSearchBtn onClick={handleButtonClick}>
               <Image src={Upload} alt="" width={30} height={30} />
-              <p>이미지 업로드</p>
+              <p>이미지 검색</p>
             </ImageSearchBtn>
           </label>
         </Search>
